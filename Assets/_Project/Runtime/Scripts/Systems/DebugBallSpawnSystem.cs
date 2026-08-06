@@ -24,7 +24,7 @@ namespace Runtime.Systems
             var path = SystemAPI.GetSingletonBuffer<PathElement>();
             var stickRefs = SystemAPI.GetSingletonBuffer<StickRefElement>();
             
-            float3 targetPosition = EntityManager.GetComponentData<Stick>(stickRefs[path[_startPathIndex].StickIndex].Value).Position;
+            float3 targetPosition = EntityManager.GetComponentData<Stick>(stickRefs[path[_startPathIndex].StickIndex].Entity).Position;
             var ballEntity = EntityManager.CreateEntity(typeof(BallComponent), typeof(TransformComponent), typeof(HopState));
 
             EntityManager.SetName(ballEntity, "DebugBall");

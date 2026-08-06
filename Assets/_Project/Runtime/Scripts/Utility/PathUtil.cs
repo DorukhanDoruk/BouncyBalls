@@ -12,7 +12,7 @@ namespace Runtime.Utility
             for (int step = 1; step <= path.Length; step++)
             {
                 int candidate = (currentPathIndex + step) % path.Length;
-                var stickEntity = stickRefs[path[candidate].StickIndex].Value;
+                var stickEntity = stickRefs[path[candidate].StickIndex].Entity;
 
                 if (discLookup[stickEntity].Length > 0)
                 {

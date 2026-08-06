@@ -3,6 +3,6 @@ namespace Runtime.Components.Model
 {
     public struct GridBallElement : IBufferElementData
     {
-        public Entity Value;
+        public Entity Entity;
     }
 }

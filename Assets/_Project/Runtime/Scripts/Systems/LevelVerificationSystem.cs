@@ -58,12 +58,12 @@ namespace Runtime.Systems
 
             for (int c = 0; c < columnRefs.Length; c++)
             {
-                var ballQueue = EntityManager.GetBuffer<GridBallElement>(columnRefs[c].Value);
+                var ballQueue = EntityManager.GetBuffer<GridBallElement>(columnRefs[c].Entity);
 
                 sb.Clear();
                 for (int b = 0; b < ballQueue.Length; b++)
                 {
-                    var ball = EntityManager.GetComponentData<BallComponent>(ballQueue[b].Value);
+                    var ball = EntityManager.GetComponentData<BallComponent>(ballQueue[b].Entity);
                     sb.Append($"{ball.Color}({ball.Remaining})");
                     if (b < ballQueue.Length - 1) sb.Append(", ");
                 }

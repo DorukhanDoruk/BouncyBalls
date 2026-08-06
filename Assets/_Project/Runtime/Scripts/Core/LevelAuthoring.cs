@@ -11,7 +11,7 @@ namespace Runtime.Core
     {
         public LevelConfigSO LevelConfigSo;
         public LevelConstantsSO LevelConstantsSo;
-        
+
         private void OnDrawGizmos()
         {
             foreach (var stickDef in LevelConfigSo.Sticks)
@@ -43,7 +43,7 @@ namespace Runtime.Core
             for (int i = 0; i < pathOrder.Length - 1; i++)
             {
                 int fromStick = pathOrder[i];
-                int toStick   = pathOrder[i + 1];
+                int toStick = pathOrder[i + 1];
 
                 if (fromStick < 0 || fromStick >= LevelConfigSo.Sticks.Length)
                 {
@@ -55,16 +55,16 @@ namespace Runtime.Core
                 }
 
                 float3 startPos = LevelConfigSo.Sticks[fromStick].Position;
-                float3 endPos   = LevelConfigSo.Sticks[toStick].Position;
+                float3 endPos = LevelConfigSo.Sticks[toStick].Position;
 
                 float3 delta = endPos - startPos;
-                float  dist  = math.length(delta);
+                float dist = math.length(delta);
                 if (dist < float.Epsilon)
                 {
                     continue;
                 }
 
-                float3 dir    = delta / dist;
+                float3 dir = delta / dist;
                 float3 midPos = startPos + dir * (dist * 0.5f);
 
                 float3 side = math.cross(dir, math.up());
@@ -81,15 +81,27 @@ namespace Runtime.Core
                 Gizmos.DrawLine(midPos, tail - side * (arrowSize * 0.5f));
             }
         }
-        
+
         public class LevelBaker : Baker<LevelAuthoring>
         {
             public override void Bake(LevelAuthoring authoring)
             {
                 DependsOn(authoring.LevelConfigSo);
+                DependsOn(authoring.LevelConstantsSo);
 
                 var config = authoring.LevelConfigSo;
+                var constants = authoring.LevelConstantsSo;
                 var rootEntity = GetEntity(TransformUsageFlags.None);
+
+                var layout = new LevelLayoutComponent
+                {
+                    GridOrigin = constants.GridOrigin, GridColumnSpacing = constants.GridColumnSpacing,
+                    GridRowSpacing = constants.GridRowSpacing, DockOrigin = constants.DockOrigin,
+                    DockSlotSpacing = constants.DockSlotSpacing,
+                };
+
+                AddComponent(rootEntity, layout);
+                AddBuffer<DockBallElement>(rootEntity);
 
                 var pathBuffer = AddBuffer<PathElement>(rootEntity);
                 foreach (int stickIndex in config.PathOrder)
@@ -102,13 +114,9 @@ namespace Runtime.Core
                 {
                     var stickDef = config.Sticks[i];
                     var stickEntity = CreateAdditionalEntity(TransformUsageFlags.None, false, $"Stick_{i}");
-                    stickRefs.Add(new StickRefElement { Value = stickEntity });
+                    stickRefs.Add(new StickRefElement { Entity = stickEntity });
 
-                    AddComponent(stickEntity, new Stick
-                    {
-                        Index    = i,
-                        Position = stickDef.Position
-                    });
+                    AddComponent(stickEntity, new Stick { Index = i, Position = stickDef.Position });
 
                     var discs = stickDef.Discs;
                     var firstShown = discs.Length - stickDef.ShownDiscCount;
@@ -125,7 +133,7 @@ namespace Runtime.Core
                 {
                     var columnDef = config.GridColumns[c];
                     var columnEntity = CreateAdditionalEntity(TransformUsageFlags.None, false, $"GridColumn_{c}");
-                    columnRefs.Add(new GridColumnRefElement { Value = columnEntity });
+                    columnRefs.Add(new GridColumnRefElement { Entity = columnEntity });
 
                     AddComponent(columnEntity, new GridColumn { Index = c });
 
@@ -137,11 +145,16 @@ namespace Runtime.Core
 
                         AddComponent(ballEntity, new BallComponent
                         {
-                            Color     = ballDef.Color,
-                            Remaining = ballDef.Count,
+                            Color = ballDef.Color, Remaining = ballDef.Count,
                         });
 
-                        ballQueue.Add(new GridBallElement { Value = ballEntity });
+                        AddComponent(ballEntity, new TransformComponent
+                        {
+                            Position = SlotLayoutUtil.GridPosition(layout, c, b), Rotation = float3.zero,
+                            Scale = new float3(1f, 1f, 1f),
+                        });
+
+                        ballQueue.Add(new GridBallElement { Entity = ballEntity });
                     }
                 }
             }

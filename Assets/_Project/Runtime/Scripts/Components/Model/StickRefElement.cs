@@ -3,6 +3,6 @@ namespace Runtime.Components.Model
 {
     public struct StickRefElement : IBufferElementData
     {
-        public Entity Value;
+        public Entity Entity;
     }
 }
