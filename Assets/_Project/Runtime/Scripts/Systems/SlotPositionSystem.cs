@@ -9,11 +9,13 @@ namespace Runtime.Systems
         protected override void OnCreate()
         {
             RequireForUpdate<LevelLayoutComponent>();
+            RequireForUpdate<BallConfigComponent>();
         }
 
         protected override void OnUpdate()
         {
             var layout = SystemAPI.GetSingleton<LevelLayoutComponent>();
+            var config = SystemAPI.GetSingleton<BallConfigComponent>();
             var columnRefs = SystemAPI.GetSingletonBuffer<GridColumnRefElement>();
             var dockBalls = SystemAPI.GetSingletonBuffer<DockBallElement>();
 
@@ -22,13 +24,13 @@ namespace Runtime.Systems
                 var ballQueue = EntityManager.GetBuffer<GridBallElement>(columnRefs[c].Entity);
                 for (int i = 0; i < ballQueue.Length; i++)
                 {
-                    WritePosition(ballQueue[i].Entity, SlotLayoutUtil.GridPosition(layout, c, i));
+                    WritePosition(ballQueue[i].Entity, SlotLayoutUtil.GridPosition(layout, c, columnRefs.Length, i));
                 }
             }
 
             for (int i = 0; i < dockBalls.Length; i++)
             {
-                WritePosition(dockBalls[i].Entity, SlotLayoutUtil.DockPosition(layout, i));
+                WritePosition(dockBalls[i].Entity, SlotLayoutUtil.DockPosition(layout, i, config.MaxDockBalls));
             }
         }
 

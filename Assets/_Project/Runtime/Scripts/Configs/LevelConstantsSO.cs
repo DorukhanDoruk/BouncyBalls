@@ -16,5 +16,9 @@ namespace Runtime.Configs
         [Header("Dock Layout")]
         public Vector3 DockOrigin = new Vector3(0f, 0f, -4f);
         public float DockSlotSpacing = 1.5f;
+
+        [Header("Input")]
+        // Dokunusun dunya duzlemindeki noktasi bir topa bu yaricap icinde duserse secilir.
+        public float BallSelectionRadius = 0.75f;
     }
 }

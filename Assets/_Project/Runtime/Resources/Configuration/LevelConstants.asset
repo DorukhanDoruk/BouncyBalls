@@ -14,3 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Runtime.Configs.LevelConstantsSO
   StickWidth: 0.25
   DiscSize: {x: 1, y: 0.5, z: 1}
+  GridOrigin: {x: 0, y: 0, z: 0}
+  GridColumnSpacing: 1.5
+  GridRowSpacing: 1.5
+  DockOrigin: {x: 0, y: 0, z: 2}
+  DockSlotSpacing: 1.5
+  BallSelectionRadius: 0.75

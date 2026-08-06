@@ -10,5 +10,7 @@ namespace Runtime.Components
 
         public float3 DockOrigin;
         public float DockSlotSpacing;
+
+        public float BallSelectionRadius;
     }
 }

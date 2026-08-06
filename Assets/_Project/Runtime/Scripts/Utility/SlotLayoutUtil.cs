@@ -6,15 +6,17 @@ namespace Runtime.Utility
     public static class SlotLayoutUtil
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float3 GridPosition(in LevelLayoutComponent layout, int column, int queueIndex)
+        public static float3 GridPosition(in LevelLayoutComponent layout, int column, int columnCount, int queueIndex)
         {
-            return layout.GridOrigin + new float3(column * layout.GridColumnSpacing, 0f, -queueIndex * layout.GridRowSpacing);
+            float offsetX = (column - (columnCount - 1) * 0.5f) * layout.GridColumnSpacing;
+            return layout.GridOrigin + new float3(offsetX, 0f, -queueIndex * layout.GridRowSpacing);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static float3 DockPosition(in LevelLayoutComponent layout, int slotIndex)
+        public static float3 DockPosition(in LevelLayoutComponent layout, int slotIndex, int slotCount)
         {
-            return layout.DockOrigin + new float3(slotIndex * layout.DockSlotSpacing, 0f, 0f);
+            float offsetX = (slotIndex - (slotCount - 1) * 0.5f) * layout.DockSlotSpacing;
+            return layout.DockOrigin + new float3(offsetX, 0f, 0f);
         }
     }
 }

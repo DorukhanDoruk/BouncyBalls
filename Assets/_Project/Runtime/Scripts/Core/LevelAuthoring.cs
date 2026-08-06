@@ -98,9 +98,12 @@ namespace Runtime.Core
                     GridOrigin = constants.GridOrigin, GridColumnSpacing = constants.GridColumnSpacing,
                     GridRowSpacing = constants.GridRowSpacing, DockOrigin = constants.DockOrigin,
                     DockSlotSpacing = constants.DockSlotSpacing,
+                    BallSelectionRadius = constants.BallSelectionRadius,
                 };
 
                 AddComponent(rootEntity, layout);
+                AddComponent(rootEntity, new LaunchRequestComponent { Ball = Entity.Null, Locked = false });
+                AddComponent(rootEntity, new LaunchStateComponent { LastLaunchTime = float.NegativeInfinity });
                 AddBuffer<DockBallElement>(rootEntity);
 
                 var pathBuffer = AddBuffer<PathElement>(rootEntity);
@@ -150,7 +153,7 @@ namespace Runtime.Core
 
                         AddComponent(ballEntity, new TransformComponent
                         {
-                            Position = SlotLayoutUtil.GridPosition(layout, c, b), Rotation = float3.zero,
+                            Position = SlotLayoutUtil.GridPosition(layout, c, config.GridColumns.Length, b), Rotation = float3.zero,
                             Scale = new float3(1f, 1f, 1f),
                         });
 
