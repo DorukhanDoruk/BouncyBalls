@@ -55,6 +55,7 @@ namespace Runtime.Systems
             }
 
             EntityManager.AddComponentData(ballEntity, HopUtil.BeginHop(0, startPosition, 0, targetPosition, config));
+            EntityManager.AddComponentData(ballEntity, new LapProgressComponent { StepsTaken = 0 });
 
             launchState.LastLaunchTime = now;
             SystemAPI.SetSingleton(launchState);
