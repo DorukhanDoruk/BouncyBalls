@@ -7,7 +7,7 @@ namespace Runtime.Utility
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static HopState BeginHop(int fromPathIndex, float3 fromPosition, int toPathIndex, float3 toPosition,
-            in BallConfigComponent config)
+            in BallConfigComponent config, float speedMultiplier)
         {
             float distance = math.distance(fromPosition.xz, toPosition.xz);
             bool inPlace = distance < float.Epsilon;
@@ -19,7 +19,7 @@ namespace Runtime.Utility
                 FromPosition = fromPosition,
                 ToPosition = toPosition,
                 Elapsed = 0f,
-                Duration = inPlace ? config.InPlaceBounceTime : distance / config.HopSpeed,
+                Duration = (inPlace ? config.InPlaceBounceTime : distance / config.HopSpeed) / speedMultiplier,
                 ArcHeight = inPlace ? config.InPlaceBounceHeight : math.min(distance * config.ArchHeightPerUnit, config.MaxArchHeight),
             };
         }

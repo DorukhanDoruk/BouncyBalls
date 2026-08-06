@@ -33,6 +33,8 @@ namespace Runtime.Systems
             }
 
             var config = SystemAPI.GetSingleton<BallConfigComponent>();
+            bool loopMode = SystemAPI.GetSingleton<LoopModeComponent>().IsActive;
+            float speedMultiplier = loopMode ? config.LoopModeSpeedMultiplier : 1f;
 
             foreach (var ballEntity in arrived)
             {
@@ -64,21 +66,30 @@ namespace Runtime.Systems
                     continue;
                 }
 
-                if (lap.StepsTaken >= path.Length)
-                {
-                    Debug.Log($"[{nameof(ArrivalResolveSystem)}] lap complete ({lap.StepsTaken} steps), returning to dock.");
-                    EntityManager.SetComponentData(ballEntity, ball);
-                    ReturnToDock(ballEntity, config);
-                    continue;
-                }
-
                 int nextPathIndex = PathUtil.ResolveNext(hop.ToPathIndex, path, stickRefs, discLookup);
 
                 if (nextPathIndex < 0)
                 {
-                    Debug.Log($"[{nameof(ArrivalResolveSystem)}] no stick left with discs, returning to dock.");
+                    if (!loopMode)
+                    {
+                        Debug.Log($"[{nameof(ArrivalResolveSystem)}] no stick left with discs, returning to dock.");
+                        EntityManager.SetComponentData(ballEntity, ball);
+                        ReturnToDock(ballEntity);
+                        continue;
+                    }
+
                     EntityManager.SetComponentData(ballEntity, ball);
-                    ReturnToDock(ballEntity, config);
+                    EntityManager.SetComponentData(ballEntity, lap);
+                    EntityManager.SetComponentData(ballEntity, HopUtil.BeginHop(hop.ToPathIndex, hop.ToPosition, hop.ToPathIndex, hop.ToPosition, config, speedMultiplier));
+                    continue;
+                }
+
+                int nextSteps = (nextPathIndex - hop.ToPathIndex + path.Length) % path.Length;
+                if (!loopMode && lap.StepsTaken + nextSteps >= path.Length)
+                {
+                    Debug.Log($"[{nameof(ArrivalResolveSystem)}] lap complete at stick {arrivedStickIndex} \n({lap.StepsTaken + nextSteps} steps), returning to dock.");
+                    EntityManager.SetComponentData(ballEntity, ball);
+                    ReturnToDock(ballEntity);
                     continue;
                 }
 
@@ -86,24 +97,18 @@ namespace Runtime.Systems
 
                 EntityManager.SetComponentData(ballEntity, ball);
                 EntityManager.SetComponentData(ballEntity, lap);
-                EntityManager.SetComponentData(ballEntity, HopUtil.BeginHop(hop.ToPathIndex, hop.ToPosition, nextPathIndex, nextStick.Position, config));
+                EntityManager.SetComponentData(ballEntity, HopUtil.BeginHop(hop.ToPathIndex, hop.ToPosition, nextPathIndex, nextStick.Position, config, speedMultiplier));
             }
 
             arrived.Dispose();
         }
 
-        private void ReturnToDock(Entity ballEntity, in BallConfigComponent config)
+        private void ReturnToDock(Entity ballEntity)
         {
             EntityManager.RemoveComponent<HopState>(ballEntity);
             EntityManager.RemoveComponent<LapProgressComponent>(ballEntity);
 
-            var dockBalls = SystemAPI.GetSingletonBuffer<DockBallElement>();
-            dockBalls.Add(new DockBallElement { Entity = ballEntity });
-
-            if (dockBalls.Length > config.MaxDockBalls)
-            {
-                Debug.LogWarning($"[{nameof(ArrivalResolveSystem)}] dock overflow: {dockBalls.Length}/{config.MaxDockBalls} -> LOSE");
-            }
+            SystemAPI.GetSingletonBuffer<DockBallElement>().Add(new DockBallElement { Entity = ballEntity });
         }
     }
 }

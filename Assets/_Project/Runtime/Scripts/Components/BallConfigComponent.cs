@@ -16,5 +16,7 @@ namespace Runtime.Components
 
         public byte MaxActiveBalls;
         public byte MaxDockBalls;
+
+        public float LoopModeSpeedMultiplier;
     }
 }

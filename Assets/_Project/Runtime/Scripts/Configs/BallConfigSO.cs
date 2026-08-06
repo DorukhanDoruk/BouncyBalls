@@ -17,5 +17,8 @@ namespace Runtime.Configs
 
         public byte MaxActiveBalls = 5;
         public byte MaxDockBalls = 5;
+
+        [Header("Loop Mode")]
+        public float LoopModeSpeedMultiplier = 2f;
     }
 }
