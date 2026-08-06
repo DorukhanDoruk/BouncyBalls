@@ -26,8 +26,8 @@ namespace Runtime.Core
                 {
                     ref var root = ref builder.ConstructRoot<AnimationConfigBlob>();
 
-                    BuildTween(ref builder, ref root.JumpArc, authoring.Animation.JumpArc);
-                    BuildTween(ref builder, ref root.JumpStratch, authoring.Animation.JumpStratch);
+                    BuildTween(ref builder, ref root.HopArc, authoring.Animation.HopArc);
+                    BuildTween(ref builder, ref root.HopStretch, authoring.Animation.HopStretch);
                     BuildTween(ref builder, ref root.LandSquash, authoring.Animation.LandSquash);
 
                     var blob = builder.CreateBlobAssetReference<AnimationConfigBlob>(Allocator.Persistent);
@@ -43,7 +43,7 @@ namespace Runtime.Core
                 var b = authoring.Ball;
                 AddComponent(entity, new BallConfigComponent
                 {
-                    JumpSpeed            = b.JumpSpeed,
+                    HopSpeed            = b.HopSpeed,
                     ArchHeightPerUnit    = b.ArchHeightPerUnit,
                     MaxArchHeight        = b.MaxArchHeight,
                     InPlaceBounceHeight = b.InPlaceBounceHeight,

@@ -3,7 +3,7 @@ namespace Runtime.Components
 {
     public struct BallConfigComponent : IComponentData
     {
-        public float JumpSpeed;
+        public float HopSpeed;
         public float ArchHeightPerUnit;
         public float MaxArchHeight;
 
