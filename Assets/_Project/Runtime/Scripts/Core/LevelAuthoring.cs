@@ -119,6 +119,31 @@ namespace Runtime.Core
                         discBuffer.Add(new DiscElement { Color = discs[j] });
                     }
                 }
+
+                var columnRefs = AddBuffer<GridColumnRefElement>(rootEntity);
+                for (int c = 0; c < config.GridColumns.Length; c++)
+                {
+                    var columnDef = config.GridColumns[c];
+                    var columnEntity = CreateAdditionalEntity(TransformUsageFlags.None, false, $"GridColumn_{c}");
+                    columnRefs.Add(new GridColumnRefElement { Value = columnEntity });
+
+                    AddComponent(columnEntity, new GridColumn { Index = c });
+
+                    var ballQueue = AddBuffer<GridBallElement>(columnEntity);
+                    for (int b = 0; b < columnDef.Balls.Length; b++)
+                    {
+                        var ballDef = columnDef.Balls[b];
+                        var ballEntity = CreateAdditionalEntity(TransformUsageFlags.None, false, $"GridBall_{c}_{b}");
+
+                        AddComponent(ballEntity, new BallComponent
+                        {
+                            Color     = ballDef.Color,
+                            Remaining = ballDef.Count,
+                        });
+
+                        ballQueue.Add(new GridBallElement { Value = ballEntity });
+                    }
+                }
             }
         }
     }

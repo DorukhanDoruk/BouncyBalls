@@ -7,5 +7,6 @@ namespace Runtime.Configs
     {
         public StickDef[] Sticks;
         public int[] PathOrder;
+        public GridColumnDef[] GridColumns;
     }
 }
