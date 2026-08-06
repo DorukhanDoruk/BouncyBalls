@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5650845f193c45ed847750090017ef5c, type: 3}
   m_Name: LevelConstants
   m_EditorClassIdentifier: Assembly-CSharp::Runtime.Configs.LevelConstantsSO
-  StickSize: {x: 0.25, y: 2, z: 0.25}
+  StickWidth: 0.25
   DiscSize: {x: 1, y: 0.5, z: 1}

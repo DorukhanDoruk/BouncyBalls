@@ -7,5 +7,6 @@ namespace Runtime.Configs.Model
     {
         public Vector3 Position;
         public DiscColorType[] Discs;
+        public int ShownDiscCount;
     }
 }
