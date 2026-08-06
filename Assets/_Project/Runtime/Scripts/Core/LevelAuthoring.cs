@@ -97,12 +97,12 @@ namespace Runtime.Core
                 {
                     GridOrigin = constants.GridOrigin, GridColumnSpacing = constants.GridColumnSpacing,
                     GridRowSpacing = constants.GridRowSpacing, DockOrigin = constants.DockOrigin,
-                    DockSlotSpacing = constants.DockSlotSpacing,
-                    BallSelectionRadius = constants.BallSelectionRadius,
+                    DockSlotSpacing = constants.DockSlotSpacing, BallSelectionRadius = constants.BallSelectionRadius,
                 };
 
                 AddComponent(rootEntity, layout);
                 AddComponent(rootEntity, new LaunchRequestComponent { Ball = Entity.Null, Locked = false });
+                AddComponent(rootEntity, new GameStateComponent { GameState = GameState.Playing });
                 AddComponent(rootEntity, new LaunchStateComponent { LastLaunchTime = float.NegativeInfinity });
                 AddBuffer<DockBallElement>(rootEntity);
 

@@ -68,7 +68,7 @@ namespace Runtime.Systems
                 {
                     Debug.Log($"[{nameof(ArrivalResolveSystem)}] lap complete ({lap.StepsTaken} steps), returning to dock.");
                     EntityManager.SetComponentData(ballEntity, ball);
-                    ReturnToDock(ballEntity, config);
+                    ReturnToDock(ballEntity);
                     continue;
                 }
 
@@ -78,7 +78,7 @@ namespace Runtime.Systems
                 {
                     Debug.Log($"[{nameof(ArrivalResolveSystem)}] no stick left with discs, returning to dock.");
                     EntityManager.SetComponentData(ballEntity, ball);
-                    ReturnToDock(ballEntity, config);
+                    ReturnToDock(ballEntity);
                     continue;
                 }
 
@@ -92,18 +92,12 @@ namespace Runtime.Systems
             arrived.Dispose();
         }
 
-        private void ReturnToDock(Entity ballEntity, in BallConfigComponent config)
+        private void ReturnToDock(Entity ballEntity)
         {
             EntityManager.RemoveComponent<HopState>(ballEntity);
             EntityManager.RemoveComponent<LapProgressComponent>(ballEntity);
 
-            var dockBalls = SystemAPI.GetSingletonBuffer<DockBallElement>();
-            dockBalls.Add(new DockBallElement { Entity = ballEntity });
-
-            if (dockBalls.Length > config.MaxDockBalls)
-            {
-                Debug.LogWarning($"[{nameof(ArrivalResolveSystem)}] dock overflow: {dockBalls.Length}/{config.MaxDockBalls} -> LOSE");
-            }
+            SystemAPI.GetSingletonBuffer<DockBallElement>().Add(new DockBallElement { Entity = ballEntity });
         }
     }
 }
