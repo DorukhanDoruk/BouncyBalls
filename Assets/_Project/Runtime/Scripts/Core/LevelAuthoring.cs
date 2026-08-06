@@ -1,5 +1,8 @@
+using Runtime.Components;
+using Runtime.Components.Model;
 using Runtime.Configs;
 using Runtime.Utility;
+using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
 namespace Runtime.Core
@@ -13,17 +16,23 @@ namespace Runtime.Core
         {
             foreach (var stickDef in LevelConfigSo.Sticks)
             {
-                var stickSize = LevelConstantsSo.StickSize;
+                var stickHeight = stickDef.ShownDiscCount * LevelConstantsSo.DiscSize.y;
+                var stickSize = new Vector3(LevelConstantsSo.StickWidth, stickHeight, LevelConstantsSo.StickWidth);
                 Gizmos.color = Color.gray;
-                Gizmos.DrawWireCube(stickDef.Position + (Vector3.up * LevelConstantsSo.StickSize.y) / 2f, stickSize);
+                Gizmos.DrawWireCube(stickDef.Position + (Vector3.up * stickHeight) / 2f, stickSize);
 
-                var stickDefDiscs = stickDef.Discs;
-                for (int index = 0; index < stickDefDiscs.Length; index++)
+                var discs = stickDef.Discs;
+                var shownCount = stickDef.ShownDiscCount;
+                var firstShown = discs.Length - shownCount;
+                var discHeight = LevelConstantsSo.DiscSize.y;
+
+                for (int slot = 0; slot < shownCount; slot++)
                 {
-                    var discColor = stickDefDiscs[index];
-                    var discSize = LevelConstantsSo.DiscSize;
+                    var discColor = discs[firstShown + slot];
+                    var center = stickDef.Position + Vector3.up * (discHeight * (slot + 0.5f));
+
                     Gizmos.color = LevelColorUtility.GetColorOfDiskByDiscColorType_Unsafe(discColor);
-                    Gizmos.DrawWireCube((stickDef.Position + (((Vector3.up * LevelConstantsSo.DiscSize.y) * (index + 1)))) - (Vector3.up * (LevelConstantsSo.DiscSize.y / 2f)), discSize);
+                    Gizmos.DrawWireCube(center, LevelConstantsSo.DiscSize);
                 }
             }
 
@@ -70,6 +79,44 @@ namespace Runtime.Core
                 Gizmos.DrawLine(startPos, endPos);
                 Gizmos.DrawLine(midPos, tail + side * (arrowSize * 0.5f));
                 Gizmos.DrawLine(midPos, tail - side * (arrowSize * 0.5f));
+            }
+        }
+        
+        public class LevelBaker : Baker<LevelAuthoring>
+        {
+            public override void Bake(LevelAuthoring authoring)
+            {
+                DependsOn(authoring.LevelConfigSo);
+
+                var config = authoring.LevelConfigSo;
+                var rootEntity = GetEntity(TransformUsageFlags.None);
+
+                var pathBuffer = AddBuffer<PathElement>(rootEntity);
+                foreach (int stickIndex in config.PathOrder)
+                {
+                    pathBuffer.Add(new PathElement { StickIndex = stickIndex });
+                }
+
+                for (int i = 0; i < config.Sticks.Length; i++)
+                {
+                    var stickDef = config.Sticks[i];
+                    var stickEntity = CreateAdditionalEntity(TransformUsageFlags.None, false, $"Stick_{i}");
+
+                    AddComponent(stickEntity, new Stick
+                    {
+                        Index    = i,
+                        Position = stickDef.Position
+                    });
+
+                    var discs = stickDef.Discs;
+                    var firstShown = discs.Length - stickDef.ShownDiscCount;
+
+                    var discBuffer = AddBuffer<DiscElement>(stickEntity);
+                    for (int j = firstShown; j < discs.Length; j++)
+                    {
+                        discBuffer.Add(new DiscElement { Color = discs[j] });
+                    }
+                }
             }
         }
     }

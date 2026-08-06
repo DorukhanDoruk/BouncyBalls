@@ -15,14 +15,20 @@ MonoBehaviour:
   Sticks:
   - Position: {x: 0, y: 0, z: 0}
     Discs: 00010203
+    ShownDiscCount: 2
   - Position: {x: 1.5, y: 0, z: 1.5}
     Discs: 00010203
+    ShownDiscCount: 3
   - Position: {x: 3, y: 0, z: 3}
     Discs: 00010203
+    ShownDiscCount: 4
   - Position: {x: 4.5, y: 0, z: 3}
     Discs: 00010203
+    ShownDiscCount: 4
   - Position: {x: 6, y: 0, z: 1.5}
     Discs: 00010203
+    ShownDiscCount: 3
   - Position: {x: 7.5, y: 0, z: 0}
     Discs: 00010203
+    ShownDiscCount: 2
   PathOrder: 000000000100000002000000030000000400000005000000
