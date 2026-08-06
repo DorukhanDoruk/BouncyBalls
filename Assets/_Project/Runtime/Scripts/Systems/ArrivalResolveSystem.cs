@@ -42,6 +42,9 @@ namespace Runtime.Systems
 
                 var ball = EntityManager.GetComponentData<BallComponent>(ballEntity);
                 var hop = EntityManager.GetComponentData<HopState>(ballEntity);
+                var lap = EntityManager.GetComponentData<LapProgressComponent>(ballEntity);
+
+                lap.StepsTaken += (hop.ToPathIndex - hop.FromPathIndex + path.Length) % path.Length;
 
                 int arrivedStickIndex = path[hop.ToPathIndex].StickIndex;
                 var discs = EntityManager.GetBuffer<DiscElement>(stickRefs[arrivedStickIndex].Entity);
@@ -61,22 +64,46 @@ namespace Runtime.Systems
                     continue;
                 }
 
+                if (lap.StepsTaken >= path.Length)
+                {
+                    Debug.Log($"[{nameof(ArrivalResolveSystem)}] lap complete ({lap.StepsTaken} steps), returning to dock.");
+                    EntityManager.SetComponentData(ballEntity, ball);
+                    ReturnToDock(ballEntity, config);
+                    continue;
+                }
+
                 int nextPathIndex = PathUtil.ResolveNext(hop.ToPathIndex, path, stickRefs, discLookup);
 
                 if (nextPathIndex < 0)
                 {
-                    Debug.Log($"[{nameof(ArrivalResolveSystem)}] no stick left with discs, destroying ball.");
-                    EntityManager.DestroyEntity(ballEntity);
+                    Debug.Log($"[{nameof(ArrivalResolveSystem)}] no stick left with discs, returning to dock.");
+                    EntityManager.SetComponentData(ballEntity, ball);
+                    ReturnToDock(ballEntity, config);
                     continue;
                 }
 
                 var nextStick = EntityManager.GetComponentData<Stick>(stickRefs[path[nextPathIndex].StickIndex].Entity);
 
                 EntityManager.SetComponentData(ballEntity, ball);
+                EntityManager.SetComponentData(ballEntity, lap);
                 EntityManager.SetComponentData(ballEntity, HopUtil.BeginHop(hop.ToPathIndex, hop.ToPosition, nextPathIndex, nextStick.Position, config));
             }
 
             arrived.Dispose();
+        }
+
+        private void ReturnToDock(Entity ballEntity, in BallConfigComponent config)
+        {
+            EntityManager.RemoveComponent<HopState>(ballEntity);
+            EntityManager.RemoveComponent<LapProgressComponent>(ballEntity);
+
+            var dockBalls = SystemAPI.GetSingletonBuffer<DockBallElement>();
+            dockBalls.Add(new DockBallElement { Entity = ballEntity });
+
+            if (dockBalls.Length > config.MaxDockBalls)
+            {
+                Debug.LogWarning($"[{nameof(ArrivalResolveSystem)}] dock overflow: {dockBalls.Length}/{config.MaxDockBalls} -> LOSE");
+            }
         }
     }
 }
