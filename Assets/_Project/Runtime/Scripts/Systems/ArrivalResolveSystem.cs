@@ -44,7 +44,7 @@ namespace Runtime.Systems
                 var hop = EntityManager.GetComponentData<HopState>(ballEntity);
 
                 int arrivedStickIndex = path[hop.ToPathIndex].StickIndex;
-                var discs = EntityManager.GetBuffer<DiscElement>(stickRefs[arrivedStickIndex].Value);
+                var discs = EntityManager.GetBuffer<DiscElement>(stickRefs[arrivedStickIndex].Entity);
 
                 bool broke = discs.Length > 0 && discs[discs.Length - 1].Color == ball.Color;
                 if (broke)
@@ -70,7 +70,7 @@ namespace Runtime.Systems
                     continue;
                 }
 
-                var nextStick = EntityManager.GetComponentData<Stick>(stickRefs[path[nextPathIndex].StickIndex].Value);
+                var nextStick = EntityManager.GetComponentData<Stick>(stickRefs[path[nextPathIndex].StickIndex].Entity);
 
                 EntityManager.SetComponentData(ballEntity, ball);
                 EntityManager.SetComponentData(ballEntity, HopUtil.BeginHop(hop.ToPathIndex, hop.ToPosition, nextPathIndex, nextStick.Position, config));

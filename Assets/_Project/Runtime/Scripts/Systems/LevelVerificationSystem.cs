@@ -47,6 +47,29 @@ namespace Runtime.Systems
             }
 
             Debug.Log($"[{nameof(LevelVerificationSystem)}] Path[{path.Length}] = {sb}");
+
+            if (!SystemAPI.TryGetSingletonBuffer<GridColumnRefElement>(out var columnRefs))
+            {
+                Debug.LogError($"[{nameof(LevelVerificationSystem)}] GridColumnRefElement buffer not found.");
+                return;
+            }
+
+            Debug.Log($"[{nameof(LevelVerificationSystem)}] Grid column count = {columnRefs.Length}");
+
+            for (int c = 0; c < columnRefs.Length; c++)
+            {
+                var ballQueue = EntityManager.GetBuffer<GridBallElement>(columnRefs[c].Entity);
+
+                sb.Clear();
+                for (int b = 0; b < ballQueue.Length; b++)
+                {
+                    var ball = EntityManager.GetComponentData<BallComponent>(ballQueue[b].Entity);
+                    sb.Append($"{ball.Color}({ball.Remaining})");
+                    if (b < ballQueue.Length - 1) sb.Append(", ");
+                }
+
+                Debug.Log($"[{nameof(LevelVerificationSystem)}] Column {c} front->back [{ballQueue.Length}] = {sb}");
+            }
         }
 
         protected override void OnUpdate() { }

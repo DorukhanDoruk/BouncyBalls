@@ -32,3 +32,23 @@ MonoBehaviour:
     Discs: 00010203
     ShownDiscCount: 2
   PathOrder: 000000000100000002000000030000000400000005000000
+  GridColumns:
+  - Balls:
+    - Color: 3
+      Count: 3
+    - Color: 0
+      Count: 3
+    - Color: 1
+      Count: 3
+  - Balls:
+    - Color: 2
+      Count: 3
+    - Color: 3
+      Count: 3
+    - Color: 0
+      Count: 3
+  - Balls:
+    - Color: 1
+      Count: 3
+    - Color: 2
+      Count: 3
