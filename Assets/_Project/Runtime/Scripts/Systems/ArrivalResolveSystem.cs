@@ -53,8 +53,7 @@ namespace Runtime.Systems
                     ball.Remaining--;
                 }
 
-                Debug.Log($"[{nameof(ArrivalResolveSystem)}] path {hop.ToPathIndex} -> stick {arrivedStickIndex}, \nbroke={{broke}}, remaining={{ball.Remaining}}");
-
+                Debug.Log($"[{nameof(ArrivalResolveSystem)}] path {hop.ToPathIndex} -> stick {arrivedStickIndex}, \nbroke={broke}, remaining={ball.Remaining}");
                 if (ball.Remaining <= 0)
                 {
                     Debug.Log($"[{nameof(ArrivalResolveSystem)}] ball exhausted, destroying.");
