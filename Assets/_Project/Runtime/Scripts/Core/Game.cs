@@ -5,6 +5,7 @@ using Unity.Entities;
 
 namespace Runtime.Core
 {
+    [DefaultExecutionOrder(-1000)]
     public sealed class Game : MonoBehaviour
     {
         public static Game Instance { get; private set; }

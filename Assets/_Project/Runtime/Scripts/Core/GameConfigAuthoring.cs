@@ -1,10 +1,11 @@
 using Runtime.Components;
+using Runtime.Configs;
 using Runtime.Configs.Model;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
-namespace Runtime.Configs
+namespace Runtime.Core
 {
     public class GameConfigAuthoring : MonoBehaviour
     {
@@ -21,15 +22,23 @@ namespace Runtime.Configs
                 DependsOn(authoring.Ball);
 
                 var builder = new BlobBuilder(Allocator.Temp);
-                ref var root = ref builder.ConstructRoot<AnimationConfigBlob>();
+                try
+                {
+                    ref var root = ref builder.ConstructRoot<AnimationConfigBlob>();
 
-                BuildTween(ref builder, ref root.JumpArc, authoring.Animation.JumpArc);
-                BuildTween(ref builder, ref root.JumpStratch, authoring.Animation.JumpStratch);
-                BuildTween(ref builder, ref root.LandSquash, authoring.Animation.LandSquash);
+                    BuildTween(ref builder, ref root.JumpArc, authoring.Animation.JumpArc);
+                    BuildTween(ref builder, ref root.JumpStratch, authoring.Animation.JumpStratch);
+                    BuildTween(ref builder, ref root.LandSquash, authoring.Animation.LandSquash);
 
-                var blob = builder.CreateBlobAssetReference<AnimationConfigBlob>(Allocator.Persistent);
-                AddBlobAsset(ref blob, out _);
-                AddComponent(entity, new AnimationConfigRefComponent { ConfigBlob = blob });
+                    var blob = builder.CreateBlobAssetReference<AnimationConfigBlob>(Allocator.Persistent);
+                    AddBlobAsset(ref blob, out _);
+                    AddComponent(entity, new AnimationConfigRefComponent { ConfigBlob = blob });
+                }
+                finally
+                {
+                    builder.Dispose();
+                }
+                
 
                 var b = authoring.Ball;
                 AddComponent(entity, new BallConfigComponent
