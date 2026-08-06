@@ -97,10 +97,12 @@ namespace Runtime.Core
                     pathBuffer.Add(new PathElement { StickIndex = stickIndex });
                 }
 
+                var stickRefs = AddBuffer<StickRefElement>(rootEntity);
                 for (int i = 0; i < config.Sticks.Length; i++)
                 {
                     var stickDef = config.Sticks[i];
                     var stickEntity = CreateAdditionalEntity(TransformUsageFlags.None, false, $"Stick_{i}");
+                    stickRefs.Add(new StickRefElement { Value = stickEntity });
 
                     AddComponent(stickEntity, new Stick
                     {

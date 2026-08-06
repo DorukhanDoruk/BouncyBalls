@@ -16,7 +16,7 @@ namespace Runtime.Systems
             var ball = SystemAPI.GetSingleton<BallConfigComponent>();
             var anim = SystemAPI.GetSingleton<AnimationConfigRefComponent>();
 
-            Debug.Log($"[ConfigVerify] BallConfig: JumpSpeed={ball.JumpSpeed}, MaxActiveBalls={ball.MaxActiveBalls}");
+            Debug.Log($"[ConfigVerify] BallConfig: HopSpeed={ball.HopSpeed}, MaxActiveBalls={ball.MaxActiveBalls}");
 
             if (!anim.ConfigBlob.IsCreated)
             {
@@ -25,7 +25,7 @@ namespace Runtime.Systems
             }
 
             ref var blob = ref anim.ConfigBlob.Value;
-            Debug.Log($"[ConfigVerify] JumpArc: duration={blob.JumpArc.Duration}, samples={blob.JumpArc.Samples.Length}, \neval(0)={blob.JumpArc.Evaulate(0f)}, eval(0.5)={blob.JumpArc.Evaulate(0.5f)}, eval(1)={blob.JumpArc.Evaulate(1f)}");
+            Debug.Log($"[ConfigVerify] HopArc: duration={blob.HopArc.Duration}, samples={blob.HopArc.Samples.Length}, \neval(0)={blob.HopArc.Evaulate(0f)}, eval(0.5)={blob.HopArc.Evaulate(0.5f)}, eval(1)={blob.HopArc.Evaulate(1f)}");
         }
 
         protected override void OnUpdate() { }

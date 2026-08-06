@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2457c80f2e8443b9a83a42b6d56d7e8b, type: 3}
   m_Name: AnimationConfig
   m_EditorClassIdentifier: Assembly-CSharp::Runtime.Configs.AnimationConfigSO
-  JumpArc:
+  HopArc:
     Duration: 0.25
     EaseType: 0
     Curve:
@@ -49,7 +49,7 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     SampleCount: 48
-  JumpStratch:
+  HopStretch:
     Duration: 0.25
     EaseType: 0
     Curve:
