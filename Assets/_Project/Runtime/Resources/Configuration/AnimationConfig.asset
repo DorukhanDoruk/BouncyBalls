@@ -9,11 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 2457c80f2e8443b9a83a42b6d56d7e8b, type: 3}
   m_Name: AnimationConfig
-  m_EditorClassIdentifier: Assembly-CSharp:_Project.Runtime.Scripts.Configs:AnimationConfigSO
+  m_EditorClassIdentifier: Assembly-CSharp::Runtime.Configs.AnimationConfigSO
   JumpArc:
-    Duration: 0
+    Duration: 0.25
     EaseType: 0
     Curve:
       serializedVersion: 2

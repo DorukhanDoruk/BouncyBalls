@@ -1,3 +1,4 @@
+using Runtime.Components;
 using System;
 using UnityEngine;
 using Unity.Entities;
@@ -77,7 +78,7 @@ namespace Runtime.Core
 
             var manager = world.EntityManager;
             var entity = manager.CreateEntity();
-            var componentData = new ManagedServices
+            var componentData = new ManagedServicesComponent
             {
                 Container = _container
             };
