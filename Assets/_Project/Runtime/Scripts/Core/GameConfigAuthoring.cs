@@ -52,7 +52,8 @@ namespace Runtime.Core
                     MaxStretch          = b.MaxStretch,
                     MinSquash           = b.MinSquash,
                     MaxActiveBalls      = b.MaxActiveBalls,
-                    MaxDockBalls        = b.MaxDockBalls
+                    MaxDockBalls        = b.MaxDockBalls,
+                    LoopModeSpeedMultiplier = b.LoopModeSpeedMultiplier
                 });
             }
 

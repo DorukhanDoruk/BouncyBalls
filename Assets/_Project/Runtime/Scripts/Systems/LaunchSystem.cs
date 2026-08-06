@@ -54,7 +54,9 @@ namespace Runtime.Systems
                 return;
             }
 
-            EntityManager.AddComponentData(ballEntity, HopUtil.BeginHop(0, startPosition, 0, targetPosition, config));
+            float speedMultiplier = SystemAPI.GetSingleton<LoopModeComponent>().IsActive ? config.LoopModeSpeedMultiplier : 1f;
+
+            EntityManager.AddComponentData(ballEntity, HopUtil.BeginHop(0, startPosition, 0, targetPosition, config, speedMultiplier));
             EntityManager.AddComponentData(ballEntity, new LapProgressComponent { StepsTaken = 0 });
 
             launchState.LastLaunchTime = now;
