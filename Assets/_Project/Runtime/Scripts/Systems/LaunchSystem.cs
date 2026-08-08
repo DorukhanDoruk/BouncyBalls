@@ -46,7 +46,8 @@ namespace Runtime.Systems
             var path = SystemAPI.GetSingletonBuffer<PathElement>();
             var stickRefs = SystemAPI.GetSingletonBuffer<StickRefElement>();
 
-            float3 targetPosition = EntityManager.GetComponentData<Stick>(stickRefs[path[0].StickIndex].Entity).Position;
+            var firstStick = EntityManager.GetComponentData<Stick>(stickRefs[path[0].StickIndex].Entity);
+            float3 targetPosition = SlotLayoutUtil.StickTopPosition(firstStick);
             float3 startPosition = EntityManager.GetComponentData<TransformComponent>(ballEntity).Position;
 
             if (!TryTakeFromSlots(ballEntity))

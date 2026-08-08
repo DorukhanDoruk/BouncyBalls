@@ -6,6 +6,7 @@ Shader "BouncyBalls/Toon"
         _ShadeColor ("Shade Color", Color) = (0.5, 0.5, 0.5, 1)
 
         [Header(Height Gradient)]
+        [Toggle(_WORLD_GRADIENT)] _WorldGradient ("World Space Gradient", Float) = 0
         _GradientScale ("Gradient Scale", Float) = 2
         _GradientBias ("Gradient Bias", Float) = 0.5
         _LightInfluence ("Light Influence", Range(0, 1)) = 0.25
@@ -42,6 +43,7 @@ Shader "BouncyBalls/Toon"
         CBUFFER_START(UnityPerMaterial)
             float4 _BaseColor;
             float4 _ShadeColor;
+            float _WorldGradient;
             float _GradientScale;
             float _GradientBias;
             float _LightInfluence;
@@ -69,6 +71,7 @@ Shader "BouncyBalls/Toon"
             #pragma multi_compile_instancing
             #pragma multi_compile _ _MAIN_LIGHT_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE _MAIN_LIGHT_SHADOWS_SCREEN
             #pragma multi_compile_fragment _ _SHADOWS_SOFT
+            #pragma shader_feature_local_fragment _WORLD_GRADIENT
 
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
 
@@ -117,8 +120,17 @@ Shader "BouncyBalls/Toon"
                 Light mainLight = GetMainLight(shadowCoord);
 
                 // Drives the shading. A cylinder side has constant N.L along its height,
-                // so a top-to-bottom falloff can only come from object space.
-                float heightT = saturate(input.heightOS * _GradientScale + _GradientBias);
+                // so a top-to-bottom falloff has to come from position, not lighting.
+                #if defined(_WORLD_GRADIENT)
+                    // World space: meshes that sit on top of each other share one ramp,
+                    // whatever their pivot or instance scale is.
+                    float height = input.positionWS.y;
+                #else
+                    // Object space: each mesh gets its own ramp, so a ball still reads round.
+                    float height = input.heightOS;
+                #endif
+
+                float heightT = saturate(height * _GradientScale + _GradientBias);
 
                 // Smoothed bands: 0 softness gives hard toon steps, 0.5 an even ramp.
                 float steps = max(1.0, floor(_Steps));

@@ -1,9 +1,7 @@
 using Runtime.Components;
 using Runtime.Configs;
 using Runtime.Configs.Model;
-using Unity.Collections;
 using Unity.Entities;
-using Unity.Mathematics;
 using UnityEngine;
 namespace Runtime.Core
 {
@@ -21,62 +19,44 @@ namespace Runtime.Core
                 DependsOn(authoring.Animation);
                 DependsOn(authoring.Ball);
 
-                var builder = new BlobBuilder(Allocator.Temp);
-                try
+                var a = authoring.Animation;
+                AddComponent(entity, new AnimationConfigComponent
                 {
-                    ref var root = ref builder.ConstructRoot<AnimationConfigBlob>();
-
-                    BuildTween(ref builder, ref root.HopArc, authoring.Animation.HopArc);
-                    BuildTween(ref builder, ref root.HopStretch, authoring.Animation.HopStretch);
-                    BuildTween(ref builder, ref root.LandSquash, authoring.Animation.LandSquash);
-
-                    var blob = builder.CreateBlobAssetReference<AnimationConfigBlob>(Allocator.Persistent);
-                    AddBlobAsset(ref blob, out _);
-                    AddComponent(entity, new AnimationConfigRefComponent { ConfigBlob = blob });
-                }
-                finally
-                {
-                    builder.Dispose();
-                }
-                
+                    HopStretch = ToTween(a.HopStretch), 
+                    LandSquash = ToTween(a.LandSquash),
+                    GridColumnAdvance = ToTween(a.GridColumnAdvance), 
+                    DockSlotSettle = ToTween(a.DockSlotSettle),
+                    DiscStackShift = ToTween(a.DiscStackShift), 
+                    StickDip = ToTween(a.StickDip),
+                    StickDipAmount = a.StickDipAmount, 
+                    DiscPieceGravity = a.DiscPieceGravity,
+                    DiscPieceOutwardSpeed = a.DiscPieceOutwardSpeed,
+                    DiscPieceUpwardSpeed = a.DiscPieceUpwardSpeed,
+                    DiscPieceSpinSpeed = a.DiscPieceSpinSpeed,
+                    DiscPieceDissolveDelay = a.DiscPieceDissolveDelay, 
+                    DiscPieceDissolve = ToTween(a.DiscPieceDissolve),
+                });
 
                 var b = authoring.Ball;
                 AddComponent(entity, new BallConfigComponent
                 {
-                    HopSpeed            = b.HopSpeed,
-                    ArchHeightPerUnit    = b.ArchHeightPerUnit,
-                    MaxArchHeight        = b.MaxArchHeight,
+                    HopSpeed = b.HopSpeed, 
+                    ArchHeightPerUnit = b.ArchHeightPerUnit,
+                    MaxArchHeight = b.MaxArchHeight, 
                     InPlaceBounceHeight = b.InPlaceBounceHeight,
-                    InPlaceBounceTime   = b.InPlaceBounceTime,
-                    MinLaunchInterval   = b.MinLaunchInterval,
-                    MaxStretch          = b.MaxStretch,
-                    MinSquash           = b.MinSquash,
-                    MaxActiveBalls      = b.MaxActiveBalls,
-                    MaxDockBalls        = b.MaxDockBalls,
-                    LoopModeSpeedMultiplier = b.LoopModeSpeedMultiplier
+                    InPlaceBounceTime = b.InPlaceBounceTime,
+                    MinLaunchInterval = b.MinLaunchInterval,
+                    MaxStretch = b.MaxStretch, 
+                    MinSquash = b.MinSquash,
+                    MaxActiveBalls = b.MaxActiveBalls,
+                    MaxDockBalls = b.MaxDockBalls,
+                    LoopModeSpeedMultiplier = b.LoopModeSpeedMultiplier,
                 });
             }
 
-            static void BuildTween(ref BlobBuilder builder, ref TweenBlob dst, in TweenDef src)
+            static Tween ToTween(in TweenDef src)
             {
-                bool useCurve = src.Curve != null && src.Curve.length > 1;
-
-                dst.Duration = src.Duration;
-                dst.EaseType = src.EaseType;
-
-                int n = useCurve ? math.clamp(src.SampleCount, 2, 128) : 1;
-                var samples = builder.Allocate(ref dst.Samples, n);
-
-                if (!useCurve)
-                {
-                    samples[0] = 0f;
-                    return;
-                }
-
-                for (int i = 0; i < n; i++)
-                {
-                    samples[i] = src.Curve.Evaluate((float)i / (n - 1));
-                }
+                return new Tween { Duration = src.Duration, EaseType = src.EaseType };
             }
         }
     }

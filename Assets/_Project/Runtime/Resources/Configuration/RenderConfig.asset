@@ -34,6 +34,27 @@ MonoBehaviour:
   DiscMesh: {fileID: 3497320551564093415, guid: d6db94eec108143e48e9b9ea4ad7d27d, type: 3}
   DiscMaterial: {fileID: 2100000, guid: 192c86ddcaf2b4d688b6d22bedfc3601, type: 2}
   DiscScale: {x: 1, y: 1, z: 1}
+  DiscPieceMeshes:
+  - {fileID: 4300000, guid: 7d07169f808964efca36d0aa1775a78d, type: 2}
+  - {fileID: 4300000, guid: b53bb18e7483d4113bb177f1f299390b, type: 2}
+  - {fileID: 4300000, guid: 6b74809fe1ba14635a197b05ba86f8bf, type: 2}
+  - {fileID: 4300000, guid: 9e228b7bf7f684f15ba7786849f57abb, type: 2}
+  - {fileID: 4300000, guid: b7ffc2d66b7484d3b9282e6033680a73, type: 2}
+  - {fileID: 4300000, guid: 96bcdba1fd9fd403392483ef9b1d7beb, type: 2}
+  - {fileID: 4300000, guid: db05fd20d1f084ff3b9f14ecd6871edd, type: 2}
+  - {fileID: 4300000, guid: 439b422b83e574d6aa14ed75fbd2a2e7, type: 2}
+  - {fileID: 4300000, guid: 137a1319e05fc40c4bb37cd715270507, type: 2}
+  - {fileID: 4300000, guid: 71636050d075642498bc2c716e208d0b, type: 2}
+  - {fileID: 4300000, guid: c85ad65cb53824bec8de57758a84d924, type: 2}
+  - {fileID: 4300000, guid: 3aba21ff1c8e04634bb3d3d2827dfe34, type: 2}
+  - {fileID: 4300000, guid: a6aee0f57017c474b9db0fa6598e2e06, type: 2}
+  - {fileID: 4300000, guid: 24abe41c120824f52b051dd3f076af53, type: 2}
+  - {fileID: 4300000, guid: 2ee2e78b72c214bc68667e50824844b7, type: 2}
+  - {fileID: 4300000, guid: 95ede89d238ab44e28ef021fa72d08a4, type: 2}
+  - {fileID: 4300000, guid: 8cccb0781fdd944668aa1881c592ba67, type: 2}
+  - {fileID: 4300000, guid: 669d53ca3d8f048c89f3b94461a86545, type: 2}
+  - {fileID: 4300000, guid: db4680c9ada7e42d79966bab6bae690c, type: 2}
+  - {fileID: 4300000, guid: 8d988f419966e44e68e0c775bf87ddaf, type: 2}
   BallMesh: {fileID: -8284045475067764618, guid: 144188fb3b67a4efa8fc6b2a036ed9be, type: 3}
   BallMaterial: {fileID: 2100000, guid: 75449c1bff3bc43798b5ac788f2e9019, type: 2}
   BallScale: {x: 1.1, y: 1.1, z: 1.1}

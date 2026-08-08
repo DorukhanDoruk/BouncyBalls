@@ -5,14 +5,27 @@ namespace Runtime.Configs
     [CreateAssetMenu(menuName = "BouncyBalls/Animation Config", fileName = "AnimationConfig")]
     public class AnimationConfigSO : ScriptableObject
     {
-        [Header("Hop")]
-        public TweenDef HopArc = new TweenDef
-        {
-            Curve = new AnimationCurve(new Keyframe(0f, 0f), new Keyframe(0.5f, 1f), new Keyframe(1f, 0f)), SampleCount = 48,
-        };
-
-        [Header("Squash & Stratch")]
+        [Header("Squash & Stretch")]
         public TweenDef HopStretch = TweenDef.Default;
         public TweenDef LandSquash = TweenDef.Default;
+
+        [Header("Slots")]
+        public TweenDef GridColumnAdvance = TweenDef.Default;
+        public TweenDef DockSlotSettle = TweenDef.Default;
+
+        [Header("Disc")]
+        public TweenDef DiscStackShift = TweenDef.Default;
+
+        [Header("Disc Shatter")]
+        public float DiscPieceGravity = 18f;
+        public float DiscPieceOutwardSpeed = 2.5f;
+        public float DiscPieceUpwardSpeed = 3f;
+        public float DiscPieceSpinSpeed = 540f;
+        public float DiscPieceDissolveDelay = 0.6f;
+        public TweenDef DiscPieceDissolve = TweenDef.Default;
+
+        [Header("Stick")]
+        public TweenDef StickDip = TweenDef.Default;
+        public float StickDipAmount = 0.15f;
     }
 }

@@ -113,6 +113,12 @@ namespace Runtime.Core
                         Height = stickDef.ShownDiscCount * constants.DiscStackSpacing,
                     });
 
+                    // Both start finished so no stick animates on the first frame.
+                    AddComponent(stickEntity, new StickAnimationComponent
+                    {
+                        DipElapsed = float.MaxValue, ShiftElapsed = float.MaxValue,
+                    });
+
                     var discs = stickDef.Discs;
                     var firstShown = discs.Length - stickDef.ShownDiscCount;
 
@@ -147,6 +153,12 @@ namespace Runtime.Core
                         {
                             Position = SlotLayoutUtil.GridPosition(layout, c, config.GridColumns.Length, b), Rotation = float3.zero,
                             Scale = new float3(1f, 1f, 1f),
+                        });
+
+                        var slotPosition = SlotLayoutUtil.GridPosition(layout, c, config.GridColumns.Length, b);
+                        AddComponent(ballEntity, new SlotTweenComponent
+                        {
+                            From = slotPosition, To = slotPosition, Elapsed = 1f, Duration = 1f,
                         });
 
                         ballQueue.Add(new GridBallElement { Entity = ballEntity });

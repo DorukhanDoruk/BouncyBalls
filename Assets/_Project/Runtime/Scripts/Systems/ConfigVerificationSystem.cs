@@ -8,24 +8,17 @@ namespace Runtime.Systems
         protected override void OnCreate()
         {
             RequireForUpdate<BallConfigComponent>();
-            RequireForUpdate<AnimationConfigRefComponent>();
+            RequireForUpdate<AnimationConfigComponent>();
         }
 
         protected override void OnStartRunning()
         {
             var ball = SystemAPI.GetSingleton<BallConfigComponent>();
-            var anim = SystemAPI.GetSingleton<AnimationConfigRefComponent>();
+            var animation = SystemAPI.GetSingleton<AnimationConfigComponent>();
 
             Debug.Log($"[ConfigVerify] BallConfig: HopSpeed={ball.HopSpeed}, MaxActiveBalls={ball.MaxActiveBalls}");
-
-            if (!anim.ConfigBlob.IsCreated)
-            {
-                Debug.LogError("[ConfigVerify] Animation blob was never created.");
-                return;
-            }
-
-            ref var blob = ref anim.ConfigBlob.Value;
-            Debug.Log($"[ConfigVerify] HopArc: duration={blob.HopArc.Duration}, samples={blob.HopArc.Samples.Length}, eval(0)={blob.HopArc.Evaulate(0f)}, eval(0.5)={blob.HopArc.Evaulate(0.5f)}, eval(1)={blob.HopArc.Evaulate(1f)}");
+            Debug.Log($"[ConfigVerify] StickDip: duration={animation.StickDip.Duration}, ease={animation.StickDip.EaseType}, amount={animation.StickDipAmount}");
+            Debug.Log($"[ConfigVerify] DiscShatter: gravity={animation.DiscPieceGravity}, dissolve={animation.DiscPieceDissolveDelay}+{animation.DiscPieceDissolve.Duration}s");
         }
 
         protected override void OnUpdate() { }

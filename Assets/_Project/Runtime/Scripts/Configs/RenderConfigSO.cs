@@ -41,6 +41,7 @@ namespace Runtime.Configs
         public Mesh DiscMesh;
         public Material DiscMaterial;
         public Vector3 DiscScale = Vector3.one;
+        public Mesh[] DiscPieceMeshes;
 
         [Header("Ball")]
         public Mesh BallMesh;
