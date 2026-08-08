@@ -11,31 +11,57 @@ namespace Runtime.Core
     {
         public LevelConfigSO LevelConfigSo;
         public LevelConstantsSO LevelConstantsSo;
+        public BallConfigSO BallConfigSo;
+        public RenderConfigSO RenderConfigSo;
 
         private void OnDrawGizmos()
         {
             var stickCenter = StickLayoutUtil.GetCenterXZ(LevelConfigSo.Sticks);
 
+            float stackSpacing = LevelConstantsSo.DiscStackSpacing;
+
             foreach (var stickDef in LevelConfigSo.Sticks)
             {
                 var stickPosition = StickLayoutUtil.Position(stickDef.Position, stickCenter, LevelConstantsSo.StickOrigin);
-                var stickHeight = stickDef.ShownDiscCount * LevelConstantsSo.DiscSize.y;
-                var stickSize = new Vector3(LevelConstantsSo.StickWidth, stickHeight, LevelConstantsSo.StickWidth);
+                var shownCount = stickDef.ShownDiscCount;
+                var stickHeight = shownCount * stackSpacing;
+
                 Gizmos.color = Color.gray;
-                Gizmos.DrawWireCube(stickPosition + (Vector3.up * stickHeight) / 2f, stickSize);
+                Gizmos.DrawWireMesh(
+                    RenderConfigSo.HoleMesh,
+                    stickPosition + Vector3.up * RenderConfigSo.GroundOffset,
+                    Quaternion.identity,
+                    RenderConfigSo.HoleScale);
+
+                Gizmos.DrawWireMesh(
+                    RenderConfigSo.StickBodyMesh,
+                    stickPosition + Vector3.up * (stickHeight * 0.5f),
+                    Quaternion.identity,
+                    new Vector3(
+                        RenderConfigSo.StickBodyScale.x,
+                        RenderConfigSo.StickBodyScale.y * stickHeight,
+                        RenderConfigSo.StickBodyScale.z));
+
+                if (shownCount == 0)
+                {
+                    Gizmos.DrawWireMesh(
+                        RenderConfigSo.StickBaseMesh,
+                        stickPosition + Vector3.up * (stackSpacing * 0.5f),
+                        Quaternion.identity,
+                        RenderConfigSo.StickBaseScale);
+                }
 
                 var discs = stickDef.Discs;
-                var shownCount = stickDef.ShownDiscCount;
                 var firstShown = discs.Length - shownCount;
-                var discHeight = LevelConstantsSo.DiscSize.y;
 
                 for (int slot = 0; slot < shownCount; slot++)
                 {
-                    var discColor = discs[firstShown + slot];
-                    var center = stickPosition + Vector3.up * (discHeight * (slot + 0.5f));
-
-                    Gizmos.color = LevelColorUtility.GetColorOfDiskByDiscColorType_Unsafe(discColor);
-                    Gizmos.DrawWireCube(center, LevelConstantsSo.DiscSize);
+                    Gizmos.color = LevelColorUtility.GetColorOfDiskByDiscColorType_Unsafe(discs[firstShown + slot]);
+                    Gizmos.DrawWireMesh(
+                        RenderConfigSo.DiscMesh,
+                        stickPosition + Vector3.up * (stackSpacing * (slot + 0.5f)),
+                        Quaternion.identity,
+                        RenderConfigSo.DiscScale);
                 }
             }
 
@@ -83,6 +109,45 @@ namespace Runtime.Core
                 Gizmos.DrawLine(midPos, tail + side * (arrowSize * 0.5f));
                 Gizmos.DrawLine(midPos, tail - side * (arrowSize * 0.5f));
             }
+
+            DrawSlotGizmos();
+        }
+
+        private void DrawSlotGizmos()
+        {
+            var layout = new LevelLayoutComponent
+            {
+                GridOrigin = LevelConstantsSo.GridOrigin,
+                GridColumnSpacing = LevelConstantsSo.GridColumnSpacing,
+                GridRowSpacing = LevelConstantsSo.GridRowSpacing,
+                DockOrigin = LevelConstantsSo.DockOrigin,
+                DockSlotSpacing = LevelConstantsSo.DockSlotSpacing,
+            };
+
+            var columns = LevelConfigSo.GridColumns;
+
+            for (int c = 0; c < columns.Length; c++)
+            {
+                var balls = columns[c].Balls;
+                for (int b = 0; b < balls.Length; b++)
+                {
+                    Gizmos.color = LevelColorUtility.GetColorOfDiskByDiscColorType_Unsafe(balls[b].Color);
+                    Gizmos.DrawWireMesh(
+                        RenderConfigSo.BallMesh,
+                        SlotLayoutUtil.GridPosition(layout, c, columns.Length, b),
+                        Quaternion.identity,
+                        RenderConfigSo.BallScale);
+                }
+            }
+
+            Gizmos.color = Color.gray;
+            for (int slot = 0; slot < BallConfigSo.MaxDockBalls; slot++)
+            {
+                float3 position = SlotLayoutUtil.DockPosition(layout, slot, BallConfigSo.MaxDockBalls);
+                position.y += RenderConfigSo.GroundOffset;
+
+                Gizmos.DrawWireMesh(RenderConfigSo.DockMesh, position, Quaternion.identity, RenderConfigSo.DockScale);
+            }
         }
 
         public class LevelBaker : Baker<LevelAuthoring>
@@ -104,7 +169,7 @@ namespace Runtime.Core
                     DockOrigin = constants.DockOrigin,
                     DockSlotSpacing = constants.DockSlotSpacing, 
                     BallSelectionRadius = constants.BallSelectionRadius,
-                    DiscHeight = constants.DiscSize.y, 
+                    DiscStackSpacing = constants.DiscStackSpacing, 
                     CameraPadding = constants.CameraPadding,
                     CameraDistance = constants.CameraDistance,
                 };
@@ -131,7 +196,12 @@ namespace Runtime.Core
                     var stickEntity = CreateAdditionalEntity(TransformUsageFlags.None, false, $"Stick_{i}");
                     stickRefs.Add(new StickRefElement { Entity = stickEntity });
 
-                    AddComponent(stickEntity, new Stick { Index = i, Position = StickLayoutUtil.Position(stickDef.Position, stickCenter, constants.StickOrigin) });
+                    AddComponent(stickEntity, new Stick
+                    {
+                        Index = i,
+                        Position = StickLayoutUtil.Position(stickDef.Position, stickCenter, constants.StickOrigin),
+                        Height = stickDef.ShownDiscCount * constants.DiscStackSpacing,
+                    });
 
                     var discs = stickDef.Discs;
                     var firstShown = discs.Length - stickDef.ShownDiscCount;

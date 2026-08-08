@@ -4,8 +4,7 @@ namespace Runtime.Configs
     [CreateAssetMenu(menuName = "BouncyBalls/Level Constants", fileName = "LevelConstants")]
     public class LevelConstantsSO : ScriptableObject
     {
-        public float StickWidth;
-        public Vector3 DiscSize;
+        public float DiscStackSpacing = 0.5f;
 
         [Header("Stick Layout")]
         public Vector3 StickOrigin;

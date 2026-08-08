@@ -13,7 +13,7 @@ namespace Runtime.Components
 
         public float BallSelectionRadius;
 
-        public float DiscHeight;
+        public float DiscStackSpacing;
         public float CameraPadding;
         public float CameraDistance;
     }

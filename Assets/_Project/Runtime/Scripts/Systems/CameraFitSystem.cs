@@ -54,7 +54,7 @@ namespace Runtime.Systems
             foreach (var (stick, discs) in SystemAPI.Query<RefRO<Stick>, DynamicBuffer<DiscElement>>())
             {
                 float3 basePosition = stick.ValueRO.Position;
-                float3 stackTop = basePosition + new float3(0f, discs.Length * layout.DiscHeight, 0f);
+                float3 stackTop = basePosition + new float3(0f, discs.Length * layout.DiscStackSpacing, 0f);
 
                 Encapsulate(ref bounds, ref initialized, basePosition);
                 Encapsulate(ref bounds, ref initialized, stackTop);
