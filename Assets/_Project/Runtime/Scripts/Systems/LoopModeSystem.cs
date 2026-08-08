@@ -66,8 +66,7 @@ namespace Runtime.Systems
             {
                 float3 startPosition = EntityManager.GetComponentData<TransformComponent>(ballEntity).Position;
 
-                EntityManager.AddComponentData(ballEntity,
-                    HopUtil.BeginHop(0, startPosition, 0, targetPosition, config, config.LoopModeSpeedMultiplier));
+                EntityManager.AddComponentData(ballEntity, HopUtil.BeginHop(0, startPosition, 0, targetPosition, config, config.LoopModeSpeedMultiplier * config.LaunchSpeedMultiplier));
                 EntityManager.AddComponentData(ballEntity, new LapProgressComponent { StepsTaken = 0 });
             }
 

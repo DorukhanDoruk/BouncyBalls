@@ -19,19 +19,23 @@ MonoBehaviour:
     Duration: 0.25
     EaseType: 0
   GridColumnAdvance:
-    Duration: 0.25
+    Duration: 0.5
     EaseType: 0
   DockSlotSettle:
-    Duration: 0.25
+    Duration: 0.5
     EaseType: 0
   DiscStackShift:
     Duration: 0.25
     EaseType: 0
   DiscPieceGravity: 18
-  DiscPieceOutwardSpeed: 2.5
+  DiscPieceOutwardSpeed: 1
   DiscPieceUpwardSpeed: 3
   DiscPieceSpinSpeed: 540
-  DiscPieceDissolveDelay: 20
+  DiscPieceEndScale: 0.5
+  DiscPieceScale:
+    Duration: 0.5
+    EaseType: 0
+  DiscPieceDissolveDelay: 2
   DiscPieceDissolve:
     Duration: 0.25
     EaseType: 0

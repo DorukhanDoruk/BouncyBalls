@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a6c1f68982741fe9dd3490d845eac9f, type: 3}
   m_Name: BallConfig
   m_EditorClassIdentifier: Assembly-CSharp::Runtime.Configs.BallConfigSO
-  HopSpeed: 3
+  HopSpeed: 4.5
+  LaunchSpeedMultiplier: 4.5
+  DockReturnSpeedMultiplier: 5
   ArchHeightPerUnit: 1
   MaxArchHeight: 3
   InPlaceBounceHeight: 1
@@ -22,3 +24,4 @@ MonoBehaviour:
   MinSquash: 0.7
   MaxActiveBalls: 5
   MaxDockBalls: 5
+  LoopModeSpeedMultiplier: 2

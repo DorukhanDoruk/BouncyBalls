@@ -14,7 +14,7 @@ namespace Runtime.Utility
 
             return new HopState
             {
-                FromPathIndex = fromPathIndex, 
+                FromPathIndex = fromPathIndex,
                 ToPathIndex = toPathIndex,
                 FromPosition = fromPosition,
                 ToPosition = toPosition,

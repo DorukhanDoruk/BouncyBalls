@@ -21,6 +21,8 @@ namespace Runtime.Configs
         public float DiscPieceOutwardSpeed = 2.5f;
         public float DiscPieceUpwardSpeed = 3f;
         public float DiscPieceSpinSpeed = 540f;
+        public float DiscPieceEndScale = 0.6f;
+        public TweenDef DiscPieceScale = TweenDef.Default;
         public float DiscPieceDissolveDelay = 0.6f;
         public TweenDef DiscPieceDissolve = TweenDef.Default;
 

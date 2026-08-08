@@ -4,6 +4,8 @@ namespace Runtime.Components
     public struct BallConfigComponent : IComponentData
     {
         public float HopSpeed;
+        public float LaunchSpeedMultiplier;
+        public float DockReturnSpeedMultiplier;
         public float ArchHeightPerUnit;
         public float MaxArchHeight;
 

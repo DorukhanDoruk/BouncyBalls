@@ -18,6 +18,10 @@ namespace Runtime.Components
         public float DiscPieceOutwardSpeed;
         public float DiscPieceUpwardSpeed;
         public float DiscPieceSpinSpeed;
+
+        public float DiscPieceEndScale;
+        public Tween DiscPieceScale;
+
         public float DiscPieceDissolveDelay;
         public Tween DiscPieceDissolve;
     }

@@ -185,7 +185,8 @@ namespace Runtime.Systems
                         _renderConfig.StickBaseScale));
                 }
 
-                for (int slot = 0; slot < discs.Length; slot++)
+                int firstShown = math.max(0, discs.Length - stick.ValueRO.ShownDiscCount);
+                for (int slot = firstShown; slot < discs.Length; slot++)
                 {
                     _discMatricesByColor[(int)discs[slot].Color].Add(Matrix4x4.TRS(
                         SlotLayoutUtil.DiscPosition(stick.ValueRO, slot, discs.Length, discHeight) + stackOffset,
@@ -199,8 +200,11 @@ namespace Runtime.Systems
             foreach (var pieceRef in SystemAPI.Query<RefRO<DiscPieceComponent>>())
             {
                 var piece = pieceRef.ValueRO;
+                float shrinkT = math.saturate(piece.Elapsed / animation.DiscPieceScale.Duration);
+                float shrink = math.lerp(1f, animation.DiscPieceEndScale, animation.DiscPieceScale.Evaluate(shrinkT));
+
                 float dissolveT = math.saturate((piece.Elapsed - animation.DiscPieceDissolveDelay) / animation.DiscPieceDissolve.Duration);
-                float scale = 1f - animation.DiscPieceDissolve.Evaluate(dissolveT);
+                float scale = shrink * (1f - animation.DiscPieceDissolve.Evaluate(dissolveT));
 
                 var pieceMesh = _renderConfig.DiscPieceMeshes[piece.MeshIndex];
 
