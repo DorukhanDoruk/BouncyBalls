@@ -58,7 +58,7 @@ namespace Runtime.Systems
                     ball.Remaining--;
                 }
 
-                Debug.Log($"[{nameof(ArrivalResolveSystem)}] path {hop.ToPathIndex} -> stick {arrivedStickIndex}, \nbroke={broke}, remaining={ball.Remaining}");
+                Debug.Log($"[{nameof(ArrivalResolveSystem)}] path {hop.ToPathIndex} -> stick {arrivedStickIndex}, broke={broke}, remaining={ball.Remaining}");
                 if (ball.Remaining <= 0)
                 {
                     Debug.Log($"[{nameof(ArrivalResolveSystem)}] ball exhausted, destroying.");
@@ -87,7 +87,7 @@ namespace Runtime.Systems
                 int nextSteps = (nextPathIndex - hop.ToPathIndex + path.Length) % path.Length;
                 if (!loopMode && lap.StepsTaken + nextSteps >= path.Length)
                 {
-                    Debug.Log($"[{nameof(ArrivalResolveSystem)}] lap complete at stick {arrivedStickIndex} \n({lap.StepsTaken + nextSteps} steps), returning to dock.");
+                    Debug.Log($"[{nameof(ArrivalResolveSystem)}] lap complete at stick {arrivedStickIndex} ({lap.StepsTaken + nextSteps} steps), returning to dock.");
                     EntityManager.SetComponentData(ballEntity, ball);
                     ReturnToDock(ballEntity);
                     continue;

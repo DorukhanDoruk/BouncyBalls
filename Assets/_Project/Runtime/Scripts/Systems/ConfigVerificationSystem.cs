@@ -25,7 +25,7 @@ namespace Runtime.Systems
             }
 
             ref var blob = ref anim.ConfigBlob.Value;
-            Debug.Log($"[ConfigVerify] HopArc: duration={blob.HopArc.Duration}, samples={blob.HopArc.Samples.Length}, \neval(0)={blob.HopArc.Evaulate(0f)}, eval(0.5)={blob.HopArc.Evaulate(0.5f)}, eval(1)={blob.HopArc.Evaulate(1f)}");
+            Debug.Log($"[ConfigVerify] HopArc: duration={blob.HopArc.Duration}, samples={blob.HopArc.Samples.Length}, eval(0)={blob.HopArc.Evaulate(0f)}, eval(0.5)={blob.HopArc.Evaulate(0.5f)}, eval(1)={blob.HopArc.Evaulate(1f)}");
         }
 
         protected override void OnUpdate() { }

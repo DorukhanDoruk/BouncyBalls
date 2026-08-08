@@ -15,9 +15,11 @@ MonoBehaviour:
   StickWidth: 0.25
   DiscSize: {x: 1, y: 0.5, z: 1}
   StickOrigin: {x: 0, y: 0, z: 5}
-  GridOrigin: {x: 0, y: 0, z: 0}
-  GridColumnSpacing: 1.5
-  GridRowSpacing: 1.5
+  GridOrigin: {x: 0, y: 0, z: -4}
+  GridColumnSpacing: 1.75
+  GridRowSpacing: 1.75
   DockOrigin: {x: 0, y: 0, z: 3}
   DockSlotSpacing: 1.5
+  CameraPadding: 1
+  CameraDistance: 20
   BallSelectionRadius: 0.75

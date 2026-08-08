@@ -12,5 +12,9 @@ namespace Runtime.Components
         public float DockSlotSpacing;
 
         public float BallSelectionRadius;
+
+        public float DiscHeight;
+        public float CameraPadding;
+        public float CameraDistance;
     }
 }
