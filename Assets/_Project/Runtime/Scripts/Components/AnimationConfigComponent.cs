@@ -9,10 +9,16 @@ namespace Runtime.Components
 
         public Tween GridColumnAdvance;
         public Tween DockSlotSettle;
-        public Tween DiscBreakPop;
 
         public Tween DiscStackShift;
         public Tween StickDip;
         public float StickDipAmount;
+
+        public float DiscPieceGravity;
+        public float DiscPieceOutwardSpeed;
+        public float DiscPieceUpwardSpeed;
+        public float DiscPieceSpinSpeed;
+        public float DiscPieceDissolveDelay;
+        public Tween DiscPieceDissolve;
     }
 }

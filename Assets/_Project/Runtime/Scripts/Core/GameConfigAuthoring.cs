@@ -22,30 +22,35 @@ namespace Runtime.Core
                 var a = authoring.Animation;
                 AddComponent(entity, new AnimationConfigComponent
                 {
-                    HopStretch        = ToTween(a.HopStretch),
-                    LandSquash        = ToTween(a.LandSquash),
-                    GridColumnAdvance = ToTween(a.GridColumnAdvance),
-                    DockSlotSettle    = ToTween(a.DockSlotSettle),
-                    DiscBreakPop      = ToTween(a.DiscBreakPop),
-                    DiscStackShift    = ToTween(a.DiscStackShift),
-                    StickDip          = ToTween(a.StickDip),
-                    StickDipAmount    = a.StickDipAmount,
+                    HopStretch = ToTween(a.HopStretch), 
+                    LandSquash = ToTween(a.LandSquash),
+                    GridColumnAdvance = ToTween(a.GridColumnAdvance), 
+                    DockSlotSettle = ToTween(a.DockSlotSettle),
+                    DiscStackShift = ToTween(a.DiscStackShift), 
+                    StickDip = ToTween(a.StickDip),
+                    StickDipAmount = a.StickDipAmount, 
+                    DiscPieceGravity = a.DiscPieceGravity,
+                    DiscPieceOutwardSpeed = a.DiscPieceOutwardSpeed,
+                    DiscPieceUpwardSpeed = a.DiscPieceUpwardSpeed,
+                    DiscPieceSpinSpeed = a.DiscPieceSpinSpeed,
+                    DiscPieceDissolveDelay = a.DiscPieceDissolveDelay, 
+                    DiscPieceDissolve = ToTween(a.DiscPieceDissolve),
                 });
 
                 var b = authoring.Ball;
                 AddComponent(entity, new BallConfigComponent
                 {
-                    HopSpeed            = b.HopSpeed,
-                    ArchHeightPerUnit    = b.ArchHeightPerUnit,
-                    MaxArchHeight        = b.MaxArchHeight,
+                    HopSpeed = b.HopSpeed, 
+                    ArchHeightPerUnit = b.ArchHeightPerUnit,
+                    MaxArchHeight = b.MaxArchHeight, 
                     InPlaceBounceHeight = b.InPlaceBounceHeight,
-                    InPlaceBounceTime   = b.InPlaceBounceTime,
-                    MinLaunchInterval   = b.MinLaunchInterval,
-                    MaxStretch          = b.MaxStretch,
-                    MinSquash           = b.MinSquash,
-                    MaxActiveBalls      = b.MaxActiveBalls,
-                    MaxDockBalls        = b.MaxDockBalls,
-                    LoopModeSpeedMultiplier = b.LoopModeSpeedMultiplier
+                    InPlaceBounceTime = b.InPlaceBounceTime,
+                    MinLaunchInterval = b.MinLaunchInterval,
+                    MaxStretch = b.MaxStretch, 
+                    MinSquash = b.MinSquash,
+                    MaxActiveBalls = b.MaxActiveBalls,
+                    MaxDockBalls = b.MaxDockBalls,
+                    LoopModeSpeedMultiplier = b.LoopModeSpeedMultiplier,
                 });
             }
 

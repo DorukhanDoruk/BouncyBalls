@@ -17,8 +17,8 @@ namespace Runtime.Systems
             var animation = SystemAPI.GetSingleton<AnimationConfigComponent>();
 
             Debug.Log($"[ConfigVerify] BallConfig: HopSpeed={ball.HopSpeed}, MaxActiveBalls={ball.MaxActiveBalls}");
-            Debug.Log($"[ConfigVerify] DiscBreakPop: duration={animation.DiscBreakPop.Duration}, ease={animation.DiscBreakPop.EaseType}, " +
-                      $"eval(0)={animation.DiscBreakPop.Evaluate(0f)}, eval(0.5)={animation.DiscBreakPop.Evaluate(0.5f)}, eval(1)={animation.DiscBreakPop.Evaluate(1f)}");
+            Debug.Log($"[ConfigVerify] StickDip: duration={animation.StickDip.Duration}, ease={animation.StickDip.EaseType}, amount={animation.StickDipAmount}");
+            Debug.Log($"[ConfigVerify] DiscShatter: gravity={animation.DiscPieceGravity}, dissolve={animation.DiscPieceDissolveDelay}+{animation.DiscPieceDissolve.Duration}s");
         }
 
         protected override void OnUpdate() { }

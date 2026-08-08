@@ -39,12 +39,15 @@ namespace Runtime.Systems
 
         private NativeList<Matrix4x4> _stickBodyMatrices;
         private NativeList<Matrix4x4> _stickBaseMatrices;
+        private NativeList<Matrix4x4>[] _pieceMatrices;
 
         protected override void OnCreate()
         {
             RequireForUpdate<LevelLayoutComponent>();
             RequireForUpdate<BallConfigComponent>();
             RequireForUpdate<AnimationConfigComponent>();
+
+            _renderConfig = Resources.Load<RenderConfigSO>(RenderConfigSO.ResourcePath);
 
             _holeMatrices = new NativeList<Matrix4x4>(64, Allocator.Persistent);
             _dockMatrices = new NativeList<Matrix4x4>(8, Allocator.Persistent);
@@ -61,6 +64,12 @@ namespace Runtime.Systems
                 _discMatricesByColor[i] = new NativeList<Matrix4x4>(64, Allocator.Persistent);
                 _ballMatricesByColor[i] = new NativeList<Matrix4x4>(8, Allocator.Persistent);
             }
+
+            _pieceMatrices = new NativeList<Matrix4x4>[_renderConfig.DiscPieceMeshes.Length * colorCount];
+            for (int i = 0; i < _pieceMatrices.Length; i++)
+            {
+                _pieceMatrices[i] = new NativeList<Matrix4x4>(16, Allocator.Persistent);
+            }
         }
 
         protected override void OnDestroy()
@@ -74,12 +83,15 @@ namespace Runtime.Systems
                 _discMatricesByColor[i].Dispose();
                 _ballMatricesByColor[i].Dispose();
             }
+
+            for (int i = 0; i < _pieceMatrices.Length; i++)
+            {
+                _pieceMatrices[i].Dispose();
+            }
         }
 
         protected override void OnStartRunning()
         {
-            _renderConfig = Resources.Load<RenderConfigSO>(RenderConfigSO.ResourcePath);
-
             _stickBodyParams = new RenderParams(_renderConfig.StickBodyMaterial) { receiveShadows = true, shadowCastingMode = ShadowCastingMode.On };
             _stickBaseParams = new RenderParams(_renderConfig.StickBaseMaterial) { receiveShadows = true, shadowCastingMode = ShadowCastingMode.On };
 
@@ -121,6 +133,11 @@ namespace Runtime.Systems
             {
                 _discMatricesByColor[i].Clear();
                 _ballMatricesByColor[i].Clear();
+            }
+
+            for (int i = 0; i < _pieceMatrices.Length; i++)
+            {
+                _pieceMatrices[i].Clear();
             }
 
 
@@ -177,16 +194,18 @@ namespace Runtime.Systems
                 }
             }
 
-            foreach (var dyingDisc in SystemAPI.Query<RefRO<DyingDiscComponent>>())
-            {
-                var disc = dyingDisc.ValueRO;
-                float t = math.saturate(disc.Elapsed / disc.Duration);
-                float pop = math.lerp(1f, 0f, animation.DiscBreakPop.Evaluate(t));
+            int colorCount = _discMatricesByColor.Length;
 
-                _discMatricesByColor[(int)disc.Color].Add(Matrix4x4.TRS(
-                    disc.Position,
-                    Quaternion.identity,
-                    _renderConfig.DiscScale * pop));
+            foreach (var pieceRef in SystemAPI.Query<RefRO<DiscPieceComponent>>())
+            {
+                var piece = pieceRef.ValueRO;
+                float dissolveT = math.saturate((piece.Elapsed - animation.DiscPieceDissolveDelay) / animation.DiscPieceDissolve.Duration);
+                float scale = 1f - animation.DiscPieceDissolve.Evaluate(dissolveT);
+
+                _pieceMatrices[piece.MeshIndex * colorCount + (int)piece.Color].Add(Matrix4x4.TRS(
+                    piece.Position,
+                    Quaternion.Euler(piece.Rotation),
+                    _renderConfig.DiscScale * scale));
             }
 
             float ballMeshBottom = _renderConfig.BallMesh.bounds.min.y;
@@ -219,6 +238,15 @@ namespace Runtime.Systems
             {
                 Draw(_discParamsByColor[i], _renderConfig.DiscMesh, _discMatricesByColor[i]);
                 Draw(_ballParamsByColor[i], _renderConfig.BallMesh, _ballMatricesByColor[i]);
+            }
+
+            for (int mesh = 0; mesh < _renderConfig.DiscPieceMeshes.Length; mesh++)
+            {
+                for (int color = 0; color < colorCount; color++)
+                {
+                    Draw(_discParamsByColor[color], _renderConfig.DiscPieceMeshes[mesh],
+                        _pieceMatrices[mesh * colorCount + color]);
+                }
             }
         }
         

@@ -11,7 +11,8 @@ Material:
   m_Shader: {fileID: 4800000, guid: b8ff696e68acb4651920770fc3d219b6, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
+  m_ValidKeywords:
+  - _WORLD_GRADIENT
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 1
@@ -125,6 +126,7 @@ Material:
     - _Steps: 1
     - _Surface: 0
     - _WorkflowMode: 1
+    - _WorldGradient: 1
     - _XRMotionVectorsPass: 1
     - _ZWrite: 1
     m_Colors:

@@ -14,8 +14,15 @@ namespace Runtime.Configs
         public TweenDef DockSlotSettle = TweenDef.Default;
 
         [Header("Disc")]
-        public TweenDef DiscBreakPop = TweenDef.Default;
         public TweenDef DiscStackShift = TweenDef.Default;
+
+        [Header("Disc Shatter")]
+        public float DiscPieceGravity = 18f;
+        public float DiscPieceOutwardSpeed = 2.5f;
+        public float DiscPieceUpwardSpeed = 3f;
+        public float DiscPieceSpinSpeed = 540f;
+        public float DiscPieceDissolveDelay = 0.6f;
+        public TweenDef DiscPieceDissolve = TweenDef.Default;
 
         [Header("Stick")]
         public TweenDef StickDip = TweenDef.Default;
