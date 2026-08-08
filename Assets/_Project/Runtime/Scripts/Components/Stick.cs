@@ -6,5 +6,6 @@ namespace Runtime.Components
     {
         public int Index;
         public float3 Position;
+        public float Height; // ShownDiscCount * DiscStackSpacing
     }
 }

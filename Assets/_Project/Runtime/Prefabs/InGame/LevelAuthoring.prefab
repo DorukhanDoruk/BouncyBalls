@@ -46,3 +46,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Runtime.Core.LevelAuthoring
   LevelConfigSo: {fileID: 11400000, guid: a2af81ca867154448aee9e5c894bedd2, type: 2}
   LevelConstantsSo: {fileID: 11400000, guid: 7485c0c5dae544c03a19b50950ddb34c, type: 2}
+  BallConfigSo: {fileID: 11400000, guid: 92601b03206b64777a1bb1c9afe93c84, type: 2}
+  RenderConfigSo: {fileID: 11400000, guid: ca48b28fe914741588078a36e601b4cc, type: 2}

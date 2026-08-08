@@ -12,14 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5650845f193c45ed847750090017ef5c, type: 3}
   m_Name: LevelConstants
   m_EditorClassIdentifier: Assembly-CSharp::Runtime.Configs.LevelConstantsSO
-  StickWidth: 0.25
-  DiscSize: {x: 1, y: 0.5, z: 1}
-  StickOrigin: {x: 0, y: 0, z: 5}
-  GridOrigin: {x: 0, y: 0, z: -4}
+  DiscStackSpacing: 0.5
+  StickOrigin: {x: 0, y: 0, z: 4}
+  GridOrigin: {x: 0, y: 0.6, z: -7}
   GridColumnSpacing: 1.75
-  GridRowSpacing: 1.75
-  DockOrigin: {x: 0, y: 0, z: 3}
+  GridRowSpacing: 2.35
+  DockOrigin: {x: 0, y: 0.1, z: -3.5}
   DockSlotSpacing: 1.5
-  CameraPadding: 1
-  CameraDistance: 20
   BallSelectionRadius: 0.75

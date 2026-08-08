@@ -13,25 +13,28 @@ MonoBehaviour:
   m_Name: LevelConfig
   m_EditorClassIdentifier: Assembly-CSharp::Runtime.Configs.LevelConfigSO
   Sticks:
-  - Position: {x: 0, y: 0, z: 0}
-    Discs: 00010203
-    ShownDiscCount: 2
-  - Position: {x: 1.5, y: 0, z: 1.5}
-    Discs: 00010203
+  - Position: {x: -3.3, y: 0, z: 0}
+    Discs: 0001020300010203
     ShownDiscCount: 3
-  - Position: {x: 3, y: 0, z: 3}
-    Discs: 00010203
+  - Position: {x: -2.2, y: 0, z: 1.2}
+    Discs: 0001020300010203
     ShownDiscCount: 4
-  - Position: {x: 4.5, y: 0, z: 3}
-    Discs: 00010203
+  - Position: {x: -1.1, y: 0, z: 2.4}
+    Discs: 0001020300010203
+    ShownDiscCount: 5
+  - Position: {x: 0, y: 0, z: 3.6}
+    Discs: 0001020300010203
+    ShownDiscCount: 6
+  - Position: {x: 1.1, y: 0, z: 2.4}
+    Discs: 0001020300010203
+    ShownDiscCount: 5
+  - Position: {x: 2.2, y: 0, z: 1.2}
+    Discs: 0001020300010203
     ShownDiscCount: 4
-  - Position: {x: 6, y: 0, z: 1.5}
-    Discs: 00010203
+  - Position: {x: 3.3, y: 0, z: 0}
+    Discs: 0001020300010203
     ShownDiscCount: 3
-  - Position: {x: 7.5, y: 0, z: 0}
-    Discs: 00010203
-    ShownDiscCount: 2
-  PathOrder: 000000000100000002000000030000000400000005000000
+  PathOrder: 00000000010000000200000003000000040000000500000006000000
   GridColumns:
   - Balls:
     - Color: 3
@@ -40,7 +43,6 @@ MonoBehaviour:
       Count: 3
     - Color: 1
       Count: 3
-  - Balls:
     - Color: 2
       Count: 3
     - Color: 3
@@ -48,7 +50,24 @@ MonoBehaviour:
     - Color: 0
       Count: 3
   - Balls:
+    - Color: 2
+      Count: 3
+    - Color: 3
+      Count: 3
+    - Color: 0
+      Count: 3
     - Color: 1
       Count: 3
     - Color: 2
+      Count: 3
+  - Balls:
+    - Color: 1
+      Count: 3
+    - Color: 2
+      Count: 3
+    - Color: 3
+      Count: 3
+    - Color: 0
+      Count: 3
+    - Color: 1
       Count: 3

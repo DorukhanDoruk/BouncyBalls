@@ -14,51 +14,29 @@ namespace Runtime.Core
 
         private void OnDrawGizmos()
         {
-            var stickCenter = StickLayoutUtil.GetCenterXZ(LevelConfigSo.Sticks);
-
-            foreach (var stickDef in LevelConfigSo.Sticks)
-            {
-                var stickPosition = StickLayoutUtil.Position(stickDef.Position, stickCenter, LevelConstantsSo.StickOrigin);
-                var stickHeight = stickDef.ShownDiscCount * LevelConstantsSo.DiscSize.y;
-                var stickSize = new Vector3(LevelConstantsSo.StickWidth, stickHeight, LevelConstantsSo.StickWidth);
-                Gizmos.color = Color.gray;
-                Gizmos.DrawWireCube(stickPosition + (Vector3.up * stickHeight) / 2f, stickSize);
-
-                var discs = stickDef.Discs;
-                var shownCount = stickDef.ShownDiscCount;
-                var firstShown = discs.Length - shownCount;
-                var discHeight = LevelConstantsSo.DiscSize.y;
-
-                for (int slot = 0; slot < shownCount; slot++)
-                {
-                    var discColor = discs[firstShown + slot];
-                    var center = stickPosition + Vector3.up * (discHeight * (slot + 0.5f));
-
-                    Gizmos.color = LevelColorUtility.GetColorOfDiskByDiscColorType_Unsafe(discColor);
-                    Gizmos.DrawWireCube(center, LevelConstantsSo.DiscSize);
-                }
-            }
-
             const float arrowSize = 0.25f;
 
-            Gizmos.color = Color.white;
+            var sticks = LevelConfigSo.Sticks;
             var pathOrder = LevelConfigSo.PathOrder;
+
+            Gizmos.color = Color.white;
+
             for (int i = 0; i < pathOrder.Length - 1; i++)
             {
                 int fromStick = pathOrder[i];
                 int toStick = pathOrder[i + 1];
 
-                if (fromStick < 0 || fromStick >= LevelConfigSo.Sticks.Length)
+                if (fromStick < 0 || fromStick >= sticks.Length)
                 {
                     continue;
                 }
-                if (toStick < 0 || toStick >= LevelConfigSo.Sticks.Length)
+                if (toStick < 0 || toStick >= sticks.Length)
                 {
                     continue;
                 }
 
-                float3 startPos = StickLayoutUtil.Position(LevelConfigSo.Sticks[fromStick].Position, stickCenter, LevelConstantsSo.StickOrigin);
-                float3 endPos = StickLayoutUtil.Position(LevelConfigSo.Sticks[toStick].Position, stickCenter, LevelConstantsSo.StickOrigin);
+                float3 startPos = sticks[fromStick].Position + LevelConstantsSo.StickOrigin;
+                float3 endPos = sticks[toStick].Position + LevelConstantsSo.StickOrigin;
 
                 float3 delta = endPos - startPos;
                 float dist = math.length(delta);
@@ -104,9 +82,8 @@ namespace Runtime.Core
                     DockOrigin = constants.DockOrigin,
                     DockSlotSpacing = constants.DockSlotSpacing, 
                     BallSelectionRadius = constants.BallSelectionRadius,
-                    DiscHeight = constants.DiscSize.y, 
-                    CameraPadding = constants.CameraPadding,
-                    CameraDistance = constants.CameraDistance,
+                    DiscStackSpacing = constants.DiscStackSpacing, 
+                   
                 };
 
                 AddComponent(rootEntity, layout);
@@ -122,8 +99,6 @@ namespace Runtime.Core
                     pathBuffer.Add(new PathElement { StickIndex = stickIndex });
                 }
 
-                var stickCenter = StickLayoutUtil.GetCenterXZ(config.Sticks);
-
                 var stickRefs = AddBuffer<StickRefElement>(rootEntity);
                 for (int i = 0; i < config.Sticks.Length; i++)
                 {
@@ -131,7 +106,12 @@ namespace Runtime.Core
                     var stickEntity = CreateAdditionalEntity(TransformUsageFlags.None, false, $"Stick_{i}");
                     stickRefs.Add(new StickRefElement { Entity = stickEntity });
 
-                    AddComponent(stickEntity, new Stick { Index = i, Position = StickLayoutUtil.Position(stickDef.Position, stickCenter, constants.StickOrigin) });
+                    AddComponent(stickEntity, new Stick
+                    {
+                        Index = i,
+                        Position = stickDef.Position + constants.StickOrigin,
+                        Height = stickDef.ShownDiscCount * constants.DiscStackSpacing,
+                    });
 
                     var discs = stickDef.Discs;
                     var firstShown = discs.Length - stickDef.ShownDiscCount;
