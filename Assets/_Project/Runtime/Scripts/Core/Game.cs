@@ -9,14 +9,13 @@ namespace Runtime.Core
     public sealed class Game : MonoBehaviour
     {
         public static Game Instance { get; private set; }
-        public static bool IsReady => Instance != null && Instance._ready;
+        public static bool IsReady => Instance != null && Instance._container != null;
         
         [Header("UI")]
         [SerializeField] private UiRootView _uiRootPrefab;
 
         private ServiceContainer _container;
         private Entity _servicesEntity;
-        private bool _ready;
 
         #region Unity
         private void Awake()
@@ -37,7 +36,7 @@ namespace Runtime.Core
 
         private void Update()
         {
-            if (_ready)
+            if (_container != null)
             {
                 _container.Tick(Time.deltaTime);
             }
@@ -52,7 +51,6 @@ namespace Runtime.Core
                 _container?.Dispose();
                 _container = null;
                 Instance = null;
-                _ready = false;
             }
         }
         #endregion Unity
@@ -63,7 +61,6 @@ namespace Runtime.Core
             _container.Register(new UiService(_uiRootPrefab));
             
             _container.InitializeAll();
-            _ready = true;
 
             PublishToEcsWorld();
         }
@@ -73,7 +70,7 @@ namespace Runtime.Core
             var world = World.DefaultGameObjectInjectionWorld;
             if (world == null || !world.IsCreated)
             {
-                Debug.LogError($"[{nameof(Game)}] ECS world is no tready.");
+                Debug.LogError($"[{nameof(Game)}] ECS world is not ready.");
                 return;
             }
 

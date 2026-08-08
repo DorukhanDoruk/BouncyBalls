@@ -24,6 +24,7 @@ namespace Runtime.Core
                 {
                     HopStretch = ToTween(a.HopStretch), 
                     LandSquash = ToTween(a.LandSquash),
+                    BallVanish = ToTween(a.BallVanish),
                     GridColumnAdvance = ToTween(a.GridColumnAdvance), 
                     DockSlotSettle = ToTween(a.DockSlotSettle),
                     DiscStackShift = ToTween(a.DiscStackShift), 

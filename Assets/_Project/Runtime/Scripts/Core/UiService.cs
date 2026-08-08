@@ -27,6 +27,7 @@ namespace Runtime.Core
 
             _labelRoot = (RectTransform)new GameObject("BallLabels", typeof(RectTransform)).transform;
             _labelRoot.SetParent(_root.Root, false);
+            _labelRoot.SetAsFirstSibling();
 
             _labelRoot.anchorMin = Vector2.zero;
             _labelRoot.anchorMax = Vector2.one;
@@ -90,6 +91,11 @@ namespace Runtime.Core
         // The UI root survives the load, so its state is reset by hand before reloading.
         private void Restart()
         {
+            if (!_resultShown)
+            {
+                return;
+            }
+
             _resultShown = false;
             _root.Backdrop.Hide();
             _root.ResultPanel.Hide();

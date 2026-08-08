@@ -48,8 +48,25 @@ MonoBehaviour:
     - Color: 3
       Count: 3
     - Color: 0
-      Count: 3
+      Count: 4
+    - Color: 1
+      Count: 2
   - Balls:
+    - Color: 2
+      Count: 3
+    - Color: 3
+      Count: 3
+    - Color: 0
+      Count: 4
+    - Color: 1
+      Count: 3
+    - Color: 2
+      Count: 3
+    - Color: 3
+      Count: 2
+  - Balls:
+    - Color: 1
+      Count: 3
     - Color: 2
       Count: 3
     - Color: 3
@@ -59,15 +76,4 @@ MonoBehaviour:
     - Color: 1
       Count: 3
     - Color: 2
-      Count: 3
-  - Balls:
-    - Color: 1
-      Count: 3
-    - Color: 2
-      Count: 3
-    - Color: 3
-      Count: 3
-    - Color: 0
-      Count: 3
-    - Color: 1
-      Count: 3
+      Count: 2

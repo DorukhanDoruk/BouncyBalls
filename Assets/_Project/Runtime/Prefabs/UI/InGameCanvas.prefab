@@ -118,7 +118,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Runtime.Core.UiRootView
   _ballLabelPrefab: {fileID: 4488744195024377808, guid: 09701f15105a84a4dbd7156b283f421e, type: 3}
-  _ballLabelWorldOffset: {x: 0, y: 0.6, z: 0}
+  _ballLabelWorldOffset: {x: 0, y: 0, z: 0}
   _ballLabelScreenOffset: {x: 0, y: 0}
   _dockCounter: {fileID: 5334959338747283840}
   _backdrop: {fileID: 4694836145945324679}

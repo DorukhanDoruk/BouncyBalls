@@ -6,12 +6,25 @@ namespace Runtime.Utility
     public static class PathUtil
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int ResolveNext(int currentPathIndex, in DynamicBuffer<PathElement> path, in DynamicBuffer<StickRefElement> stickRefs,
-            in BufferLookup<DiscElement> discLookup)
+        public static int ResolveNext(int currentPathIndex, in DynamicBuffer<PathElement> path,
+            in DynamicBuffer<StickRefElement> stickRefs, in BufferLookup<DiscElement> discLookup)
         {
-            for (int step = 1; step <= path.Length; step++)
+            return Resolve(currentPathIndex + 1, path, stickRefs, discLookup);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int ResolveFirst(in DynamicBuffer<PathElement> path,
+            in DynamicBuffer<StickRefElement> stickRefs, in BufferLookup<DiscElement> discLookup)
+        {
+            return Resolve(0, path, stickRefs, discLookup);
+        }
+
+        private static int Resolve(int startIndex, in DynamicBuffer<PathElement> path,
+            in DynamicBuffer<StickRefElement> stickRefs, in BufferLookup<DiscElement> discLookup)
+        {
+            for (int step = 0; step < path.Length; step++)
             {
-                int candidate = (currentPathIndex + step) % path.Length;
+                int candidate = (startIndex + step) % path.Length;
                 var stickEntity = stickRefs[path[candidate].StickIndex].Entity;
 
                 if (discLookup[stickEntity].Length > 0)

@@ -14,7 +14,7 @@ namespace Runtime.Systems
         protected override void OnCreate()
         {
             RequireForUpdate<BallConfigComponent>();
-            _activeBallQuery = SystemAPI.QueryBuilder().WithAll<HopState>().Build();
+            _activeBallQuery = SystemAPI.QueryBuilder().WithAll<HopState>().WithNone<DockReturnComponent>().Build();
         }
 
         protected override void OnUpdate()
@@ -45,9 +45,16 @@ namespace Runtime.Systems
 
             var path = SystemAPI.GetSingletonBuffer<PathElement>();
             var stickRefs = SystemAPI.GetSingletonBuffer<StickRefElement>();
+            var discLookup = SystemAPI.GetBufferLookup<DiscElement>();
 
-            var firstStick = EntityManager.GetComponentData<Stick>(stickRefs[path[0].StickIndex].Entity);
-            float3 targetPosition = SlotLayoutUtil.StickTopPosition(firstStick);
+            int targetPathIndex = PathUtil.ResolveFirst(path, stickRefs, discLookup);
+            if (targetPathIndex < 0)
+            {
+                return;
+            }
+
+            var targetStick = EntityManager.GetComponentData<Stick>(stickRefs[path[targetPathIndex].StickIndex].Entity);
+            float3 targetPosition = SlotLayoutUtil.StickTopPosition(targetStick);
             float3 startPosition = EntityManager.GetComponentData<TransformComponent>(ballEntity).Position;
 
             if (!TryTakeFromSlots(ballEntity))
@@ -58,14 +65,11 @@ namespace Runtime.Systems
             float speedMultiplier = SystemAPI.GetSingleton<LoopModeComponent>().IsActive ? config.LoopModeSpeedMultiplier : 1f;
             speedMultiplier *= config.LaunchSpeedMultiplier;
 
-            EntityManager.AddComponentData(ballEntity, HopUtil.BeginHop(0, startPosition, 0, targetPosition, config, speedMultiplier));
+            EntityManager.AddComponentData(ballEntity, HopUtil.BeginHop(targetPathIndex, startPosition, targetPathIndex, targetPosition, config, speedMultiplier));
             EntityManager.AddComponentData(ballEntity, new LapProgressComponent { StepsTaken = 0 });
 
             launchState.LastLaunchTime = now;
             SystemAPI.SetSingleton(launchState);
-
-            var ball = EntityManager.GetComponentData<BallComponent>(ballEntity);
-            Debug.Log($"[{nameof(LaunchSystem)}] launched {ball.Color}({ball.Remaining}), active balls = {_activeBallQuery.CalculateEntityCount()}");
         }
 
         private bool TryTakeFromSlots(Entity ballEntity)

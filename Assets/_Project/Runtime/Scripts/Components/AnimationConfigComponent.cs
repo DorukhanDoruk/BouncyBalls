@@ -6,6 +6,7 @@ namespace Runtime.Components
     {
         public Tween HopStretch;
         public Tween LandSquash;
+        public Tween BallVanish;
 
         public Tween GridColumnAdvance;
         public Tween DockSlotSettle;

@@ -21,8 +21,12 @@ namespace Runtime.Systems
             {
                 var hopState = hop.ValueRO;
 
-                float takeoff = 1f - math.saturate(hopState.Elapsed / animation.HopStretch.Duration);
-                float landing = 1f - math.saturate((hopState.Duration - hopState.Elapsed) / animation.LandSquash.Duration);
+                float half = hopState.Duration * 0.5f;
+                float stretchTime = math.min(animation.HopStretch.Duration, half);
+                float squashTime = math.min(animation.LandSquash.Duration, half);
+
+                float takeoff = 1f - math.saturate(hopState.Elapsed / stretchTime);
+                float landing = 1f - math.saturate((hopState.Duration - hopState.Elapsed) / squashTime);
 
                 float stretch = animation.HopStretch.Evaluate(takeoff);
                 float squash = animation.LandSquash.Evaluate(landing);

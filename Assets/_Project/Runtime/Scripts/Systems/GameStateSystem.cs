@@ -7,10 +7,14 @@ namespace Runtime.Systems
     [UpdateAfter(typeof(ArrivalResolveSystem))]
     public partial class GameStateSystem : SystemBase
     {
+        private EntityQuery _returningQuery;
+
         protected override void OnCreate()
         {
             RequireForUpdate<GameStateComponent>();
             RequireForUpdate<BallConfigComponent>();
+
+            _returningQuery = SystemAPI.QueryBuilder().WithAll<DockReturnComponent>().Build();
         }
 
         protected override void OnUpdate()
@@ -31,7 +35,7 @@ namespace Runtime.Systems
             var config = SystemAPI.GetSingleton<BallConfigComponent>();
             var dockBalls = SystemAPI.GetSingletonBuffer<DockBallElement>();
 
-            if (dockBalls.Length > config.MaxDockBalls)
+            if (dockBalls.Length + _returningQuery.CalculateEntityCount() > config.MaxDockBalls)
             {
                 Finish(GameState.Lost);
             }
@@ -58,8 +62,6 @@ namespace Runtime.Systems
             request.Ball = Entity.Null;
             request.Locked = true;
             SystemAPI.SetSingleton(request);
-
-            Debug.Log($"[{nameof(GameStateSystem)}] game over: {result}");
         }
     }
 }
