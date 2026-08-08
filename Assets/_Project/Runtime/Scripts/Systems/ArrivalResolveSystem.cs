@@ -53,6 +53,15 @@ namespace Runtime.Systems
 
             foreach (var ballEntity in arrived)
             {
+                if (EntityManager.HasComponent<DockReturnComponent>(ballEntity))
+                {
+                    EntityManager.RemoveComponent<HopState>(ballEntity);
+                    EntityManager.RemoveComponent<DockReturnComponent>(ballEntity);
+
+                    SystemAPI.GetSingletonBuffer<DockBallElement>().Add(new DockBallElement { Entity = ballEntity });
+                    continue;
+                }
+
                 var path = SystemAPI.GetSingletonBuffer<PathElement>();
                 var stickRefs = SystemAPI.GetSingletonBuffer<StickRefElement>();
                 var discLookup = SystemAPI.GetBufferLookup<DiscElement>();
@@ -106,7 +115,7 @@ namespace Runtime.Systems
                     {
                         Debug.Log($"[{nameof(ArrivalResolveSystem)}] no stick left with discs, returning to dock.");
                         EntityManager.SetComponentData(ballEntity, ball);
-                        ReturnToDock(ballEntity);
+                        ReturnToDock(ballEntity, hop.ToPosition, config, speedMultiplier);
                         continue;
                     }
 
@@ -121,7 +130,7 @@ namespace Runtime.Systems
                 {
                     Debug.Log($"[{nameof(ArrivalResolveSystem)}] lap complete at stick {arrivedStickIndex} ({lap.StepsTaken + nextSteps} steps), returning to dock.");
                     EntityManager.SetComponentData(ballEntity, ball);
-                    ReturnToDock(ballEntity);
+                    ReturnToDock(ballEntity, hop.ToPosition, config, speedMultiplier);
                     continue;
                 }
 
@@ -169,12 +178,17 @@ namespace Runtime.Systems
             }
         }
 
-        private void ReturnToDock(Entity ballEntity)
+        private void ReturnToDock(Entity ballEntity, float3 fromPosition, in BallConfigComponent config,
+            float speedMultiplier)
         {
-            EntityManager.RemoveComponent<HopState>(ballEntity);
             EntityManager.RemoveComponent<LapProgressComponent>(ballEntity);
+            EntityManager.AddComponent<DockReturnComponent>(ballEntity);
 
-            SystemAPI.GetSingletonBuffer<DockBallElement>().Add(new DockBallElement { Entity = ballEntity });
+            var layout = SystemAPI.GetSingleton<LevelLayoutComponent>();
+            int slotIndex = SystemAPI.GetSingletonBuffer<DockBallElement>().Length;
+            float3 slotPosition = SlotLayoutUtil.DockPosition(layout, slotIndex, config.MaxDockBalls);
+
+            EntityManager.SetComponentData(ballEntity, HopUtil.BeginHop(0, fromPosition, 0, slotPosition, config, speedMultiplier * config.DockReturnSpeedMultiplier));
         }
     }
 }

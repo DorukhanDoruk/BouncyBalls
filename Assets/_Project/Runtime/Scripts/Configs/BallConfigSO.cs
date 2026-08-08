@@ -5,6 +5,9 @@ namespace Runtime.Configs
     public class BallConfigSO : ScriptableObject
     {
         public float HopSpeed = 10f;
+        public float LaunchSpeedMultiplier = 1f;
+        public float DockReturnSpeedMultiplier = 1f;
+
         public float ArchHeightPerUnit = 1f;
         public float MaxArchHeight = 3f;
 

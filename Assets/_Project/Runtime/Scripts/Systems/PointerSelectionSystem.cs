@@ -1,5 +1,6 @@
 using Runtime.Components;
 using Runtime.Components.Model;
+using Runtime.Configs;
 using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
@@ -9,6 +10,7 @@ namespace Runtime.Systems
     public partial class PointerSelectionSystem : SystemBase
     {
         private Camera _camera;
+        private float _ballLift;
 
         protected override void OnCreate()
         {
@@ -18,6 +20,9 @@ namespace Runtime.Systems
         protected override void OnStartRunning()
         {
             _camera = Camera.main;
+
+            var renderConfig = Resources.Load<RenderConfigSO>(RenderConfigSO.ResourcePath);
+            _ballLift = -renderConfig.BallMesh.bounds.min.y * renderConfig.BallScale.y;
         }
 
         protected override void OnUpdate()
@@ -34,10 +39,7 @@ namespace Runtime.Systems
                 return;
             }
 
-            if (!TryGetGroundHit(pointer.position.ReadValue(), out float3 hitPoint))
-            {
-                return;
-            }
+            var ray = _camera.ScreenPointToRay(pointer.position.ReadValue());
 
             var layout = SystemAPI.GetSingleton<LevelLayoutComponent>();
             var columnRefs = SystemAPI.GetSingletonBuffer<GridColumnRefElement>();
@@ -54,12 +56,12 @@ namespace Runtime.Systems
                     continue;
                 }
 
-                Consider(ballQueue[0].Entity, hitPoint, ref selected, ref bestDistanceSq);
+                Consider(ballQueue[0].Entity, ray, ref selected, ref bestDistanceSq);
             }
 
             for (int i = 0; i < dockBalls.Length; i++)
             {
-                Consider(dockBalls[i].Entity, hitPoint, ref selected, ref bestDistanceSq);
+                Consider(dockBalls[i].Entity, ray, ref selected, ref bestDistanceSq);
             }
 
             if (selected == Entity.Null)
@@ -71,31 +73,35 @@ namespace Runtime.Systems
             SystemAPI.SetSingleton(request);
         }
 
-        private bool TryGetGroundHit(Vector2 screenPosition, out float3 hitPoint)
+        private static bool TryGetPlaneHit(in Ray ray, float planeY, out float3 hitPoint)
         {
             hitPoint = default;
 
-            var ray = _camera.ScreenPointToRay(screenPosition);
             if (math.abs(ray.direction.y) < 1e-6f)
             {
                 return false;
             }
 
-            float distance = -ray.origin.y / ray.direction.y;
+            float distance = (planeY - ray.origin.y) / ray.direction.y;
             if (distance < 0f)
             {
                 return false;
             }
 
-            hitPoint = ray.origin + ray.direction * distance;
+            hitPoint = (float3)ray.origin + (float3)ray.direction * distance;
             return true;
         }
 
-        private void Consider(Entity ballEntity, float3 hitPoint, ref Entity selected, ref float bestDistanceSq)
+        private void Consider(Entity ballEntity, in Ray ray, ref Entity selected, ref float bestDistanceSq)
         {
             float3 ballPosition = EntityManager.GetComponentData<TransformComponent>(ballEntity).Position;
-            float distanceSq = math.distancesq(ballPosition.xz, hitPoint.xz);
 
+            if (!TryGetPlaneHit(ray, ballPosition.y + _ballLift, out float3 hitPoint))
+            {
+                return;
+            }
+
+            float distanceSq = math.distancesq(ballPosition.xz, hitPoint.xz);
             if (distanceSq > bestDistanceSq)
             {
                 return;

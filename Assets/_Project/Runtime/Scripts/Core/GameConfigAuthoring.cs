@@ -33,14 +33,18 @@ namespace Runtime.Core
                     DiscPieceOutwardSpeed = a.DiscPieceOutwardSpeed,
                     DiscPieceUpwardSpeed = a.DiscPieceUpwardSpeed,
                     DiscPieceSpinSpeed = a.DiscPieceSpinSpeed,
-                    DiscPieceDissolveDelay = a.DiscPieceDissolveDelay, 
+                    DiscPieceEndScale = a.DiscPieceEndScale,
+                    DiscPieceScale = ToTween(a.DiscPieceScale),
+                    DiscPieceDissolveDelay = a.DiscPieceDissolveDelay,
                     DiscPieceDissolve = ToTween(a.DiscPieceDissolve),
                 });
 
                 var b = authoring.Ball;
                 AddComponent(entity, new BallConfigComponent
                 {
-                    HopSpeed = b.HopSpeed, 
+                    HopSpeed = b.HopSpeed,
+                    LaunchSpeedMultiplier = b.LaunchSpeedMultiplier,
+                    DockReturnSpeedMultiplier = b.DockReturnSpeedMultiplier,
                     ArchHeightPerUnit = b.ArchHeightPerUnit,
                     MaxArchHeight = b.MaxArchHeight, 
                     InPlaceBounceHeight = b.InPlaceBounceHeight,

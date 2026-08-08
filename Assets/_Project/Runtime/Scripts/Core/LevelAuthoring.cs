@@ -111,6 +111,7 @@ namespace Runtime.Core
                         Index = i,
                         Position = stickDef.Position + constants.StickOrigin,
                         Height = stickDef.ShownDiscCount * constants.DiscStackSpacing,
+                        ShownDiscCount = stickDef.ShownDiscCount,
                     });
 
                     // Both start finished so no stick animates on the first frame.
@@ -120,10 +121,8 @@ namespace Runtime.Core
                     });
 
                     var discs = stickDef.Discs;
-                    var firstShown = discs.Length - stickDef.ShownDiscCount;
-
                     var discBuffer = AddBuffer<DiscElement>(stickEntity);
-                    for (int j = firstShown; j < discs.Length; j++)
+                    for (int j = 0; j < discs.Length; j++)
                     {
                         discBuffer.Add(new DiscElement { Color = discs[j] });
                     }
