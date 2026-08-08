@@ -63,9 +63,6 @@ namespace Runtime.Systems
 
             launchState.LastLaunchTime = now;
             SystemAPI.SetSingleton(launchState);
-
-            var ball = EntityManager.GetComponentData<BallComponent>(ballEntity);
-            Debug.Log($"[{nameof(LaunchSystem)}] launched {ball.Color}({ball.Remaining}), active balls = {_activeBallQuery.CalculateEntityCount()}");
         }
 
         private bool TryTakeFromSlots(Entity ballEntity)

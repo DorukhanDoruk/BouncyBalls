@@ -70,7 +70,6 @@ namespace Runtime.Systems
                 EntityManager.AddComponentData(ballEntity, new LapProgressComponent { StepsTaken = 0 });
             }
 
-            Debug.Log($"[{nameof(LoopModeSystem)}] loop mode ON, launched {toLaunch.Length} docked ball(s), speed x{config.LoopModeSpeedMultiplier}");
             toLaunch.Dispose();
         }
     }

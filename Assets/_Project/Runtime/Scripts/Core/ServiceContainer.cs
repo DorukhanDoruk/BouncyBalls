@@ -18,8 +18,7 @@ namespace Runtime.Core
         private Dictionary<Type, IService> _servicesByType = new Dictionary<Type, IService>();
         private List<IService> _initializeOrder = new List<IService>();
         private List<ITickable> _tickableList = new List<ITickable>();
-        private bool _initialized;
-        
+
         public void Dispose()
         {
             for (int i = _initializeOrder.Count - 1; i >= 0; i--)
@@ -28,7 +27,6 @@ namespace Runtime.Core
             _initializeOrder.Clear();
             _tickableList.Clear();
             _servicesByType.Clear();
-            _initialized = false;
         }
 
         #region Register & Resolve
@@ -82,8 +80,6 @@ namespace Runtime.Core
             {
                 service.Initialize();
             }
-            
-            _initialized = true;
         }
  
         public void Tick(float deltaTime)

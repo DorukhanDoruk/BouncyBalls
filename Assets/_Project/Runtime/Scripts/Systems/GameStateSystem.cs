@@ -58,8 +58,6 @@ namespace Runtime.Systems
             request.Ball = Entity.Null;
             request.Locked = true;
             SystemAPI.SetSingleton(request);
-
-            Debug.Log($"[{nameof(GameStateSystem)}] game over: {result}");
         }
     }
 }

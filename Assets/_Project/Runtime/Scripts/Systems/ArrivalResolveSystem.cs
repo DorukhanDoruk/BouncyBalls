@@ -99,10 +99,8 @@ namespace Runtime.Systems
 
                 EntityManager.SetComponentData(arrivedStickEntity, stickAnimation);
 
-                Debug.Log($"[{nameof(ArrivalResolveSystem)}] path {hop.ToPathIndex} -> stick {arrivedStickIndex}, broke={broke}, remaining={ball.Remaining}");
                 if (ball.Remaining <= 0)
                 {
-                    Debug.Log($"[{nameof(ArrivalResolveSystem)}] ball exhausted, destroying.");
                     EntityManager.DestroyEntity(ballEntity);
                     continue;
                 }
@@ -113,7 +111,6 @@ namespace Runtime.Systems
                 {
                     if (!loopMode)
                     {
-                        Debug.Log($"[{nameof(ArrivalResolveSystem)}] no stick left with discs, returning to dock.");
                         EntityManager.SetComponentData(ballEntity, ball);
                         ReturnToDock(ballEntity, hop.ToPosition, config, speedMultiplier);
                         continue;
@@ -128,7 +125,6 @@ namespace Runtime.Systems
                 int nextSteps = (nextPathIndex - hop.ToPathIndex + path.Length) % path.Length;
                 if (!loopMode && lap.StepsTaken + nextSteps >= path.Length)
                 {
-                    Debug.Log($"[{nameof(ArrivalResolveSystem)}] lap complete at stick {arrivedStickIndex} ({lap.StepsTaken + nextSteps} steps), returning to dock.");
                     EntityManager.SetComponentData(ballEntity, ball);
                     ReturnToDock(ballEntity, hop.ToPosition, config, speedMultiplier);
                     continue;
