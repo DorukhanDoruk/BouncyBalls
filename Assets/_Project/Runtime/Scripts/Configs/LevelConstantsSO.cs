@@ -18,10 +18,6 @@ namespace Runtime.Configs
         public Vector3 DockOrigin = new Vector3(0f, 0f, -4f);
         public float DockSlotSpacing = 1.5f;
 
-        [Header("Camera")]
-        public float CameraPadding = 1f;
-        public float CameraDistance = 20f;
-
         [Header("Input")]
         public float BallSelectionRadius = 0.75f;
     }

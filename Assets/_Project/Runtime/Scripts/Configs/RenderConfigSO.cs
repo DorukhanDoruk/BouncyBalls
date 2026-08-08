@@ -7,6 +7,16 @@ namespace Runtime.Configs
         public const string ResourcePath = "Configuration/RenderConfig";
         public float GroundOffset = 0.01f;
 
+        [Header("Palette")]
+        public ColorPaletteSO Palette;
+
+        [Header("Background")]
+        public Mesh BackgroundMesh;
+        public Material BackgroundMaterial;
+        public Vector3 BackgroundPosition;
+        public Vector3 BackgroundEulerAngles;
+        public Vector3 BackgroundScale = Vector3.one;
+
         [Header("Stick Body")]
         public Mesh StickBodyMesh;
         public Material StickBodyMaterial;

@@ -13,6 +13,12 @@ MonoBehaviour:
   m_Name: RenderConfig
   m_EditorClassIdentifier: Assembly-CSharp::Runtime.Configs.RenderConfigSO
   GroundOffset: 0.01
+  Palette: {fileID: 11400000, guid: 53eee354eaaba4343af9ae2e98f3a106, type: 2}
+  BackgroundMesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+  BackgroundMaterial: {fileID: 2100000, guid: df42d72e93476430490e4f27fdc4e0b6, type: 2}
+  BackgroundPosition: {x: 0, y: 0, z: 0}
+  BackgroundEulerAngles: {x: 0, y: 0, z: 0}
+  BackgroundScale: {x: 5, y: 1, z: 5}
   StickBodyMesh: {fileID: -1906286341395312018, guid: a101f7b02b6ae4ec7801cd82c5fe5aa2, type: 3}
   StickBodyMaterial: {fileID: 2100000, guid: d381c6981a7bd4451aecf0ddd096eeb5, type: 2}
   StickBodyScale: {x: 0.8, y: 0.8, z: 0.8}
@@ -24,7 +30,7 @@ MonoBehaviour:
   HoleScale: {x: 1, y: 1, z: 1}
   DockMesh: {fileID: 2903779204459063754, guid: 7f3f35303535a48369324d6d92d52d5f, type: 3}
   DockMaterial: {fileID: 2100000, guid: d058772b824df4db284af05023aa220a, type: 2}
-  DockScale: {x: 8, y: 8, z: 8}
+  DockScale: {x: 7, y: 10, z: 7}
   DiscMesh: {fileID: 3497320551564093415, guid: d6db94eec108143e48e9b9ea4ad7d27d, type: 3}
   DiscMaterial: {fileID: 2100000, guid: 192c86ddcaf2b4d688b6d22bedfc3601, type: 2}
   DiscScale: {x: 1, y: 1, z: 1}

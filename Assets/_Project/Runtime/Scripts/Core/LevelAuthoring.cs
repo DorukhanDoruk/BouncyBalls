@@ -18,7 +18,6 @@ namespace Runtime.Core
 
             var sticks = LevelConfigSo.Sticks;
             var pathOrder = LevelConfigSo.PathOrder;
-            var stickCenter = StickLayoutUtil.GetCenterXZ(sticks);
 
             Gizmos.color = Color.white;
 
@@ -36,8 +35,8 @@ namespace Runtime.Core
                     continue;
                 }
 
-                float3 startPos = StickLayoutUtil.Position(sticks[fromStick].Position, stickCenter, LevelConstantsSo.StickOrigin);
-                float3 endPos = StickLayoutUtil.Position(sticks[toStick].Position, stickCenter, LevelConstantsSo.StickOrigin);
+                float3 startPos = sticks[fromStick].Position + LevelConstantsSo.StickOrigin;
+                float3 endPos = sticks[toStick].Position + LevelConstantsSo.StickOrigin;
 
                 float3 delta = endPos - startPos;
                 float dist = math.length(delta);
@@ -84,8 +83,7 @@ namespace Runtime.Core
                     DockSlotSpacing = constants.DockSlotSpacing, 
                     BallSelectionRadius = constants.BallSelectionRadius,
                     DiscStackSpacing = constants.DiscStackSpacing, 
-                    CameraPadding = constants.CameraPadding,
-                    CameraDistance = constants.CameraDistance,
+                   
                 };
 
                 AddComponent(rootEntity, layout);
@@ -101,8 +99,6 @@ namespace Runtime.Core
                     pathBuffer.Add(new PathElement { StickIndex = stickIndex });
                 }
 
-                var stickCenter = StickLayoutUtil.GetCenterXZ(config.Sticks);
-
                 var stickRefs = AddBuffer<StickRefElement>(rootEntity);
                 for (int i = 0; i < config.Sticks.Length; i++)
                 {
@@ -113,7 +109,7 @@ namespace Runtime.Core
                     AddComponent(stickEntity, new Stick
                     {
                         Index = i,
-                        Position = StickLayoutUtil.Position(stickDef.Position, stickCenter, constants.StickOrigin),
+                        Position = stickDef.Position + constants.StickOrigin,
                         Height = stickDef.ShownDiscCount * constants.DiscStackSpacing,
                     });
 
