@@ -27,6 +27,7 @@ namespace Runtime.Core
 
             _labelRoot = (RectTransform)new GameObject("BallLabels", typeof(RectTransform)).transform;
             _labelRoot.SetParent(_root.Root, false);
+            _labelRoot.SetAsFirstSibling();
 
             _labelRoot.anchorMin = Vector2.zero;
             _labelRoot.anchorMax = Vector2.one;

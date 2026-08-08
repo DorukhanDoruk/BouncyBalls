@@ -188,6 +188,11 @@ namespace Runtime.Systems
             int slotIndex = SystemAPI.GetSingletonBuffer<DockBallElement>().Length + _returningQuery.CalculateEntityCount();
 
             EntityManager.AddComponent<DockReturnComponent>(ballEntity);
+            if (slotIndex >= config.MaxDockBalls)
+            {
+                EntityManager.RemoveComponent<HopState>(ballEntity);
+                return;
+            }
 
             float3 slotPosition = SlotLayoutUtil.DockPosition(layout, slotIndex, config.MaxDockBalls);
             EntityManager.SetComponentData(ballEntity, HopUtil.BeginHop(0, fromPosition, 0, slotPosition, config, speedMultiplier * config.DockReturnSpeedMultiplier));
