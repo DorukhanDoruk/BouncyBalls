@@ -5,5 +5,9 @@ namespace Runtime.Configs.Model
         public TweenBlob HopArc;
         public TweenBlob HopStretch;
         public TweenBlob LandSquash;
+
+        public TweenBlob GridColumnAdvance;
+        public TweenBlob DockSlotSettle;
+        public TweenBlob DiscBreakPop;
     }
 }

@@ -14,5 +14,12 @@ namespace Runtime.Configs
         [Header("Squash & Stratch")]
         public TweenDef HopStretch = TweenDef.Default;
         public TweenDef LandSquash = TweenDef.Default;
+
+        [Header("Slots")]
+        public TweenDef GridColumnAdvance = TweenDef.Default;
+        public TweenDef DockSlotSettle = TweenDef.Default;
+
+        [Header("Disc")]
+        public TweenDef DiscBreakPop = TweenDef.Default;
     }
 }

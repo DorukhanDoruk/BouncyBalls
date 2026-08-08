@@ -149,6 +149,12 @@ namespace Runtime.Core
                             Scale = new float3(1f, 1f, 1f),
                         });
 
+                        var slotPosition = SlotLayoutUtil.GridPosition(layout, c, config.GridColumns.Length, b);
+                        AddComponent(ballEntity, new SlotTweenComponent
+                        {
+                            From = slotPosition, To = slotPosition, Elapsed = 1f, Duration = 1f,
+                        });
+
                         ballQueue.Add(new GridBallElement { Entity = ballEntity });
                     }
                 }

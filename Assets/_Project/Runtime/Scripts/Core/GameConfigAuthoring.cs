@@ -29,6 +29,9 @@ namespace Runtime.Core
                     BuildTween(ref builder, ref root.HopArc, authoring.Animation.HopArc);
                     BuildTween(ref builder, ref root.HopStretch, authoring.Animation.HopStretch);
                     BuildTween(ref builder, ref root.LandSquash, authoring.Animation.LandSquash);
+                    BuildTween(ref builder, ref root.GridColumnAdvance, authoring.Animation.GridColumnAdvance);
+                    BuildTween(ref builder, ref root.DockSlotSettle, authoring.Animation.DockSlotSettle);
+                    BuildTween(ref builder, ref root.DiscBreakPop, authoring.Animation.DiscBreakPop);
 
                     var blob = builder.CreateBlobAssetReference<AnimationConfigBlob>(Allocator.Persistent);
                     AddBlobAsset(ref blob, out _);
