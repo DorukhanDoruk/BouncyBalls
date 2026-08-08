@@ -9,6 +9,9 @@ namespace Runtime.Configs
         public TweenDef HopStretch = TweenDef.Default;
         public TweenDef LandSquash = TweenDef.Default;
 
+        [Header("Ball")]
+        public TweenDef BallVanish = TweenDef.Default;
+
         [Header("Slots")]
         public TweenDef GridColumnAdvance = TweenDef.Default;
         public TweenDef DockSlotSettle = TweenDef.Default;

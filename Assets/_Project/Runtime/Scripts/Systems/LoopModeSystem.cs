@@ -50,8 +50,16 @@ namespace Runtime.Systems
 
             var path = SystemAPI.GetSingletonBuffer<PathElement>();
             var stickRefs = SystemAPI.GetSingletonBuffer<StickRefElement>();
-            var firstStick = EntityManager.GetComponentData<Stick>(stickRefs[path[0].StickIndex].Entity);
-            float3 targetPosition = SlotLayoutUtil.StickTopPosition(firstStick);
+            var discLookup = SystemAPI.GetBufferLookup<DiscElement>();
+
+            int targetPathIndex = PathUtil.ResolveFirst(path, stickRefs, discLookup);
+            if (targetPathIndex < 0)
+            {
+                return;
+            }
+
+            var targetStick = EntityManager.GetComponentData<Stick>(stickRefs[path[targetPathIndex].StickIndex].Entity);
+            float3 targetPosition = SlotLayoutUtil.StickTopPosition(targetStick);
 
             var toLaunch = new NativeList<Entity>(Allocator.Temp);
             for (int i = 0; i < dockBalls.Length; i++)
@@ -66,7 +74,8 @@ namespace Runtime.Systems
             {
                 float3 startPosition = EntityManager.GetComponentData<TransformComponent>(ballEntity).Position;
 
-                EntityManager.AddComponentData(ballEntity, HopUtil.BeginHop(0, startPosition, 0, targetPosition, config, config.LoopModeSpeedMultiplier * config.LaunchSpeedMultiplier));
+                EntityManager.AddComponentData(ballEntity, HopUtil.BeginHop(targetPathIndex, startPosition,
+                    targetPathIndex, targetPosition, config, config.LoopModeSpeedMultiplier * config.LaunchSpeedMultiplier));
                 EntityManager.AddComponentData(ballEntity, new LapProgressComponent { StepsTaken = 0 });
             }
 

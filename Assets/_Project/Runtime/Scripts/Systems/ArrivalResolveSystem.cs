@@ -15,12 +15,14 @@ namespace Runtime.Systems
     {
         private RenderConfigSO _renderConfig;
         private Random _random;
+        private EntityQuery _returningQuery;
 
         protected override void OnCreate()
         {
             RequireForUpdate<BallConfigComponent>();
             RequireForUpdate<AnimationConfigComponent>();
 
+            _returningQuery = SystemAPI.QueryBuilder().WithAll<DockReturnComponent>().Build();
             _renderConfig = Resources.Load<RenderConfigSO>(RenderConfigSO.ResourcePath);
             _random = Random.CreateFromIndex(1);
         }
@@ -101,7 +103,10 @@ namespace Runtime.Systems
 
                 if (ball.Remaining <= 0)
                 {
-                    EntityManager.DestroyEntity(ballEntity);
+                    EntityManager.SetComponentData(ballEntity, ball);
+                    EntityManager.RemoveComponent<HopState>(ballEntity);
+                    EntityManager.RemoveComponent<LapProgressComponent>(ballEntity);
+                    EntityManager.AddComponent<DyingBallComponent>(ballEntity);
                     continue;
                 }
 
@@ -178,12 +183,13 @@ namespace Runtime.Systems
             float speedMultiplier)
         {
             EntityManager.RemoveComponent<LapProgressComponent>(ballEntity);
-            EntityManager.AddComponent<DockReturnComponent>(ballEntity);
 
             var layout = SystemAPI.GetSingleton<LevelLayoutComponent>();
-            int slotIndex = SystemAPI.GetSingletonBuffer<DockBallElement>().Length;
-            float3 slotPosition = SlotLayoutUtil.DockPosition(layout, slotIndex, config.MaxDockBalls);
+            int slotIndex = SystemAPI.GetSingletonBuffer<DockBallElement>().Length + _returningQuery.CalculateEntityCount();
 
+            EntityManager.AddComponent<DockReturnComponent>(ballEntity);
+
+            float3 slotPosition = SlotLayoutUtil.DockPosition(layout, slotIndex, config.MaxDockBalls);
             EntityManager.SetComponentData(ballEntity, HopUtil.BeginHop(0, fromPosition, 0, slotPosition, config, speedMultiplier * config.DockReturnSpeedMultiplier));
         }
     }

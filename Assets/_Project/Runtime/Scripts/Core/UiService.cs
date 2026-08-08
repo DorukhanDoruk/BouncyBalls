@@ -90,6 +90,11 @@ namespace Runtime.Core
         // The UI root survives the load, so its state is reset by hand before reloading.
         private void Restart()
         {
+            if (!_resultShown)
+            {
+                return;
+            }
+
             _resultShown = false;
             _root.Backdrop.Hide();
             _root.ResultPanel.Hide();

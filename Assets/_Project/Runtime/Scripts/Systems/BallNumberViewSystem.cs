@@ -1,4 +1,5 @@
 using Runtime.Components;
+using Runtime.Configs;
 using Runtime.Core;
 using System.Collections.Generic;
 using TMPro;
@@ -20,6 +21,7 @@ namespace Runtime.Systems
 
         private Camera _camera;
         private UiService _ui;
+        private float _ballLift;
 
         protected override void OnCreate()
         {
@@ -30,6 +32,9 @@ namespace Runtime.Systems
         {
             _camera = Camera.main;
             _ui = SystemAPI.ManagedAPI.GetSingleton<ManagedServicesComponent>().Container.Resolve<UiService>();
+
+            var renderConfig = Resources.Load<RenderConfigSO>(RenderConfigSO.ResourcePath);
+            _ballLift = -renderConfig.BallMesh.bounds.min.y * renderConfig.BallScale.y;
         }
 
         protected override void OnDestroy()
@@ -55,12 +60,13 @@ namespace Runtime.Systems
                     label.Shown = remaining;
                 }
 
-                Vector3 world = (Vector3)ballTransform.ValueRO.Position + _ui.BallLabelWorldOffset;
+                var scale = ballTransform.ValueRO.Scale;
+                Vector3 world = (Vector3)ballTransform.ValueRO.Position + Vector3.up * (_ballLift * scale.y) + _ui.BallLabelWorldOffset * scale.y;
                 Vector3 screen = _camera.WorldToScreenPoint(world);
                 Vector2 screenOffset = _ui.BallLabelScreenOffset;
 
-                label.Text.rectTransform.position =
-                    new Vector3(screen.x + screenOffset.x, screen.y + screenOffset.y, 0f);
+                label.Text.rectTransform.position = new Vector3(screen.x + screenOffset.x, screen.y + screenOffset.y, 0f);
+                label.Text.rectTransform.localScale = new Vector3(scale.x, scale.y, 1f);
 
                 // BallLabel is a struct, so the mutated copy has to be written back.
                 _labels[entity] = label;
