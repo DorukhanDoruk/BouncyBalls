@@ -98,9 +98,15 @@ namespace Runtime.Core
 
                 var layout = new LevelLayoutComponent
                 {
-                    GridOrigin = constants.GridOrigin, GridColumnSpacing = constants.GridColumnSpacing,
-                    GridRowSpacing = constants.GridRowSpacing, DockOrigin = constants.DockOrigin,
-                    DockSlotSpacing = constants.DockSlotSpacing, BallSelectionRadius = constants.BallSelectionRadius,
+                    GridOrigin = constants.GridOrigin, 
+                    GridColumnSpacing = constants.GridColumnSpacing,
+                    GridRowSpacing = constants.GridRowSpacing, 
+                    DockOrigin = constants.DockOrigin,
+                    DockSlotSpacing = constants.DockSlotSpacing, 
+                    BallSelectionRadius = constants.BallSelectionRadius,
+                    DiscHeight = constants.DiscSize.y, 
+                    CameraPadding = constants.CameraPadding,
+                    CameraDistance = constants.CameraDistance,
                 };
 
                 AddComponent(rootEntity, layout);
