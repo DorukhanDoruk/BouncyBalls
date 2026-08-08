@@ -130,11 +130,21 @@ namespace Runtime.Systems
             var bodyBounds = _renderConfig.StickBodyMesh.bounds;
             float bodyMeshHeight = bodyBounds.size.y;
             float bodyMeshCenter = bodyBounds.center.y;
+            float baseMeshBottom = _renderConfig.StickBaseMesh.bounds.min.y * _renderConfig.StickBaseScale.y;
 
-            foreach (var (stick, discs) in SystemAPI.Query<RefRO<Stick>, DynamicBuffer<DiscElement>>())
+            foreach (var (stick, discs, stickAnimation) in
+                     SystemAPI.Query<RefRO<Stick>, DynamicBuffer<DiscElement>, RefRO<StickAnimationComponent>>())
             {
                 float3 basePosition = stick.ValueRO.Position;
 
+                float dipT = math.saturate(stickAnimation.ValueRO.DipElapsed / animation.StickDip.Duration);
+                float dipPhase = dipT < 0.5f ? dipT * 2f : 2f - dipT * 2f;
+                float dip = -animation.StickDip.Evaluate(dipPhase) * animation.StickDipAmount;
+
+                float shiftT = math.saturate(stickAnimation.ValueRO.ShiftElapsed / animation.DiscStackShift.Duration);
+                float shift = -discHeight * (1f - animation.DiscStackShift.Evaluate(shiftT));
+
+                float3 stackOffset = new float3(0f, dip + shift, 0f);
 
                 float bodyLength = math.max(0f, stick.ValueRO.Height - discHeight);
 
@@ -153,7 +163,7 @@ namespace Runtime.Systems
                 if (discs.Length == 0)
                 {
                     _stickBaseMatrices.Add(Matrix4x4.TRS(
-                        basePosition + new float3(0f, stick.ValueRO.Height - discHeight * 0.5f, 0f),
+                        basePosition + new float3(0f, bodyLength - baseMeshBottom, 0f) + stackOffset,
                         Quaternion.identity,
                         _renderConfig.StickBaseScale));
                 }
@@ -161,7 +171,7 @@ namespace Runtime.Systems
                 for (int slot = 0; slot < discs.Length; slot++)
                 {
                     _discMatricesByColor[(int)discs[slot].Color].Add(Matrix4x4.TRS(
-                        basePosition + new float3(0f, discHeight * (slot + 0.5f), 0f),
+                        SlotLayoutUtil.DiscPosition(stick.ValueRO, slot, discs.Length, discHeight) + stackOffset,
                         Quaternion.identity,
                         _renderConfig.DiscScale));
                 }
@@ -179,15 +189,16 @@ namespace Runtime.Systems
                     _renderConfig.DiscScale * pop));
             }
 
+            float ballMeshBottom = _renderConfig.BallMesh.bounds.min.y;
             foreach (var (ballTransform, ball) in SystemAPI.Query<RefRO<TransformComponent>, RefRO<BallComponent>>())
             {
                 var transform = ballTransform.ValueRO;
-
+                Vector3 ballScale = Vector3.Scale(_renderConfig.BallScale, transform.Scale);
 
                 _ballMatricesByColor[(int)ball.ValueRO.Color].Add(Matrix4x4.TRS(
-                    transform.Position,
+                    transform.Position + new float3(0f, -ballMeshBottom * ballScale.y, 0f),
                     Quaternion.Euler(transform.Rotation),
-                    Vector3.Scale(_renderConfig.BallScale, transform.Scale)));
+                    ballScale));
             }
 
             // Single instance, so no batching needed.

@@ -56,18 +56,19 @@ namespace Runtime.Systems
                 lap.StepsTaken += (hop.ToPathIndex - hop.FromPathIndex + path.Length) % path.Length;
 
                 int arrivedStickIndex = path[hop.ToPathIndex].StickIndex;
-                var discs = EntityManager.GetBuffer<DiscElement>(stickRefs[arrivedStickIndex].Entity);
+                var arrivedStickEntity = stickRefs[arrivedStickIndex].Entity;
+                var discs = EntityManager.GetBuffer<DiscElement>(arrivedStickEntity);
 
                 bool broke = discs.Length > 0 && discs[discs.Length - 1].Color == ball.Color;
                 if (broke)
                 {
                     int topSlot = discs.Length - 1;
-                    float3 stickPosition = EntityManager.GetComponentData<Stick>(stickRefs[arrivedStickIndex].Entity).Position;
+                    var arrivedStick = EntityManager.GetComponentData<Stick>(arrivedStickEntity);
 
                     brokenDiscs.Add(new DyingDiscComponent
                     {
                         Color = discs[topSlot].Color,
-                        Position = stickPosition + new float3(0f, layout.DiscStackSpacing * (topSlot + 0.5f), 0f),
+                        Position = SlotLayoutUtil.DiscPosition(arrivedStick, topSlot, discs.Length, layout.DiscStackSpacing),
                         Elapsed = 0f,
                         Duration = animation.DiscBreakPop.Duration,
                     });
@@ -75,6 +76,15 @@ namespace Runtime.Systems
                     discs.RemoveAt(topSlot);
                     ball.Remaining--;
                 }
+
+                var stickAnimation = EntityManager.GetComponentData<StickAnimationComponent>(arrivedStickEntity);
+                stickAnimation.DipElapsed = 0f;
+                if (broke)
+                {
+                    stickAnimation.ShiftElapsed = 0f;
+                }
+
+                EntityManager.SetComponentData(arrivedStickEntity, stickAnimation);
 
                 Debug.Log($"[{nameof(ArrivalResolveSystem)}] path {hop.ToPathIndex} -> stick {arrivedStickIndex}, broke={broke}, remaining={ball.Remaining}");
                 if (ball.Remaining <= 0)
@@ -112,10 +122,11 @@ namespace Runtime.Systems
                 }
 
                 var nextStick = EntityManager.GetComponentData<Stick>(stickRefs[path[nextPathIndex].StickIndex].Entity);
+                float3 nextPosition = SlotLayoutUtil.StickTopPosition(nextStick);
 
                 EntityManager.SetComponentData(ballEntity, ball);
                 EntityManager.SetComponentData(ballEntity, lap);
-                EntityManager.SetComponentData(ballEntity, HopUtil.BeginHop(hop.ToPathIndex, hop.ToPosition, nextPathIndex, nextStick.Position, config, speedMultiplier));
+                EntityManager.SetComponentData(ballEntity, HopUtil.BeginHop(hop.ToPathIndex, hop.ToPosition, nextPathIndex, nextPosition, config, speedMultiplier));
             }
 
             foreach (var brokenDisc in brokenDiscs)

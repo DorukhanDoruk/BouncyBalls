@@ -27,6 +27,9 @@ namespace Runtime.Core
                     GridColumnAdvance = ToTween(a.GridColumnAdvance),
                     DockSlotSettle    = ToTween(a.DockSlotSettle),
                     DiscBreakPop      = ToTween(a.DiscBreakPop),
+                    DiscStackShift    = ToTween(a.DiscStackShift),
+                    StickDip          = ToTween(a.StickDip),
+                    StickDipAmount    = a.StickDipAmount,
                 });
 
                 var b = authoring.Ball;

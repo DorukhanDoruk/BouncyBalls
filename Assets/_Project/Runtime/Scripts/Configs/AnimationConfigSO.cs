@@ -15,5 +15,10 @@ namespace Runtime.Configs
 
         [Header("Disc")]
         public TweenDef DiscBreakPop = TweenDef.Default;
+        public TweenDef DiscStackShift = TweenDef.Default;
+
+        [Header("Stick")]
+        public TweenDef StickDip = TweenDef.Default;
+        public float StickDipAmount = 0.15f;
     }
 }

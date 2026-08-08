@@ -113,6 +113,12 @@ namespace Runtime.Core
                         Height = stickDef.ShownDiscCount * constants.DiscStackSpacing,
                     });
 
+                    // Both start finished so no stick animates on the first frame.
+                    AddComponent(stickEntity, new StickAnimationComponent
+                    {
+                        DipElapsed = float.MaxValue, ShiftElapsed = float.MaxValue,
+                    });
+
                     var discs = stickDef.Discs;
                     var firstShown = discs.Length - stickDef.ShownDiscCount;
 

@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: LevelConstants
   m_EditorClassIdentifier: Assembly-CSharp::Runtime.Configs.LevelConstantsSO
   DiscStackSpacing: 0.5
-  StickOrigin: {x: 0, y: 0, z: 4}
-  GridOrigin: {x: 0, y: 0.6, z: -7}
+  StickOrigin: {x: 0, y: 0.05, z: 4}
+  GridOrigin: {x: 0, y: 0, z: -7}
   GridColumnSpacing: 1.75
   GridRowSpacing: 2.35
   DockOrigin: {x: 0, y: 0.1, z: -3.5}
