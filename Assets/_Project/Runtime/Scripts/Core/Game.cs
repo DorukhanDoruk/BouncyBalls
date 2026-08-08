@@ -11,9 +11,11 @@ namespace Runtime.Core
         public static Game Instance { get; private set; }
         public static bool IsReady => Instance != null && Instance._ready;
         
-        //[Header("Config Assets")]
+        [Header("UI")]
+        [SerializeField] private UiRootView _uiRootPrefab;
 
         private ServiceContainer _container;
+        private Entity _servicesEntity;
         private bool _ready;
 
         #region Unity
@@ -45,6 +47,8 @@ namespace Runtime.Core
         {
             if (Instance == this)
             {
+                DestroyServicesEntity();
+
                 _container?.Dispose();
                 _container = null;
                 Instance = null;
@@ -56,11 +60,7 @@ namespace Runtime.Core
         private void Bootstrap()
         {
             _container = new ServiceContainer();
-            
-            // Levels
-            // Camera
-            // Flow
-            // UI
+            _container.Register(new UiService(_uiRootPrefab));
             
             _container.InitializeAll();
             _ready = true;
@@ -78,12 +78,25 @@ namespace Runtime.Core
             }
 
             var manager = world.EntityManager;
-            var entity = manager.CreateEntity();
+            _servicesEntity = manager.CreateEntity();
             var componentData = new ManagedServicesComponent
             {
                 Container = _container
             };
-            manager.AddComponentObject(entity, componentData);
+            manager.AddComponentObject(_servicesEntity, componentData);
+        }
+
+        // Without this the entity outlives the play session, and a second one would make
+        // GetSingleton<ManagedServicesComponent>() throw once domain reload is turned off.
+        private void DestroyServicesEntity()
+        {
+            var world = World.DefaultGameObjectInjectionWorld;
+            if (world == null || !world.IsCreated)
+            {
+                return;
+            }
+
+            world.EntityManager.DestroyEntity(_servicesEntity);
         }
 
         public static T Get<T>() where T : class, IService

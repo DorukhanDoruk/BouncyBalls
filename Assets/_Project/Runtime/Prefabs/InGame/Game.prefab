@@ -44,3 +44,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b8a6bdd59f3b41258b3f67b909414be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Runtime.Core.Game
+  _uiRootPrefab: {fileID: 0}
