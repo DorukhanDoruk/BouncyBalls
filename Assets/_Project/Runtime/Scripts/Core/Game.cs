@@ -31,6 +31,10 @@ namespace Runtime.Core
 
             Application.targetFrameRate = 60;
 
+            // Default is BelowNormal, which caps how much loading Unity does per frame.
+            // Nothing runs during a scene change here, so there is nothing to be polite to.
+            Application.backgroundLoadingPriority = ThreadPriority.High;
+
             Bootstrap();
         }
 
@@ -58,8 +62,10 @@ namespace Runtime.Core
         private void Bootstrap()
         {
             _container = new ServiceContainer();
-            _container.Register(new UiService(_uiRootPrefab));
             
+            var sceneLoader = _container.Register(new SceneLoaderService());
+            _container.Register(new UiService(_uiRootPrefab, sceneLoader));
+
             _container.InitializeAll();
 
             PublishToEcsWorld();

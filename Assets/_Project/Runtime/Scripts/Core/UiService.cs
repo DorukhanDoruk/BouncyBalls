@@ -1,11 +1,11 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 namespace Runtime.Core
 {
     public sealed class UiService : IService
     {
         private readonly UiRootView _rootPrefab;
+        private readonly SceneLoaderService _sceneLoader;
 
         private UiRootView _root;
         private Canvas _canvas;
@@ -14,9 +14,10 @@ namespace Runtime.Core
         private bool _hudShown;
         private bool _resultShown;
 
-        public UiService(UiRootView rootPrefab)
+        public UiService(UiRootView rootPrefab, SceneLoaderService sceneLoader)
         {
             _rootPrefab = rootPrefab;
+            _sceneLoader = sceneLoader;
         }
 
         public void Initialize()
@@ -34,6 +35,7 @@ namespace Runtime.Core
             _labelRoot.offsetMin = Vector2.zero;
             _labelRoot.offsetMax = Vector2.zero;
 
+            _root.TopArea.gameObject.SetActive(false);
             _root.Backdrop.HideInstant();
             _root.ResultPanel.HideInstant();
             _root.ResultPanel.PlayAgainButton.onClick.AddListener(Restart);
@@ -68,6 +70,7 @@ namespace Runtime.Core
             }
 
             _hudShown = true;
+            _root.TopArea.gameObject.SetActive(true);
             _root.DockCounter.gameObject.SetActive(true);
         }
 
@@ -97,9 +100,14 @@ namespace Runtime.Core
             }
 
             _resultShown = false;
+            _hudShown = false;
+
             _root.Backdrop.Hide();
             _root.ResultPanel.Hide();
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            _root.TopArea.gameObject.SetActive(false);
+            _root.DockCounter.gameObject.SetActive(false);
+
+            _sceneLoader.Load(SceneNames.Gameplay);
         }
     }
 }

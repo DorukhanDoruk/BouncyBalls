@@ -30,7 +30,7 @@ MonoBehaviour:
   HoleScale: {x: 1, y: 1, z: 1}
   DockMesh: {fileID: 2903779204459063754, guid: 7f3f35303535a48369324d6d92d52d5f, type: 3}
   DockMaterial: {fileID: 2100000, guid: d058772b824df4db284af05023aa220a, type: 2}
-  DockScale: {x: 7, y: 10, z: 7}
+  DockScale: {x: 8, y: 10, z: 8}
   DiscMesh: {fileID: 3497320551564093415, guid: d6db94eec108143e48e9b9ea4ad7d27d, type: 3}
   DiscMaterial: {fileID: 2100000, guid: 192c86ddcaf2b4d688b6d22bedfc3601, type: 2}
   DiscScale: {x: 1, y: 1, z: 1}
@@ -58,3 +58,4 @@ MonoBehaviour:
   BallMesh: {fileID: -8284045475067764618, guid: 144188fb3b67a4efa8fc6b2a036ed9be, type: 3}
   BallMaterial: {fileID: 2100000, guid: 75449c1bff3bc43798b5ac788f2e9019, type: 2}
   BallScale: {x: 1.1, y: 1.1, z: 1.1}
+  BallTrailPrefab: {fileID: 3306621355247345249, guid: ea482793d009443eb87186e4015f53f6, type: 3}
