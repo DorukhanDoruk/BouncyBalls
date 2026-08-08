@@ -146,19 +146,20 @@ namespace Runtime.Systems
         private void AddPieces(NativeList<DiscPieceComponent> pieces, DiscColorType color, float3 position,
             float groundY, in AnimationConfigComponent animation)
         {
-            int pieceCount = _renderConfig.DiscPieceMeshes.Length;
-            float wedge = math.PI * 2f / pieceCount;
+            var meshes = _renderConfig.DiscPieceMeshes;
+            var scale = _renderConfig.DiscScale;
 
-            for (int i = 0; i < pieceCount; i++)
+            for (int i = 0; i < meshes.Length; i++)
             {
-                float angle = (i + 0.5f) * wedge;
-                float3 outward = new float3(math.sin(angle), 0f, math.cos(angle));
+                var center = meshes[i].bounds.center;
+                float3 offset = new float3(center.x * scale.x, center.y * scale.y, center.z * scale.z);
+                float3 outward = math.normalizesafe(new float3(offset.x, 0f, offset.z), new float3(1f, 0f, 0f));
 
                 pieces.Add(new DiscPieceComponent
                 {
                     MeshIndex = i,
                     Color = color,
-                    Position = position,
+                    Position = position + offset,
                     Velocity = outward * animation.DiscPieceOutwardSpeed * _random.NextFloat(0.7f, 1.3f) + new float3(0f, animation.DiscPieceUpwardSpeed * _random.NextFloat(0.7f, 1.3f), 0f),
                     Rotation = float3.zero,
                     AngularVelocity = _random.NextFloat3(-1f, 1f) * animation.DiscPieceSpinSpeed,

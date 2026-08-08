@@ -202,10 +202,11 @@ namespace Runtime.Systems
                 float dissolveT = math.saturate((piece.Elapsed - animation.DiscPieceDissolveDelay) / animation.DiscPieceDissolve.Duration);
                 float scale = 1f - animation.DiscPieceDissolve.Evaluate(dissolveT);
 
-                _pieceMatrices[piece.MeshIndex * colorCount + (int)piece.Color].Add(Matrix4x4.TRS(
-                    piece.Position,
-                    Quaternion.Euler(piece.Rotation),
-                    _renderConfig.DiscScale * scale));
+                var pieceMesh = _renderConfig.DiscPieceMeshes[piece.MeshIndex];
+
+                _pieceMatrices[piece.MeshIndex * colorCount + (int)piece.Color].Add(
+                    Matrix4x4.TRS(piece.Position, Quaternion.Euler(piece.Rotation), _renderConfig.DiscScale * scale)
+                    * Matrix4x4.Translate(-pieceMesh.bounds.center));
             }
 
             float ballMeshBottom = _renderConfig.BallMesh.bounds.min.y;
