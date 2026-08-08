@@ -47,5 +47,6 @@ namespace Runtime.Configs
         public Mesh BallMesh;
         public Material BallMaterial;
         public Vector3 BallScale = Vector3.one;
+        public GameObject BallTrailPrefab;
     }
 }
