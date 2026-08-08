@@ -5,14 +5,8 @@ namespace Runtime.Systems
 {
     public partial class HopMotionSystem : SystemBase
     {
-        protected override void OnCreate()
-        {
-            RequireForUpdate<AnimationConfigRefComponent>();
-        }
-
         protected override void OnUpdate()
         {
-            var configBlob = SystemAPI.GetSingleton<AnimationConfigRefComponent>().ConfigBlob;
             float deltaTime = SystemAPI.Time.DeltaTime;
 
             foreach (var (hop, transform) in SystemAPI.Query<RefRW<HopState>, RefRW<TransformComponent>>())
@@ -22,9 +16,10 @@ namespace Runtime.Systems
                 hopState.Elapsed += deltaTime;
 
                 float t = math.saturate(hopState.Elapsed / hopState.Duration);
+                float arc = 4f * t * (1f - t);
 
                 float3 position = math.lerp(hopState.FromPosition, hopState.ToPosition, t);
-                position.y += configBlob.Value.HopArc.Evaulate(t) * hopState.ArcHeight;
+                position.y += arc * hopState.ArcHeight;
 
                 transform.ValueRW.Position = position;
             }

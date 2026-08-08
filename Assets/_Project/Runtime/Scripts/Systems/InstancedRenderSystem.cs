@@ -44,6 +44,7 @@ namespace Runtime.Systems
         {
             RequireForUpdate<LevelLayoutComponent>();
             RequireForUpdate<BallConfigComponent>();
+            RequireForUpdate<AnimationConfigComponent>();
 
             _holeMatrices = new NativeList<Matrix4x4>(64, Allocator.Persistent);
             _dockMatrices = new NativeList<Matrix4x4>(8, Allocator.Persistent);
@@ -109,6 +110,7 @@ namespace Runtime.Systems
         protected override void OnUpdate()
         {
             var layout = SystemAPI.GetSingleton<LevelLayoutComponent>();
+            var animation = SystemAPI.GetSingleton<AnimationConfigComponent>();
 
             RefreshPaletteColors();
             BuildLayoutMatrices();
@@ -163,6 +165,18 @@ namespace Runtime.Systems
                         Quaternion.identity,
                         _renderConfig.DiscScale));
                 }
+            }
+
+            foreach (var dyingDisc in SystemAPI.Query<RefRO<DyingDiscComponent>>())
+            {
+                var disc = dyingDisc.ValueRO;
+                float t = math.saturate(disc.Elapsed / disc.Duration);
+                float pop = math.lerp(1f, 0f, animation.DiscBreakPop.Evaluate(t));
+
+                _discMatricesByColor[(int)disc.Color].Add(Matrix4x4.TRS(
+                    disc.Position,
+                    Quaternion.identity,
+                    _renderConfig.DiscScale * pop));
             }
 
             foreach (var (ballTransform, ball) in SystemAPI.Query<RefRO<TransformComponent>, RefRO<BallComponent>>())

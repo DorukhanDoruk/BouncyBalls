@@ -12,14 +12,14 @@ namespace Runtime.Systems
         {
             RequireForUpdate<LevelLayoutComponent>();
             RequireForUpdate<BallConfigComponent>();
-            RequireForUpdate<AnimationConfigRefComponent>();
+            RequireForUpdate<AnimationConfigComponent>();
         }
 
         protected override void OnUpdate()
         {
             var layout = SystemAPI.GetSingleton<LevelLayoutComponent>();
             var config = SystemAPI.GetSingleton<BallConfigComponent>();
-            var configBlob = SystemAPI.GetSingleton<AnimationConfigRefComponent>().ConfigBlob;
+            var animation = SystemAPI.GetSingleton<AnimationConfigComponent>();
             var columnRefs = SystemAPI.GetSingletonBuffer<GridColumnRefElement>();
             var dockBalls = SystemAPI.GetSingletonBuffer<DockBallElement>();
 
@@ -33,7 +33,7 @@ namespace Runtime.Systems
                     MoveToSlot(
                         ballQueue[i].Entity,
                         SlotLayoutUtil.GridPosition(layout, c, columnRefs.Length, i),
-                        ref configBlob.Value.GridColumnAdvance,
+                        animation.GridColumnAdvance,
                         deltaTime);
                 }
             }
@@ -43,13 +43,13 @@ namespace Runtime.Systems
                 MoveToSlot(
                     dockBalls[i].Entity,
                     SlotLayoutUtil.DockPosition(layout, i, config.MaxDockBalls),
-                    ref configBlob.Value.DockSlotSettle,
+                    animation.DockSlotSettle,
                     deltaTime);
             }
         }
 
         // Scale is reset here because BallSquashSystem deforms balls while they hop
-        private void MoveToSlot(Entity ballEntity, float3 target, ref TweenBlob tween, float deltaTime)
+        private void MoveToSlot(Entity ballEntity, float3 target, in Tween tween, float deltaTime)
         {
             var transform = EntityManager.GetComponentData<TransformComponent>(ballEntity);
             var slot = EntityManager.GetComponentData<SlotTweenComponent>(ballEntity);
@@ -66,7 +66,7 @@ namespace Runtime.Systems
             slot.Elapsed += deltaTime;
             float t = math.saturate(slot.Elapsed / slot.Duration);
 
-            transform.Position = math.lerp(slot.From, slot.To, tween.Evaulate(t));
+            transform.Position = math.lerp(slot.From, slot.To, tween.Evaluate(t));
             transform.Scale = new float3(1f, 1f, 1f);
 
             EntityManager.SetComponentData(ballEntity, transform);

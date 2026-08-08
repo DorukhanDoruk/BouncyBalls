@@ -3,6 +3,7 @@ using Runtime.Components.Model;
 using Runtime.Utility;
 using Unity.Collections;
 using Unity.Entities;
+using Unity.Mathematics;
 using UnityEngine;
 namespace Runtime.Systems
 {
@@ -12,6 +13,7 @@ namespace Runtime.Systems
         protected override void OnCreate()
         {
             RequireForUpdate<BallConfigComponent>();
+            RequireForUpdate<AnimationConfigComponent>();
         }
 
         protected override void OnUpdate()
@@ -33,7 +35,12 @@ namespace Runtime.Systems
             }
 
             var config = SystemAPI.GetSingleton<BallConfigComponent>();
+            var layout = SystemAPI.GetSingleton<LevelLayoutComponent>();
+            var animation = SystemAPI.GetSingleton<AnimationConfigComponent>();
             bool loopMode = SystemAPI.GetSingleton<LoopModeComponent>().IsActive;
+
+            // Creating entities is structural, so breaks are collected and spawned after the loop.
+            var brokenDiscs = new NativeList<DyingDiscComponent>(Allocator.Temp);
             float speedMultiplier = loopMode ? config.LoopModeSpeedMultiplier : 1f;
 
             foreach (var ballEntity in arrived)
@@ -54,7 +61,18 @@ namespace Runtime.Systems
                 bool broke = discs.Length > 0 && discs[discs.Length - 1].Color == ball.Color;
                 if (broke)
                 {
-                    discs.RemoveAt(discs.Length - 1);
+                    int topSlot = discs.Length - 1;
+                    float3 stickPosition = EntityManager.GetComponentData<Stick>(stickRefs[arrivedStickIndex].Entity).Position;
+
+                    brokenDiscs.Add(new DyingDiscComponent
+                    {
+                        Color = discs[topSlot].Color,
+                        Position = stickPosition + new float3(0f, layout.DiscStackSpacing * (topSlot + 0.5f), 0f),
+                        Elapsed = 0f,
+                        Duration = animation.DiscBreakPop.Duration,
+                    });
+
+                    discs.RemoveAt(topSlot);
                     ball.Remaining--;
                 }
 
@@ -100,6 +118,13 @@ namespace Runtime.Systems
                 EntityManager.SetComponentData(ballEntity, HopUtil.BeginHop(hop.ToPathIndex, hop.ToPosition, nextPathIndex, nextStick.Position, config, speedMultiplier));
             }
 
+            foreach (var brokenDisc in brokenDiscs)
+            {
+                var discEntity = EntityManager.CreateEntity(typeof(DyingDiscComponent));
+                EntityManager.SetComponentData(discEntity, brokenDisc);
+            }
+
+            brokenDiscs.Dispose();
             arrived.Dispose();
         }
 

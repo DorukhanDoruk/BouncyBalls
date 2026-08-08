@@ -8,24 +8,24 @@ namespace Runtime.Systems
     {
         protected override void OnCreate()
         {
-            RequireForUpdate<AnimationConfigRefComponent>();
+            RequireForUpdate<AnimationConfigComponent>();
             RequireForUpdate<BallConfigComponent>();
         }
 
         protected override void OnUpdate()
         {
-            var configBlob = SystemAPI.GetSingleton<AnimationConfigRefComponent>().ConfigBlob;
+            var animation = SystemAPI.GetSingleton<AnimationConfigComponent>();
             var config = SystemAPI.GetSingleton<BallConfigComponent>();
 
             foreach (var (hop, transform) in SystemAPI.Query<RefRO<HopState>, RefRW<TransformComponent>>())
             {
                 var hopState = hop.ValueRO;
 
-                float takeoff = 1f - math.saturate(hopState.Elapsed / configBlob.Value.HopStretch.Duration);
-                float landing = 1f - math.saturate((hopState.Duration - hopState.Elapsed) / configBlob.Value.LandSquash.Duration);
+                float takeoff = 1f - math.saturate(hopState.Elapsed / animation.HopStretch.Duration);
+                float landing = 1f - math.saturate((hopState.Duration - hopState.Elapsed) / animation.LandSquash.Duration);
 
-                float stretch = configBlob.Value.HopStretch.Evaulate(takeoff);
-                float squash = configBlob.Value.LandSquash.Evaulate(landing);
+                float stretch = animation.HopStretch.Evaluate(takeoff);
+                float squash = animation.LandSquash.Evaluate(landing);
 
                 float scaleY = math.lerp(1f, config.MaxStretch, stretch) * math.lerp(1f, config.MinSquash, squash);
                 float scaleXZ = math.rsqrt(scaleY);
