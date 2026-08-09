@@ -70,6 +70,8 @@ namespace Runtime.Core
             }
 
             _hudShown = true;
+            _resultShown = false;
+
             _root.TopArea.gameObject.SetActive(true);
             _root.DockCounter.gameObject.SetActive(true);
         }
@@ -94,12 +96,13 @@ namespace Runtime.Core
         // The UI root survives the load, so its state is reset by hand before reloading.
         private void Restart()
         {
-            if (!_resultShown)
+            if (!_hudShown)
             {
                 return;
             }
 
-            _resultShown = false;
+            // _resultShown stays set on purpose: the level being torn down keeps reporting
+            // Won/Lost for a few frames, and clearing it here reopens the panel instantly.
             _hudShown = false;
 
             _root.Backdrop.Hide();
