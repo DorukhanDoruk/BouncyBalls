@@ -4,7 +4,6 @@ using Runtime.Utility;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
-using UnityEngine;
 namespace Runtime.Systems
 {
     [UpdateBefore(typeof(HopMotionSystem))]
@@ -43,7 +42,7 @@ namespace Runtime.Systems
             var config = SystemAPI.GetSingleton<BallConfigComponent>();
             var dockBalls = SystemAPI.GetSingletonBuffer<DockBallElement>();
 
-            if (dockBalls.Length + _activeBallQuery.CalculateEntityCount() != config.MaxDockBalls)
+            if (_activeBallQuery.CalculateEntityCount() > 0 || dockBalls.Length == 0)
             {
                 return;
             }

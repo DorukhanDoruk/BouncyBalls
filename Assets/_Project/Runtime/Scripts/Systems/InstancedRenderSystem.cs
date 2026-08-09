@@ -22,7 +22,8 @@ namespace Runtime.Systems
         private RenderParams[] _discParamsByColor;
         private RenderParams[] _ballParamsByColor;
 
-        // Kept so the palette can be re-read every frame; RenderParams holds these by reference.
+        // Held because RenderParams keeps these by reference, so re-reading the palette into
+        // them is enough to repaint without rebuilding the RenderParams.
         private MaterialPropertyBlock[] _discBlocks;
         private MaterialPropertyBlock[] _ballBlocks;
 
@@ -117,6 +118,8 @@ namespace Runtime.Systems
                 _ballParamsByColor[i] = new RenderParams(_renderConfig.BallMaterial) { receiveShadows = true, shadowCastingMode = ShadowCastingMode.On, matProps = _ballBlocks[i] };
             }
             _backgroundParams = new RenderParams(_renderConfig.BackgroundMaterial) { receiveShadows = true, shadowCastingMode = ShadowCastingMode.On };
+
+            RefreshPaletteColors();
         }
 
         protected override void OnUpdate()
@@ -124,7 +127,10 @@ namespace Runtime.Systems
             var layout = SystemAPI.GetSingleton<LevelLayoutComponent>();
             var animation = SystemAPI.GetSingleton<AnimationConfigComponent>();
 
+#if UNITY_EDITOR
+            // The palette never changes in a build; re-read it only so it stays tweakable in play mode.
             RefreshPaletteColors();
+#endif
             BuildLayoutMatrices();
 
             _stickBodyMatrices.Clear();

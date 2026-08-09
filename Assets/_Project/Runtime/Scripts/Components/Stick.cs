@@ -4,7 +4,6 @@ namespace Runtime.Components
 {
     public struct Stick : IComponentData
     {
-        public int Index;
         public float3 Position;
         public float Height; // ShownDiscCount * DiscStackSpacing
         public int ShownDiscCount;

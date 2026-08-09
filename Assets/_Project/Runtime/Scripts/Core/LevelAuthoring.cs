@@ -76,14 +76,13 @@ namespace Runtime.Core
 
                 var layout = new LevelLayoutComponent
                 {
-                    GridOrigin = constants.GridOrigin, 
+                    GridOrigin = constants.GridOrigin,
                     GridColumnSpacing = constants.GridColumnSpacing,
-                    GridRowSpacing = constants.GridRowSpacing, 
+                    GridRowSpacing = constants.GridRowSpacing,
                     DockOrigin = constants.DockOrigin,
-                    DockSlotSpacing = constants.DockSlotSpacing, 
+                    DockSlotSpacing = constants.DockSlotSpacing,
                     BallSelectionRadius = constants.BallSelectionRadius,
-                    DiscStackSpacing = constants.DiscStackSpacing, 
-                   
+                    DiscStackSpacing = constants.DiscStackSpacing,
                 };
 
                 AddComponent(rootEntity, layout);
@@ -108,7 +107,6 @@ namespace Runtime.Core
 
                     AddComponent(stickEntity, new Stick
                     {
-                        Index = i,
                         Position = stickDef.Position + constants.StickOrigin,
                         Height = stickDef.ShownDiscCount * constants.DiscStackSpacing,
                         ShownDiscCount = stickDef.ShownDiscCount,
@@ -134,8 +132,6 @@ namespace Runtime.Core
                     var columnDef = config.GridColumns[c];
                     var columnEntity = CreateAdditionalEntity(TransformUsageFlags.None, false, $"GridColumn_{c}");
                     columnRefs.Add(new GridColumnRefElement { Entity = columnEntity });
-
-                    AddComponent(columnEntity, new GridColumn { Index = c });
 
                     var ballQueue = AddBuffer<GridBallElement>(columnEntity);
                     for (int b = 0; b < columnDef.Balls.Length; b++)

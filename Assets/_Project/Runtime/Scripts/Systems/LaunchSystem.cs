@@ -3,7 +3,6 @@ using Runtime.Components.Model;
 using Runtime.Utility;
 using Unity.Entities;
 using Unity.Mathematics;
-using UnityEngine;
 namespace Runtime.Systems
 {
     [UpdateBefore(typeof(HopMotionSystem))]

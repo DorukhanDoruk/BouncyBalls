@@ -1,28 +1,35 @@
 using Runtime.Components;
+using Unity.Burst;
 using Unity.Entities;
 using Unity.Mathematics;
 namespace Runtime.Systems
 {
-    public partial class HopMotionSystem : SystemBase
+    [BurstCompile]
+    public partial struct HopMotionSystem : ISystem
     {
-        protected override void OnUpdate()
+        [BurstCompile]
+        public void OnUpdate(ref SystemState state)
         {
-            float deltaTime = SystemAPI.Time.DeltaTime;
+            new HopMotionJob { DeltaTime = SystemAPI.Time.DeltaTime }.ScheduleParallel();
+        }
+    }
 
-            foreach (var (hop, transform) in SystemAPI.Query<RefRW<HopState>, RefRW<TransformComponent>>())
-            {
-                ref var hopState = ref hop.ValueRW;
+    [BurstCompile]
+    public partial struct HopMotionJob : IJobEntity
+    {
+        public float DeltaTime;
 
-                hopState.Elapsed += deltaTime;
+        private void Execute(ref HopState hop, ref TransformComponent transform)
+        {
+            hop.Elapsed += DeltaTime;
 
-                float t = math.saturate(hopState.Elapsed / hopState.Duration);
-                float arc = 4f * t * (1f - t);
+            float t = math.saturate(hop.Elapsed / hop.Duration);
+            float arc = 4f * t * (1f - t);
 
-                float3 position = math.lerp(hopState.FromPosition, hopState.ToPosition, t);
-                position.y += arc * hopState.ArcHeight;
+            float3 position = math.lerp(hop.FromPosition, hop.ToPosition, t);
+            position.y += arc * hop.ArcHeight;
 
-                transform.ValueRW.Position = position;
-            }
+            transform.Position = position;
         }
     }
 }
