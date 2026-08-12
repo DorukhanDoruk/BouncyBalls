@@ -463,6 +463,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Runtime.Core.Game
   _gameConfig: {fileID: 11400000, guid: 2e501cd2f2aa6487893eb8ff1d77cff7, type: 2}
   _visualConfig: {fileID: 11400000, guid: 13404ce76b91942bb86ebb69f5d581a3, type: 2}
+  _levelLayout: {fileID: 11400000, guid: 4720622101af3477e9faff1601b0c873, type: 2}
   _levels:
   - {fileID: 11400000, guid: d9b5ad772ca52475aa0a6d0932f0c064, type: 2}
   _mainCamera: {fileID: 330585545}

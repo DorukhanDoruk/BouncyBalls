@@ -11,6 +11,7 @@ namespace Runtime.Core
         [Header("Config")]
         [SerializeField] GameConfigSO   _gameConfig;
         [SerializeField] VisualConfigSO _visualConfig;
+        [SerializeField] LevelLayoutSO _levelLayout;
 
         [Header("Levels")]
         [SerializeField] LevelData[] _levels;

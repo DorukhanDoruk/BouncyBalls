@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9002dedf692d48ce815f30eacbe97e64, type: 3}
-  m_Name: LevelConstants
+  m_Name: LevelLayout
   m_EditorClassIdentifier: Assembly-CSharp::Runtime.Core.LevelConstantsSO
   GridOrigin: {x: 0, y: -4, z: 0}
   DockOrigin: {x: 0, y: -2, z: 0}
