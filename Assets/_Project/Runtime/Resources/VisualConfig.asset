@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26f7ad105ad44bf497e1ebb570c464de, type: 3}
+  m_Name: VisualConfig
+  m_EditorClassIdentifier: Assembly-CSharp::Runtime.Core.VisualConfigSO
+  Palette:
+  - Id: 0
+    Tint: {r: 0.95, g: 0.95, b: 0.95, a: 1}
+  - Id: 1
+    Tint: {r: 0.9, g: 0.18, b: 0.18, a: 1}
+  - Id: 2
+    Tint: {r: 0.2, g: 0.75, b: 0.3, a: 1}
+  - Id: 3
+    Tint: {r: 0.16, g: 0.45, b: 0.9, a: 1}
+  - Id: 4
+    Tint: {r: 0.98, g: 0.8, b: 0.15, a: 1}
+  - Id: 5
+    Tint: {r: 0.97, g: 0.5, b: 0.12, a: 1}
+  - Id: 6
+    Tint: {r: 0.6, g: 0.3, b: 0.85, a: 1}
+  - Id: 7
+    Tint: {r: 0.95, g: 0.4, b: 0.7, a: 1}
+  BallPrefab: {fileID: 9054394476146898818, guid: 91546173d57244232adf6682496c5432, type: 3}
+  StickPrefab: {fileID: 1010216387263886588, guid: 33a0b5bb07f004b1aba7156537e6211e, type: 3}
+  DiscPrefab: {fileID: 2361190521727009320, guid: 361c36f5c5d234fffa27d047fe9cd44f, type: 3}
+  SquashDuration: 0.12
+  SquashScale: {x: 1.25, y: 0.75, z: 1.25}
+  SquashEase: 6
+  DiscPopDuration: 0.2
+  DiscPopEase: 26
+  GridShiftDuration: 0.25
+  GridShiftEase: 9
+  DockInsertDuration: 0.3
+  DockInsertEase: 27
