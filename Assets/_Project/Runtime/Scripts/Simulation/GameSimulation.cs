@@ -133,15 +133,21 @@ namespace Runtime.Simulation
 
             var decision = GameRules.MakeDecision(_path, _sticks, ball.PathIndex, DoesGridHasBalls(), out int next);
 
+            // The winning ball can spend its last charge on the same landing, so it dies either way.
+            bool ballDied = ball.Counter <= 0;
+            if (ballDied)
+            {
+                KillBall(ball, flyingIndex);
+            }
+
             if (decision == PathMovementDecision.PathSticksCleared)
             {
                 EndLevel(true);
                 return;
             }
 
-            if (ball.Counter <= 0)
+            if (ballDied)
             {
-                KillBall(ball, flyingIndex);
                 return;
             }
 
