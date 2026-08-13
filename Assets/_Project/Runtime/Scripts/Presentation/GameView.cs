@@ -11,6 +11,7 @@ namespace Runtime.Presentation
     {
         private readonly Dictionary<Ball, BallView> _ballViews = new Dictionary<Ball, BallView>();
         private readonly Dictionary<Disc, DiscView> _discViews = new Dictionary<Disc, DiscView>();
+        private readonly Dictionary<Stick, StickView> _stickViews = new Dictionary<Stick, StickView>();
 
         private GameSimulation _simulation;
         private VisualConfigSO _visualConfig;
@@ -58,6 +59,7 @@ namespace Runtime.Presentation
             _factory.ReleaseAll();
             _ballViews.Clear();
             _discViews.Clear();
+            _stickViews.Clear();
         }
 
         private void BuildDock()
@@ -72,15 +74,19 @@ namespace Runtime.Presentation
         {
             foreach (var stick in _simulation.Sticks)
             {
-                _factory.CreateStick(stick);
+                var stickView = _factory.CreateStick(stick, _gameConfig.DiscHeight);
+                _stickViews.Add(stick, stickView);
 
-                var bottom = stick.Position + Vector3.up * (_gameConfig.DiscHeight / 2f);
                 for (int i = 0; i < stick.AliveCount; i++)
                 {
                     var disc = stick.Discs[i];
-                    var discView = _factory.CreateDisc(disc, bottom + Vector3.up * (i * _gameConfig.DiscHeight));
+                    var discView = _factory.CreateDisc(disc, stick.Position, stickView.transform);
+
                     _discViews.Add(disc, discView);
+                    stickView.AddDisc(discView.transform);
                 }
+
+                stickView.LayoutDiscs(0f, _visualConfig.DiscShiftEase);
             }
         }
 
@@ -102,7 +108,7 @@ namespace Runtime.Presentation
             {
                 if (!_ballViews.TryGetValue(ball, out BallView ballView))
                 {
-                    throw new Exception("Finished ball doesn't have registered BallView");
+                    throw new Exception("Finished ball doesnt have registered BallView");
                 }
 
                 _factory.ReleaseBall(ballView);
@@ -112,16 +118,24 @@ namespace Runtime.Presentation
 
         private void EventsOnBallLanded(Ball ball, Stick stick, Disc disc)
         {
-            if (disc != null)
-            {
-                if (!_discViews.TryGetValue(disc, out DiscView discView))
-                {
-                    throw new Exception("Landed disc doesn't have registered DiscView");
-                }
+            var stickView = _stickViews[stick];
+            stickView.Dip(_visualConfig.StickDipAmount, _visualConfig.StickDipDuration);
 
-                _factory.ReleaseDisc(discView);
-                _discViews.Remove(disc);
+            if (disc == null)
+            {
+                return;
             }
+
+            if (!_discViews.TryGetValue(disc, out DiscView discView))
+            {
+                throw new Exception("Landed disc doesnt have registered DiscView");
+            }
+
+            _factory.BreakDisc(discView, disc, stick.Position.y);
+            _discViews.Remove(disc);
+
+            stickView.RemoveTopDisc();
+            stickView.LayoutDiscs(_visualConfig.DiscShiftDuration, _visualConfig.DiscShiftEase);
         }
     }
 }

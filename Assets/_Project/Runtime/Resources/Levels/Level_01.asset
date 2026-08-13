@@ -14,22 +14,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Runtime.Core.LevelData
   Sticks:
   - Position: {x: -1, y: 0, z: 0}
-    DiscColors: 000000000100000002000000
+    DiscColors: 00000000010000000200000000000000
+    ShownDiscCount: 3
   - Position: {x: 0, y: 0, z: 0}
-    DiscColors: 000000000100000002000000
+    DiscColors: 00000000010000000200000000000000
+    ShownDiscCount: 3
   - Position: {x: 1, y: 0, z: 0}
-    DiscColors: 000000000100000002000000
+    DiscColors: 00000000010000000200000000000000
+    ShownDiscCount: 3
   Path: 000000000100000002000000
   GridColumns:
   - GridBalls:
     - ColorId: 0
-      Counter: 3
+      Counter: 6
   - GridBalls:
     - ColorId: 1
       Counter: 3
   - GridBalls:
     - ColorId: 2
       Counter: 3
-  GridOrigin: {x: 0, y: -4, z: 0}
-  DockOrigin: {x: 0, y: -2, z: 0}
-  SlotSpacing: 1.1

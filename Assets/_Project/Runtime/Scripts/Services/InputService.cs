@@ -10,9 +10,6 @@ namespace Runtime.Services
         private readonly GameFlowService _flowService;
         private readonly LevelLayout _levelLayout;
 
-        // Balls sit on the board plane, so a tap is projected onto it.
-        private readonly Plane _boardPlane = new Plane(Vector3.up, Vector3.zero);
-
         public InputService(Camera camera, GameFlowService flowService, LevelLayout levelLayout)
         {
             _camera = camera;
@@ -43,18 +40,11 @@ namespace Runtime.Services
             }
 
             var ray = _camera.ScreenPointToRay(pointer.position.ReadValue());
-            if (!_boardPlane.Raycast(ray, out float rayDistance))
-            {
-                return;
-            }
-
-            var point = ray.GetPoint(rayDistance);
 
             float bestDistance = _levelLayout.BallSelectionRadius;
             int bestColumn = -1;
             int bestDockIndex = -1;
 
-            // Only the front ball of a column is playable, so the rest never become candidates.
             for (int i = 0; i < simulation.ColumnCount; i++)
             {
                 var column = simulation.GridColumn(i);
@@ -63,7 +53,7 @@ namespace Runtime.Services
                     continue;
                 }
 
-                float distance = Vector3.Distance(column[0].Position, point);
+                float distance = DistanceToRay(ray, column[0].Position);
                 if (distance < bestDistance)
                 {
                     bestDistance = distance;
@@ -74,7 +64,7 @@ namespace Runtime.Services
 
             for (int i = 0; i < simulation.Dock.Count; i++)
             {
-                float distance = Vector3.Distance(simulation.Dock[i].Position, point);
+                float distance = DistanceToRay(ray, simulation.Dock[i].Position);
                 if (distance < bestDistance)
                 {
                     bestDistance = distance;
@@ -91,6 +81,12 @@ namespace Runtime.Services
             {
                 simulation.LaunchFromDock(bestDockIndex);
             }
+        }
+
+        // Perpendicular distance from the ray to a point; the direction is already normalized.
+        private static float DistanceToRay(Ray ray, Vector3 point)
+        {
+            return Vector3.Cross(ray.direction, point - ray.origin).magnitude;
         }
     }
 }

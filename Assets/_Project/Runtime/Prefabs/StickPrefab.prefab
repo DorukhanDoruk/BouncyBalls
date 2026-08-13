@@ -46,6 +46,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Runtime.Presentation.StickView
   _topMeshRenderer: {fileID: 7493083788314017552}
+  _body: {fileID: 6259367618486664136}
+  _bodyMesh: {fileID: 2271398095894861898}
 --- !u!1001 &1400189532182755163
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -203,6 +205,16 @@ PrefabInstance:
 --- !u!4 &1753097398987792190 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: a101f7b02b6ae4ec7801cd82c5fe5aa2, type: 3}
+  m_PrefabInstance: {fileID: 2296547423136872661}
+  m_PrefabAsset: {fileID: 0}
+--- !u!33 &2271398095894861898 stripped
+MeshFilter:
+  m_CorrespondingSourceObject: {fileID: 25712346184196255, guid: a101f7b02b6ae4ec7801cd82c5fe5aa2, type: 3}
+  m_PrefabInstance: {fileID: 2296547423136872661}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &6259367618486664136 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -3962248369508482275, guid: a101f7b02b6ae4ec7801cd82c5fe5aa2, type: 3}
   m_PrefabInstance: {fileID: 2296547423136872661}
   m_PrefabAsset: {fileID: 0}
 --- !u!23 &7493083788314017552 stripped

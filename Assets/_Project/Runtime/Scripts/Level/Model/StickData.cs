@@ -8,6 +8,8 @@ namespace Runtime.Level.Model
     {
         public Vector3 Position;
         public List<ObjectColor> DiscColors = new();
+
+        public int ShownDiscCount = 4;
         public int Height => DiscColors.Count;
     }
 }

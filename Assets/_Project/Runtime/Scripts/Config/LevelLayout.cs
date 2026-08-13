@@ -14,6 +14,7 @@ namespace Runtime.Core
         public Vector3 DockOrigin;
         public float DockSlotSpacing;
 
+        public float BallLift;
         public float BallSelectionRadius;
     }
 }

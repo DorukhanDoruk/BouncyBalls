@@ -6,5 +6,6 @@ namespace Runtime.Simulation.Model
         Flying = 1,
         AtDock = 2,
         Dead = 3,
+        ToDock = 4,
     }
 }

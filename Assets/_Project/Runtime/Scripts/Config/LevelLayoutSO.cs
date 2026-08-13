@@ -16,6 +16,9 @@ namespace Runtime.Core
         public Vector3 DockOrigin = new Vector3(0f, 0.1f, -3.6f);
         public float DockSlotSpacing = 1.6f;
 
+        [Header("Balls")]
+        public float BallLift = 0.6f;
+
         [Header("Input")]
         public float BallSelectionRadius = 0.75f;
 
@@ -24,7 +27,7 @@ namespace Runtime.Core
             StickOrigin = StickOrigin, GridOrigin = GridOrigin,
             GridColumnSpacing = GridColumnSpacing, GridRowSpacing = GridRowSpacing,
             DockOrigin = DockOrigin, DockSlotSpacing = DockSlotSpacing,
-            BallSelectionRadius = BallSelectionRadius
+            BallLift = BallLift, BallSelectionRadius = BallSelectionRadius
         };
     }
 }

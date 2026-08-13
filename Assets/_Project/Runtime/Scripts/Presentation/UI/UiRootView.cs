@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace Runtime.Presentation
 {
-    // Holder only: the presenter reaches the panels through here.
     public sealed class UiRootView : MonoBehaviour
     {
         [SerializeField] private TextMeshProUGUI _ballLabelPrefab;

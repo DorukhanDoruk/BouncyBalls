@@ -43,8 +43,7 @@ namespace Runtime.Presentation
             _fill?.Kill();
             float target = _fullWidth * count / capacity;
             _fill = DOTween.To(() => _fillMask.sizeDelta.x, SetWidth, target, _fillDuration);
-
-            // Red once the dock is full: the next arriving ball loses the level.
+            
             _color?.Kill();
             _color = _fillImage.DOColor(count >= capacity ? _fullColor : _normalColor, _colorDuration);
         }

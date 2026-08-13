@@ -21,7 +21,7 @@ namespace Runtime.Simulation.Utility
                     discs.Add(new Disc(data.DiscColors[d]));
                 }
 
-                sticks.Add(new Stick(discs, data.Position + layout.StickOrigin, discs.Count));
+                sticks.Add(new Stick(discs, data.Position + layout.StickOrigin, discs.Count, data.ShownDiscCount));
             }
 
             return sticks;
@@ -38,7 +38,7 @@ namespace Runtime.Simulation.Utility
 
                 for (int r = 0; r < source.Count; r++)
                 {
-                    var slot = GridSlot(c, columnCount, r, layout);
+                    var slot = GridBallSlot(c, columnCount, r, layout);
                     column.Add(new Ball(source[r].ColorId, source[r].Counter, slot));
                 }
 
@@ -48,11 +48,11 @@ namespace Runtime.Simulation.Utility
             return grid;
         }
 
-        public static Vector3 GridSlot(int column, int columnCount, int row, LevelLayout layout)
+        public static Vector3 GridBallSlot(int column, int columnCount, int row, LevelLayout layout)
         {
             float x = (column - (columnCount - 1) * 0.5f) * layout.GridColumnSpacing;
             float z = -row * layout.GridRowSpacing;
-            return layout.GridOrigin + new Vector3(x, 0f, z);
+            return layout.GridOrigin + new Vector3(x, layout.BallLift, z);
         }
 
         public static Vector3 DockSlot(int index, int capacity, LevelLayout layout)
@@ -61,9 +61,15 @@ namespace Runtime.Simulation.Utility
             return layout.DockOrigin + new Vector3(x, 0f, 0f);
         }
 
+        public static Vector3 DockBallSlot(int index, int capacity, LevelLayout layout)
+        {
+            return DockSlot(index, capacity, layout) + Vector3.up * layout.BallLift;
+        }
+
+        // The stack hangs from the stick top, so the landing height never changes as discs break.
         public static Vector3 SurfacePoint(Stick stick, float discHeight)
         {
-            return stick.Position + Vector3.up * (stick.AliveCount * discHeight);
+            return stick.Position + Vector3.up * (stick.ShownDiscCount * discHeight);
         }
     }
 }

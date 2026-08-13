@@ -127,13 +127,18 @@ namespace Runtime.Simulation
         {
             ball.Position = ball.Hop.To;
 
+            if (ball.State == BallState.ToDock)
+            {
+                CompleteDocking(ball, flyingIndex);
+                return;
+            }
+
             var stick = _sticks[_path[ball.PathIndex]];
             GameRules.TryBreakDiscAtTop(stick, ball, out var brokenDisc);
             Events.RaiseBallLanded(ball, stick, brokenDisc);
 
             var decision = GameRules.MakeDecision(_path, _sticks, ball.PathIndex, DoesGridHasBalls(), out int next);
 
-            // The winning ball can spend its last charge on the same landing, so it dies either way.
             bool ballDied = ball.Counter <= 0;
             if (ballDied)
             {
@@ -153,7 +158,7 @@ namespace Runtime.Simulation
 
             if (decision == PathMovementDecision.PathLapFinished)
             {
-                SendToDock(ball, flyingIndex);
+                SendToDock(ball);
                 return;
             }
 
@@ -177,7 +182,16 @@ namespace Runtime.Simulation
             Events.RaiseBallFinished(ball);
         }
 
-        private void SendToDock(Ball ball, int flyingIndex)
+        private void SendToDock(Ball ball)
+        {
+            var slot = LevelLoader.DockBallSlot(_dock.Count, _config.DockCapacity, _layout);
+
+            ball.State = BallState.ToDock;
+            ball.HopElapsed = 0f;
+            ball.Hop = new HopMotion(ball.Position, slot, _config);
+        }
+
+        private void CompleteDocking(Ball ball, int flyingIndex)
         {
             if (_dock.Count >= _config.DockCapacity)
             {
@@ -187,8 +201,9 @@ namespace Runtime.Simulation
 
             _flying.RemoveAt(flyingIndex);
             ball.State = BallState.AtDock;
-            ball.Position = LevelLoader.DockSlot(_dock.Count, _config.DockCapacity, _layout);
             _dock.Add(ball);
+
+            RepositionDock();
 
             Events.RaiseBallFinished(ball);
         }
@@ -204,7 +219,7 @@ namespace Runtime.Simulation
             var balls = _grid[column];
             for (int i = 0; i < balls.Count; i++)
             {
-                balls[i].Position = LevelLoader.GridSlot(column, ColumnCount, i, _layout);
+                balls[i].Position = LevelLoader.GridBallSlot(column, ColumnCount, i, _layout);
             }
         }
 
@@ -212,7 +227,7 @@ namespace Runtime.Simulation
         {
             for (int i = 0; i < _dock.Count; i++)
             {
-                _dock[i].Position = LevelLoader.DockSlot(i, _config.DockCapacity, _layout);
+                _dock[i].Position = LevelLoader.DockBallSlot(i, _config.DockCapacity, _layout);
             }
         }
     }

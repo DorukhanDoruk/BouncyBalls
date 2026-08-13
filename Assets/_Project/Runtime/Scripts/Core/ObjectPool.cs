@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace Runtime.Core
 {
-    // Minimal pool for view components; instances are parented once and reused.
     public class ObjectPool<T> where T : Component
     {
         private readonly T _prefab;

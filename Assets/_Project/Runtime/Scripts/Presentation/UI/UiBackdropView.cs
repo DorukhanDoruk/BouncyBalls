@@ -18,7 +18,6 @@ namespace Runtime.Presentation
             gameObject.SetActive(true);
             _group.alpha = 0f;
 
-            // Unscaled so the backdrop still fades if the game is paused on result.
             _fade = _group.DOFade(_shownAlpha, _fadeDuration).SetUpdate(true);
         }
 

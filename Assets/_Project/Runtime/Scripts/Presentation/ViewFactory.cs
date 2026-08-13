@@ -12,6 +12,7 @@ namespace Runtime.Presentation
         private readonly ObjectPool<DiscView> _discPool;
         private readonly ObjectPool<BallView> _ballPool;
         private readonly ObjectPool<DockView> _dockPool;
+        private readonly ObjectPool<DiscPieceView> _piecePool;
 
         public ViewFactory(VisualConfigSO visualConfig, Transform root)
         {
@@ -21,6 +22,7 @@ namespace Runtime.Presentation
             _discPool = new ObjectPool<DiscView>(visualConfig.DiscPrefab.GetComponent<DiscView>(), root);
             _ballPool = new ObjectPool<BallView>(visualConfig.BallPrefab.GetComponent<BallView>(), root);
             _dockPool = new ObjectPool<DockView>(visualConfig.DockPrefab.GetComponent<DockView>(), root);
+            _piecePool = new ObjectPool<DiscPieceView>(visualConfig.DiscPiecePrefab.GetComponent<DiscPieceView>(), root);
         }
 
         public DockView CreateDock(Vector3 position)
@@ -28,35 +30,42 @@ namespace Runtime.Presentation
             return _dockPool.Get(position);
         }
 
-        public StickView CreateStick(Stick stick)
+        public StickView CreateStick(Stick stick, float discHeight)
         {
             var view = _stickPool.Get(stick.Position);
-            view.SetStick(stick);
+            view.SetStick(stick, discHeight);
             return view;
         }
 
-        public DiscView CreateDisc(Disc disc, Vector3 position)
+        public DiscView CreateDisc(Disc disc, Vector3 position, Transform stick)
         {
             var view = _discPool.Get(position);
-            view.SetDisc(disc, _visualConfig.GetColor(disc.Color));
+            view.transform.SetParent(stick, true);
+            view.SetDisc(_visualConfig.GetColor(disc.Color));
             return view;
         }
 
         public BallView CreateBall(Ball ball)
         {
             var view = _ballPool.Get(ball.Position);
-            view.SetBall(ball, _visualConfig.GetColor(ball.Color));
+            view.SetBall(ball, _visualConfig.GetColor(ball.Color), _visualConfig.BallMove);
             return view;
         }
 
-        public void ReleaseStick(StickView view)
+        public void BreakDisc(DiscView view, Disc disc, float groundY)
         {
-            _stickPool.Release(view);
-        }
+            var position = view.transform.position;
+            var scale = view.transform.lossyScale;
+            var color = _visualConfig.GetColor(disc.Color);
 
-        public void ReleaseDisc(DiscView view)
-        {
             _discPool.Release(view);
+
+            var meshes = _visualConfig.DiscPieceMeshes;
+            for (int i = 0; i < meshes.Length; i++)
+            {
+                var piece = _piecePool.Get(position);
+                piece.Play(meshes[i], color, position, scale, groundY, _visualConfig.DiscShatter, released => _piecePool.Release(released));
+            }
         }
 
         public void ReleaseBall(BallView view)

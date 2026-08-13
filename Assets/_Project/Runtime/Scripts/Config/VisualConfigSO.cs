@@ -15,22 +15,38 @@ namespace Runtime.Core
         public GameObject DiscPrefab;
         public GameObject DockPrefab;
 
-        [Header("Squash & Stretch")]
-        public float SquashDuration = 0.12f;
-        public Vector3 SquashScale = new Vector3(1.25f, 0.75f, 1.25f);
-        public DG.Tweening.Ease SquashEase = DG.Tweening.Ease.OutQuad;
+        [Header("Disc Stack Shift")]
+        public float DiscShiftDuration = 0.25f;
+        public DG.Tweening.Ease DiscShiftEase = DG.Tweening.Ease.OutCubic;
+
+        [Header("Stick Dip")]
+        public float StickDipAmount = 0.15f;
+        public float StickDipDuration = 0.25f;
 
         [Header("Disk Shatter")]
-        public float DiscPopDuration = 0.2f;
-        public DG.Tweening.Ease DiscPopEase = DG.Tweening.Ease.InBack;
+        public GameObject DiscPiecePrefab;
+        public Mesh[] DiscPieceMeshes;
 
-        [Header("Grid Shift")]
-        public float GridShiftDuration = 0.25f;
-        public DG.Tweening.Ease GridShiftEase = DG.Tweening.Ease.OutCubic;
+        public DiscShatterSettings DiscShatter = new DiscShatterSettings
+        {
+            Gravity = 18f,
+            OutwardSpeed = 1f,
+            UpwardSpeed = 3f,
+            SpinSpeed = 540f,
+            EndScale = 0.5f,
+            ShrinkDuration = 0.5f,
+            DissolveDelay = 2f,
+            DissolveDuration = 0.25f
+        };
 
-        [Header("Dock Insert")]
-        public float DockInsertDuration = 0.3f;
-        public DG.Tweening.Ease DockInsertEase = DG.Tweening.Ease.OutBack;
+        [Header("Ball Move")]
+        public BallMoveSettings BallMove = new BallMoveSettings
+        {
+            GridShiftDuration = 0.25f,
+            GridShiftEase = DG.Tweening.Ease.OutCubic,
+            DockInsertDuration = 0.3f,
+            DockInsertEase = DG.Tweening.Ease.OutBack
+        };
 
         public Color GetColor(ObjectColor color)
         {
