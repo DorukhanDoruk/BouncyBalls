@@ -1,0 +1,56 @@
+using DG.Tweening;
+using UnityEngine;
+using UnityEngine.UI;
+
+namespace Runtime.Presentation
+{
+    public sealed class ResultPanelView : MonoBehaviour
+    {
+        [SerializeField] private Image _title;
+        [SerializeField] private Button _playAgainButton;
+
+        [Header("Title Sprites")]
+        [SerializeField] private Sprite _wonSprite;
+        [SerializeField] private Sprite _lostSprite;
+
+        [Header("Scale")]
+        [SerializeField] private float _openDuration = 0.3f;
+        [SerializeField] private Ease _openEase = Ease.OutBack;
+        [SerializeField] private float _closeDuration = 0.2f;
+        [SerializeField] private Ease _closeEase = Ease.InQuad;
+
+        private Tween _scale;
+
+        public Button PlayAgainButton => _playAgainButton;
+
+        public void Show(bool won)
+        {
+            _scale?.Kill();
+
+            _title.sprite = won ? _wonSprite : _lostSprite;
+
+            gameObject.SetActive(true);
+            transform.localScale = Vector3.zero;
+
+            _scale = transform.DOScale(Vector3.one, _openDuration)
+                .SetEase(_openEase)
+                .SetUpdate(true);
+        }
+
+        public void Hide()
+        {
+            _scale?.Kill();
+
+            _scale = transform.DOScale(Vector3.zero, _closeDuration)
+                .SetEase(_closeEase)
+                .SetUpdate(true)
+                .OnComplete(() => gameObject.SetActive(false));
+        }
+
+        private void OnDisable()
+        {
+            _scale?.Kill();
+            _scale = null;
+        }
+    }
+}
