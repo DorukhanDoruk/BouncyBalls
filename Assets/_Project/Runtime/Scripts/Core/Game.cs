@@ -84,7 +84,13 @@ namespace Runtime.Core
             _container.Register(uiPresenter);
 
             _container.InitializeAll();
-            _gameView.Initialize(flowService.Simulation, _visualConfig, gameConfig, levelLayout);
+
+            _gameView.Initialize(_visualConfig, gameConfig, levelLayout);
+
+            flowService.LevelStarted += _gameView.Rebuild;
+            uiPresenter.PlayAgainRequested += flowService.Continue;
+
+            flowService.StartLevel();
             _ready = true;
 
             Debug.Log("[Game] Bootstrap completed");

@@ -1,4 +1,5 @@
 using DG.Tweening;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,10 +9,15 @@ namespace Runtime.Presentation
     {
         [SerializeField] private Image _title;
         [SerializeField] private Button _playAgainButton;
+        [SerializeField] private TextMeshProUGUI _buttonLabel;
 
         [Header("Title Sprites")]
         [SerializeField] private Sprite _wonSprite;
         [SerializeField] private Sprite _lostSprite;
+
+        [Header("Button Label")]
+        [SerializeField] private string _wonLabel = "CONTINUE";
+        [SerializeField] private string _lostLabel = "RETRY";
 
         [Header("Scale")]
         [SerializeField] private float _openDuration = 0.3f;
@@ -28,6 +34,7 @@ namespace Runtime.Presentation
             _scale?.Kill();
 
             _title.sprite = won ? _wonSprite : _lostSprite;
+            _buttonLabel.SetText(won ? _wonLabel : _lostLabel);
 
             gameObject.SetActive(true);
             transform.localScale = Vector3.zero;

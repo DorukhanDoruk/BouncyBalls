@@ -23,7 +23,7 @@ namespace Runtime.Presentation
             _meshRenderer.SetPropertyBlock(_materialPropertyBlock);
         }
 
-        public void Dispose()
+        private void OnDisable()
         {
             _disc = null;
         }

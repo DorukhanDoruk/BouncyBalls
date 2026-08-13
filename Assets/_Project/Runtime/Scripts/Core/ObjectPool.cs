@@ -9,6 +9,7 @@ namespace Runtime.Core
         private readonly T _prefab;
         private readonly Transform _parent;
         private readonly Stack<T> _idle = new();
+        private readonly List<T> _active = new();
 
         public ObjectPool(T prefab, Transform parent, int prewarm = 0)
         {
@@ -27,13 +28,31 @@ namespace Runtime.Core
 
             instance.transform.position = position;
             instance.gameObject.SetActive(true);
+            _active.Add(instance);
             return instance;
         }
 
         public void Release(T instance)
         {
+            _active.Remove(instance);
             instance.gameObject.SetActive(false);
             _idle.Push(instance);
+        }
+
+        public void ReleaseAll()
+        {
+            for (int i = 0; i < _active.Count; i++)
+            {
+                if (_active[i] == null)
+                {
+                    continue;
+                }
+
+                _active[i].gameObject.SetActive(false);
+                _idle.Push(_active[i]);
+            }
+
+            _active.Clear();
         }
 
         private T Create(bool active)

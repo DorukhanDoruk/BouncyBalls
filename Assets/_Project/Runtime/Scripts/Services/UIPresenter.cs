@@ -37,14 +37,33 @@ namespace Runtime.Services
 
         public void Initialize()
         {
-            _simulation = _flowService.Simulation;
             _root = UnityEngine.Object.Instantiate(_rootPrefab);
 
             CreateLabelRoot();
 
-            _root.TopArea.SetLevelName(_levelService.Current.name);
             _root.ResultPanel.gameObject.SetActive(false);
             _root.Backdrop.gameObject.SetActive(false);
+            _root.ResultPanel.PlayAgainButton.onClick.AddListener(OnPlayAgainClicked);
+
+            _flowService.LevelStarted += OnLevelStarted;
+        }
+
+        public void Dispose()
+        {
+            _flowService.LevelStarted -= OnLevelStarted;
+            Teardown();
+        }
+
+        // Runs for every level, first one included.
+        private void OnLevelStarted(GameSimulation simulation)
+        {
+            Teardown();
+
+            _simulation = simulation;
+
+            _root.TopArea.SetLevelName(_levelService.Current.name);
+            _root.ResultPanel.Hide();
+            _root.Backdrop.Hide();
 
             for (int i = 0; i < _simulation.ColumnCount; i++)
             {
@@ -55,25 +74,30 @@ namespace Runtime.Services
                 }
             }
 
-            _root.ResultPanel.PlayAgainButton.onClick.AddListener(OnPlayAgainClicked);
-
             _simulation.Events.BallLanded += OnBallLanded;
             _simulation.Events.BallFinished += OnBallFinished;
             _simulation.Events.LevelEnded += OnLevelEnded;
         }
 
-        public void Dispose()
+        private void Teardown()
         {
-            _simulation.Events.BallLanded -= OnBallLanded;
-            _simulation.Events.BallFinished -= OnBallFinished;
-            _simulation.Events.LevelEnded -= OnLevelEnded;
-            
-            _labels.Clear();
-            if (_root != null)
+            if (_simulation != null)
             {
-                _root.ResultPanel.PlayAgainButton.onClick.RemoveListener(OnPlayAgainClicked);
-                UnityEngine.Object.Destroy(_root.gameObject);
+                _simulation.Events.BallLanded -= OnBallLanded;
+                _simulation.Events.BallFinished -= OnBallFinished;
+                _simulation.Events.LevelEnded -= OnLevelEnded;
+                _simulation = null;
             }
+
+            foreach (var label in _labels.Values)
+            {
+                if (label != null)
+                {
+                    UnityEngine.Object.Destroy(label.gameObject);
+                }
+            }
+
+            _labels.Clear();
         }
 
         public void Tick(float deltaTime)

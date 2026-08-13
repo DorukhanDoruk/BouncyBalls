@@ -57,13 +57,19 @@ namespace Runtime.Presentation
         public void ReleaseDisc(DiscView view)
         {
             _discPool.Release(view);
-            view.Dispose();
         }
 
         public void ReleaseBall(BallView view)
         {
             _ballPool.Release(view);
-            view.Dispose();
+        }
+
+        public void ReleaseAll()
+        {
+            _stickPool.ReleaseAll();
+            _discPool.ReleaseAll();
+            _ballPool.ReleaseAll();
+            _dockPool.ReleaseAll();
         }
     }
 }

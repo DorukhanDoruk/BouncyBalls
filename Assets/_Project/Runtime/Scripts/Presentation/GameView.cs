@@ -11,56 +11,89 @@ namespace Runtime.Presentation
     {
         private readonly Dictionary<Ball, BallView> _ballViews = new Dictionary<Ball, BallView>();
         private readonly Dictionary<Disc, DiscView> _discViews = new Dictionary<Disc, DiscView>();
-        
+
         private GameSimulation _simulation;
         private VisualConfigSO _visualConfig;
         private GameConfig _gameConfig;
+        private LevelLayout _levelLayout;
         private ViewFactory _factory;
-        
-        public void Initialize(GameSimulation simulation, VisualConfigSO visualConfig, GameConfig gameConfig, LevelLayout levelLayout)
+
+        public void Initialize(VisualConfigSO visualConfig, GameConfig gameConfig, LevelLayout levelLayout)
         {
-            _simulation = simulation;
             _visualConfig = visualConfig;
             _gameConfig = gameConfig;
+            _levelLayout = levelLayout;
 
             _factory = new ViewFactory(_visualConfig, transform);
+        }
 
-            for (int i = 0; i < _gameConfig.DockCapacity; i++)
-            {
-                _factory.CreateDock(LevelLoader.DockSlot(i, _gameConfig.DockCapacity, levelLayout));
-            }
+        public void Rebuild(GameSimulation simulation)
+        {
+            Teardown();
 
-            foreach (var stick in simulation.Sticks)
-            {
-                _factory.CreateStick(stick);
+            _simulation = simulation;
 
-                int aliveCount = stick.AliveCount;
-                for (int i = 0; i < aliveCount; i++)
-                {
-                    var disc = stick.Discs[i];
-                    var discView = _factory.CreateDisc(disc, (stick.Position + (Vector3.up * (_gameConfig.DiscHeight / 2f))) + (Vector3.up * (i * _gameConfig.DiscHeight)));
-                    _discViews.Add(disc, discView);
-                }
-            }
+            BuildDock();
+            BuildSticks();
+            BuildBalls();
 
-            for (int i = 0; i < _simulation.ColumnCount; i++)
-            {
-                var column = simulation.GridColumn(i);
-                foreach (var ball in column)
-                {
-                    var ballView = _factory.CreateBall(ball);
-                    _ballViews.Add(ball, ballView);
-                }
-            }
-            
             _simulation.Events.BallLanded += EventsOnBallLanded;
             _simulation.Events.BallFinished += EventsOnBallFinished;
         }
 
         private void OnDestroy()
         {
-            _simulation.Events.BallLanded -= EventsOnBallLanded;
-            _simulation.Events.BallFinished -= EventsOnBallFinished;
+            Teardown();
+        }
+
+        private void Teardown()
+        {
+            if (_simulation != null)
+            {
+                _simulation.Events.BallLanded -= EventsOnBallLanded;
+                _simulation.Events.BallFinished -= EventsOnBallFinished;
+                _simulation = null;
+            }
+
+            _factory.ReleaseAll();
+            _ballViews.Clear();
+            _discViews.Clear();
+        }
+
+        private void BuildDock()
+        {
+            for (int i = 0; i < _gameConfig.DockCapacity; i++)
+            {
+                _factory.CreateDock(LevelLoader.DockSlot(i, _gameConfig.DockCapacity, _levelLayout));
+            }
+        }
+
+        private void BuildSticks()
+        {
+            foreach (var stick in _simulation.Sticks)
+            {
+                _factory.CreateStick(stick);
+
+                var bottom = stick.Position + Vector3.up * (_gameConfig.DiscHeight / 2f);
+                for (int i = 0; i < stick.AliveCount; i++)
+                {
+                    var disc = stick.Discs[i];
+                    var discView = _factory.CreateDisc(disc, bottom + Vector3.up * (i * _gameConfig.DiscHeight));
+                    _discViews.Add(disc, discView);
+                }
+            }
+        }
+
+        private void BuildBalls()
+        {
+            for (int i = 0; i < _simulation.ColumnCount; i++)
+            {
+                var column = _simulation.GridColumn(i);
+                foreach (var ball in column)
+                {
+                    _ballViews.Add(ball, _factory.CreateBall(ball));
+                }
+            }
         }
 
         private void EventsOnBallFinished(Ball ball)
@@ -69,7 +102,7 @@ namespace Runtime.Presentation
             {
                 if (!_ballViews.TryGetValue(ball, out BallView ballView))
                 {
-                    throw new Exception("Landed disc doesn't have registered BallView");
+                    throw new Exception("Finished ball doesn't have registered BallView");
                 }
 
                 _factory.ReleaseBall(ballView);
@@ -83,7 +116,7 @@ namespace Runtime.Presentation
             {
                 if (!_discViews.TryGetValue(disc, out DiscView discView))
                 {
-                    throw new Exception("Landed disc doesn't have registered DiskView");
+                    throw new Exception("Landed disc doesn't have registered DiscView");
                 }
 
                 _factory.ReleaseDisc(discView);

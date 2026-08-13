@@ -52,8 +52,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Runtime.Core.ResultPanelView
   _title: {fileID: 3354850521056012250}
   _playAgainButton: {fileID: 6417113350375391978}
+  _buttonLabel: {fileID: 7553429569214549152}
   _wonSprite: {fileID: 21300000, guid: 8c7fe1d28d42d41db9a66602c7f1d1d0, type: 3}
   _lostSprite: {fileID: 21300000, guid: e9a6c78a54cee4419ae486b09aad64f3, type: 3}
+  _wonLabel: CONTINUE
+  _lostLabel: RETRY
   _openDuration: 0.3
   _openEase: 2
   _closeDuration: 0.2

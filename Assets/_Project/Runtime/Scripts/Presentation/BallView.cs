@@ -30,7 +30,7 @@ namespace Runtime.Presentation
             transform.position = _ball.Position;
         }
 
-        public void Dispose()
+        private void OnDisable()
         {
             _ball = null;
         }
