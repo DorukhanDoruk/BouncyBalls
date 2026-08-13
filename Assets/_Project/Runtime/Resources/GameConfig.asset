@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 446479cf880645d59aab8519b2f7825e, type: 3}
   m_Name: GameConfig
   m_EditorClassIdentifier: Assembly-CSharp::Runtime.Core.GameConfigSO
-  HopSpeed: 12
-  ArcHeightPerUnit: 0.35
+  HopSpeed: 4.5
+  ArcHeightPerUnit: 1
   MaxArcHeight: 3
-  InPlaceBounceHeight: 1.2
+  InPlaceBounceHeight: 1
   InPlaceBounceDuration: 0.3
   MaxActiveBalls: 5
   DockCapacity: 5
   MinLaunchInterval: 0.15
-  DiscHeight: 0.25
+  DiscHeight: 0.5
   BallRadius: 0.4

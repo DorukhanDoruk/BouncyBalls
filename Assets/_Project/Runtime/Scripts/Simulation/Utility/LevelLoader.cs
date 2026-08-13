@@ -8,7 +8,7 @@ namespace Runtime.Simulation.Utility
 {
     public static class LevelLoader
     {
-        public static List<Stick> LoadSticks(LevelData level)
+        public static List<Stick> LoadSticks(LevelData level, LevelLayout layout)
         {
             var sticks = new List<Stick>(level.Sticks.Count);
             for (int i = 0; i < level.Sticks.Count; i++)
@@ -21,7 +21,7 @@ namespace Runtime.Simulation.Utility
                     discs.Add(new Disc(data.DiscColors[d]));
                 }
 
-                sticks.Add(new Stick(discs, data.Position, discs.Count));
+                sticks.Add(new Stick(discs, data.Position + layout.StickOrigin, discs.Count));
             }
 
             return sticks;
@@ -50,14 +50,14 @@ namespace Runtime.Simulation.Utility
 
         public static Vector3 GridSlot(int column, int columnCount, int row, LevelLayout layout)
         {
-            float x = (column - (columnCount - 1) * 0.5f) * layout.SlotSpacing;
-            float y = -row * layout.SlotSpacing;
-            return layout.GridOrigin + new Vector3(x, y, 0f);
+            float x = (column - (columnCount - 1) * 0.5f) * layout.GridColumnSpacing;
+            float z = -row * layout.GridRowSpacing;
+            return layout.GridOrigin + new Vector3(x, 0f, z);
         }
 
         public static Vector3 DockSlot(int index, int capacity, LevelLayout layout)
         {
-            float x = (index - (capacity - 1) * 0.5f) * layout.SlotSpacing;
+            float x = (index - (capacity - 1) * 0.5f) * layout.DockSlotSpacing;
             return layout.DockOrigin + new Vector3(x, 0f, 0f);
         }
 

@@ -1,4 +1,6 @@
 using Runtime.Level.Config;
+using Runtime.Presentation;
+using Runtime.Services;
 using UnityEngine;
 namespace Runtime.Core
 {
@@ -9,20 +11,21 @@ namespace Runtime.Core
         public static bool IsReady => Instance != null && Instance._ready;
 
         [Header("Config")]
-        [SerializeField] GameConfigSO   _gameConfig;
-        [SerializeField] VisualConfigSO _visualConfig;
-        [SerializeField] LevelLayoutSO _levelLayout;
+        [SerializeField] private GameConfigSO   _gameConfig;
+        [SerializeField] private VisualConfigSO _visualConfig;
+        [SerializeField] private LevelLayoutSO _levelLayout;
 
         [Header("Levels")]
-        [SerializeField] LevelData[] _levels;
+        [SerializeField] private LevelData[] _levels;
 
         [Header("Scene References")]
-        [SerializeField] Camera _mainCamera;
+        [SerializeField] private Camera _mainCamera;
+        [SerializeField] private GameView _gameView;
 
-        ServiceContainer _container;
-        bool _ready;
+        private ServiceContainer _container;
+        private bool _ready;
 
-        void Awake()
+        private void Awake()
         {
             if (Instance != null && Instance != this)
             {
@@ -39,7 +42,7 @@ namespace Runtime.Core
             Bootstrap();
         }
 
-        void Update()
+        private void Update()
         {
             if (_ready)
             {
@@ -47,7 +50,7 @@ namespace Runtime.Core
             }
         }
 
-        void OnDestroy()
+        private void OnDestroy()
         {
             if (Instance != this)
             {
@@ -59,12 +62,25 @@ namespace Runtime.Core
             _ready = false;
         }
 
-        void Bootstrap()
+        private void Bootstrap()
         {
             _container = new ServiceContainer();
             Debug.Log("[Game] Bootstrap started");
 
+            var gameConfig = _gameConfig.ToRuntime();
+            var levelLayout = _levelLayout.ToRuntime();
+            
+            var levelService = new LevelService(_levels, 1);
+            _container.Register(levelService);
+
+            var flowService = new GameFlowService(gameConfig, levelLayout, levelService);
+            _container.Register(flowService);
+
+            var inputService = new InputService(_mainCamera, flowService, levelLayout);
+            _container.Register(inputService);
+
             _container.InitializeAll();
+            _gameView.Initialize(flowService.Simulation, _visualConfig, gameConfig, levelLayout);
             _ready = true;
 
             Debug.Log("[Game] Bootstrap completed");

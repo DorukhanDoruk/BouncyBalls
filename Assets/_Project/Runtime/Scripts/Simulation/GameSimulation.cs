@@ -28,7 +28,7 @@ namespace Runtime.Simulation
             _layout = layout;
             _path = new List<int>(level.Path);
 
-            _sticks = LevelLoader.LoadSticks(level);
+            _sticks = LevelLoader.LoadSticks(level, layout);
             _grid = LevelLoader.LoadGrid(level, layout);
         }
 

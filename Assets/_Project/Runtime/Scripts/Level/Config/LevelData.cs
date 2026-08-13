@@ -10,7 +10,7 @@ namespace Runtime.Level.Config
         [Header("Playground")]
         public List<StickData> Sticks = new();
         public List<int> Path = new();
- 
+
         [Header("Grid")]
         public List<GridColumnData> GridColumns = new();
     }

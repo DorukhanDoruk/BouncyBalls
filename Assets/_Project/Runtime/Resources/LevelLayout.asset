@@ -11,7 +11,11 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9002dedf692d48ce815f30eacbe97e64, type: 3}
   m_Name: LevelLayout
-  m_EditorClassIdentifier: Assembly-CSharp::Runtime.Core.LevelConstantsSO
-  GridOrigin: {x: 0, y: -4, z: 0}
-  DockOrigin: {x: 0, y: -2, z: 0}
-  SlotSpacing: 1.1
+  m_EditorClassIdentifier: Assembly-CSharp::Runtime.Core.LevelLayoutSO
+  StickOrigin: {x: 0, y: 0.05, z: 4}
+  GridOrigin: {x: 0, y: 0, z: -7}
+  GridColumnSpacing: 1.75
+  GridRowSpacing: 2.35
+  DockOrigin: {x: 0, y: 0.1, z: -3.6}
+  DockSlotSpacing: 1.6
+  BallSelectionRadius: 0.75

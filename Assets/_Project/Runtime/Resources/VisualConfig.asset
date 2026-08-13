@@ -29,9 +29,10 @@ MonoBehaviour:
     Tint: {r: 0.6, g: 0.3, b: 0.85, a: 1}
   - Id: 7
     Tint: {r: 0.95, g: 0.4, b: 0.7, a: 1}
-  BallPrefab: {fileID: 9054394476146898818, guid: 91546173d57244232adf6682496c5432, type: 3}
-  StickPrefab: {fileID: 1010216387263886588, guid: 33a0b5bb07f004b1aba7156537e6211e, type: 3}
-  DiscPrefab: {fileID: 2361190521727009320, guid: 361c36f5c5d234fffa27d047fe9cd44f, type: 3}
+  BallPrefab: {fileID: 1487107321798637747, guid: cb7bee0f7586449ca8bdef5a21acd732, type: 3}
+  StickPrefab: {fileID: 8878548657681287385, guid: b11d53bc11bb74233b3b8e7c9ec9b205, type: 3}
+  DiscPrefab: {fileID: 2721632727801960950, guid: 277bc0cec963648ce9913d56d13c1f97, type: 3}
+  DockPrefab: {fileID: 8474345383761501757, guid: f6aa54d377293411a8323153fa051c80, type: 3}
   SquashDuration: 0.12
   SquashScale: {x: 1.25, y: 0.75, z: 1.25}
   SquashEase: 6

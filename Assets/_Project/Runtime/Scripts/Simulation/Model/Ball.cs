@@ -4,7 +4,7 @@ namespace Runtime.Simulation.Model
 {
     public class Ball
     {
-        public ObjectColor Color;
+        public readonly ObjectColor Color;
         public int Counter;
         public Vector3 Position;
 

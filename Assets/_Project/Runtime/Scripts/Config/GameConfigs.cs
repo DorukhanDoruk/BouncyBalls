@@ -18,11 +18,11 @@ namespace Runtime.Core
 
         public static GameConfig Default => new GameConfig
         {
-            HopSpeed = 12f, ArcHeightPerUnit = 0.35f,
-            MaxArcHeight = 3f, InPlaceBounceHeight = 1.2f,
+            HopSpeed = 4.5f, ArcHeightPerUnit = 1f,
+            MaxArcHeight = 3f, InPlaceBounceHeight = 1f,
             InPlaceBounceDuration = 0.3f, MaxActiveBalls = 5,
             DockCapacity = 5, MinLaunchInterval = 0.15f,
-            DiscHeight = 0.25f, BallRadius = 0.4f
+            DiscHeight = 0.5f, BallRadius = 0.4f
         };
     }
 

@@ -5,8 +5,15 @@ namespace Runtime.Core
     [Serializable]
     public struct LevelLayout
     {
+        public Vector3 StickOrigin;
+
         public Vector3 GridOrigin;
+        public float GridColumnSpacing;
+        public float GridRowSpacing;
+
         public Vector3 DockOrigin;
-        public float SlotSpacing;
+        public float DockSlotSpacing;
+
+        public float BallSelectionRadius;
     }
 }

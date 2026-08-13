@@ -13,6 +13,7 @@ namespace Runtime.Core
         public GameObject BallPrefab;
         public GameObject StickPrefab;
         public GameObject DiscPrefab;
+        public GameObject DockPrefab;
 
         [Header("Squash & Stretch")]
         public float SquashDuration = 0.12f;
