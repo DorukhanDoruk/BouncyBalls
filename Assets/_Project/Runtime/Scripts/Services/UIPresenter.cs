@@ -7,6 +7,7 @@ using Runtime.Simulation;
 using Runtime.Simulation.Model;
 using TMPro;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Runtime.Services
 {
@@ -38,7 +39,7 @@ namespace Runtime.Services
 
         public void Initialize()
         {
-            _root = UnityEngine.Object.Instantiate(_rootPrefab);
+            _root = Object.Instantiate(_rootPrefab);
 
             CreateLabelRoot();
 
@@ -59,7 +60,7 @@ namespace Runtime.Services
             }
 
             _root.ResultPanel.PlayAgainButton.onClick.RemoveListener(OnPlayAgainClicked);
-            UnityEngine.Object.Destroy(_root.gameObject);
+            Object.Destroy(_root.gameObject);
             _root = null;
         }
 
@@ -102,7 +103,7 @@ namespace Runtime.Services
             {
                 if (label != null)
                 {
-                    UnityEngine.Object.Destroy(label.gameObject);
+                    Object.Destroy(label.gameObject);
                 }
             }
 
@@ -139,7 +140,7 @@ namespace Runtime.Services
 
         private void CreateLabel(Ball ball)
         {
-            var label = UnityEngine.Object.Instantiate(_root.BallLabelPrefab, _labelRoot);
+            var label = Object.Instantiate(_root.BallLabelPrefab, _labelRoot);
             _labels.Add(ball, label);
             label.SetText("{0}", ball.Counter);
         }
@@ -161,7 +162,7 @@ namespace Runtime.Services
 
             if (_labels.TryGetValue(ball, out var label))
             {
-                UnityEngine.Object.Destroy(label.gameObject);
+                Object.Destroy(label.gameObject);
                 _labels.Remove(ball);
             }
         }
