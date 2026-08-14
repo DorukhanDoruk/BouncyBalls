@@ -34,24 +34,24 @@ namespace Runtime.Core
         public void Release(T instance)
         {
             _active.Remove(instance);
-            instance.gameObject.SetActive(false);
-            _idle.Push(instance);
+            Return(instance);
         }
 
         public void ReleaseAll()
         {
             for (int i = 0; i < _active.Count; i++)
             {
-                if (_active[i] == null)
-                {
-                    continue;
-                }
-
-                _active[i].gameObject.SetActive(false);
-                _idle.Push(_active[i]);
+                Return(_active[i]);
             }
 
             _active.Clear();
+        }
+
+        private void Return(T instance)
+        {
+            instance.transform.SetParent(_parent, false);
+            instance.gameObject.SetActive(false);
+            _idle.Push(instance);
         }
 
         private T Create(bool active)

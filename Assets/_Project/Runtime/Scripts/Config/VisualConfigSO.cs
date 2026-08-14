@@ -1,7 +1,8 @@
+using Runtime.Config;
 using Runtime.Level.Model;
 using System;
 using UnityEngine;
-namespace Runtime.Config
+namespace Runtime.Core
 {
     [CreateAssetMenu(menuName = "BouncyBalls/Visual Config", fileName = "VisualConfig")]
     public class VisualConfigSO : ScriptableObject

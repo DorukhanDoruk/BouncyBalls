@@ -45,21 +45,29 @@ namespace Runtime.Presentation
         private void OnDestroy()
         {
             Teardown();
+            Unsubscribe();
         }
 
         private void Teardown()
         {
-            if (_simulation != null)
-            {
-                _simulation.Events.BallLanded -= EventsOnBallLanded;
-                _simulation.Events.BallFinished -= EventsOnBallFinished;
-                _simulation = null;
-            }
+            Unsubscribe();
 
             _factory.ReleaseAll();
             _ballViews.Clear();
             _discViews.Clear();
             _stickViews.Clear();
+        }
+
+        private void Unsubscribe()
+        {
+            if (_simulation == null)
+            {
+                return;
+            }
+
+            _simulation.Events.BallLanded -= EventsOnBallLanded;
+            _simulation.Events.BallFinished -= EventsOnBallFinished;
+            _simulation = null;
         }
 
         private void BuildDock()

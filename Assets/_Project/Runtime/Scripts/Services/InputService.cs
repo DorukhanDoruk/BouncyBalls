@@ -1,5 +1,6 @@
 using Runtime.Core;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 namespace Runtime.Services
@@ -29,6 +30,11 @@ namespace Runtime.Services
         {
             var pointer = Pointer.current;
             if (pointer == null || !pointer.press.wasPressedThisFrame)
+            {
+                return;
+            }
+
+            if (EventSystem.current.IsPointerOverGameObject())
             {
                 return;
             }

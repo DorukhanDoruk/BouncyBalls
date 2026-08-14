@@ -1,5 +1,6 @@
+using Runtime.Config;
 using UnityEngine;
-namespace Runtime.Config
+namespace Runtime.Core
 {
     [CreateAssetMenu(menuName = "BouncyBalls/Game Config", fileName = "GameConfig")]
     public class GameConfigSO : ScriptableObject

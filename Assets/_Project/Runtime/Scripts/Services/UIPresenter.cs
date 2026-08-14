@@ -53,6 +53,14 @@ namespace Runtime.Services
         {
             _flowService.LevelStarted -= OnLevelStarted;
             Teardown();
+            if (_root == null)
+            {
+                return;
+            }
+
+            _root.ResultPanel.PlayAgainButton.onClick.RemoveListener(OnPlayAgainClicked);
+            UnityEngine.Object.Destroy(_root.gameObject);
+            _root = null;
         }
 
         // Runs for every level, first one included.

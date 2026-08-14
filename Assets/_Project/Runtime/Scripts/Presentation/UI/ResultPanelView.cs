@@ -38,6 +38,7 @@ namespace Runtime.Presentation
 
             gameObject.SetActive(true);
             transform.localScale = Vector3.zero;
+            _playAgainButton.interactable = true;
 
             _scale = transform.DOScale(Vector3.one, _openDuration)
                 .SetEase(_openEase)
@@ -47,6 +48,8 @@ namespace Runtime.Presentation
         public void Hide()
         {
             _scale?.Kill();
+
+            _playAgainButton.interactable = false;
 
             _scale = transform.DOScale(Vector3.zero, _closeDuration)
                 .SetEase(_closeEase)

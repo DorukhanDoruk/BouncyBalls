@@ -32,15 +32,15 @@ namespace Runtime.Simulation
         {
             int columnCount = level.GridColumns.Count;
             var grid = new List<List<Ball>>(columnCount);
-            for (int c = 0; c < columnCount; c++)
+            for (int i = 0; i < columnCount; i++)
             {
-                var source = level.GridColumns[c].GridBalls;
-                var column = new List<Ball>(source.Count);
+                var gridBalls = level.GridColumns[i].GridBalls;
+                var column = new List<Ball>(gridBalls.Count);
 
-                for (int r = 0; r < source.Count; r++)
+                for (int j = 0; j < gridBalls.Count; j++)
                 {
-                    var slot = GridBallSlot(c, columnCount, r, layout);
-                    column.Add(new Ball(source[r].ColorId, source[r].Counter, slot));
+                    var slot = GridBallSlot(i, columnCount, j, layout);
+                    column.Add(new Ball(gridBalls[j].ColorId, gridBalls[j].Counter, slot, j));
                 }
 
                 grid.Add(column);

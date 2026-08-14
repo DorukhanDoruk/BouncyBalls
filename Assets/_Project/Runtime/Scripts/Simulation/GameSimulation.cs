@@ -114,6 +114,7 @@ namespace Runtime.Simulation
 
             ball.PathIndex = next;
             ball.State = BallState.Flying;
+            ball.GridRowIndex = -1;
             ball.HopElapsed = 0f;
             ball.Hop = BuildHop(ball, next);
 
@@ -220,6 +221,7 @@ namespace Runtime.Simulation
             for (int i = 0; i < balls.Count; i++)
             {
                 balls[i].Position = LevelLoader.GridBallSlot(column, ColumnCount, i, _layout);
+                balls[i].GridRowIndex = i;
             }
         }
 
