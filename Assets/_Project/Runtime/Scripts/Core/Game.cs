@@ -22,7 +22,7 @@ namespace Runtime.Core
         [Header("Scene References")]
         [SerializeField] private Camera _mainCamera;
         [SerializeField] private GameView _gameView;
-        [SerializeField] private UiRootView _uiRootPrefab;
+        [SerializeField] private UiRootView _uiRoot;
 
         private ServiceContainer _container;
         private bool _ready;
@@ -81,7 +81,7 @@ namespace Runtime.Core
             var inputService = new InputService(_mainCamera, flowService, levelLayout.BallSelectionRadius);
             _container.Register(inputService);
 
-            var uiPresenter = new UIPresenter(_uiRootPrefab, flowService, levelService, _mainCamera, gameConfig);
+            var uiPresenter = new UIPresenter(_uiRoot, flowService, levelService, _mainCamera, gameConfig);
             _container.Register(uiPresenter);
 
             _container.InitializeAll();

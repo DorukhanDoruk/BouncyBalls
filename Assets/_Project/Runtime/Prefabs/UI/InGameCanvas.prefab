@@ -118,7 +118,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1fc16847de20485f90e02f412b8e7a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Runtime.Core.UiRootView
-  _ballLabelPrefab: {fileID: 4488744195024377808, guid: 09701f15105a84a4dbd7156b283f421e, type: 3}
+  _ballLabelPrefab: {fileID: 7712054396183025641, guid: 09701f15105a84a4dbd7156b283f421e, type: 3}
   _ballLabelWorldOffset: {x: 0, y: 0, z: 0}
   _ballLabelScreenOffset: {x: 0, y: 0}
   _topArea: {fileID: 3040285991655465330}
@@ -280,7 +280,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3155847754884856283, guid: 6ab7e75a997044395908163e368ed708, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3588080325504709283, guid: 6ab7e75a997044395908163e368ed708, type: 3}
       propertyPath: m_Pivot.x
@@ -501,7 +501,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4603801759526614337, guid: 7f9ea6966284549ada8f2faf24a76b78, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

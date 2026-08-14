@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3588080325504709283}
   - component: {fileID: 6840589916918426798}
   - component: {fileID: 4488744195024377808}
+  - component: {fileID: 7712054396183025641}
   m_Layer: 5
   m_Name: BallNumberLabel
   m_TagString: Untagged
@@ -45,6 +46,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3155847754884856283}
   m_CullTransparentMesh: 1
+--- !u!114 &7712054396183025641
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3155847754884856283}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e2b9d4a1c7f45308b3e0a6d2f5c1974, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::Runtime.Presentation.BallLabelView
+  _text: {fileID: 4488744195024377808}
 --- !u!114 &4488744195024377808
 MonoBehaviour:
   m_ObjectHideFlags: 0

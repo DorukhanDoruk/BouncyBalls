@@ -21,13 +21,19 @@ namespace Runtime.Core
             }
         }
 
-        public T Get(Vector3 position)
+        public T Get()
         {
             var instance = _idle.Count > 0 ? _idle.Pop() : Create(true);
 
-            instance.transform.position = position;
             instance.gameObject.SetActive(true);
             _active.Add(instance);
+            return instance;
+        }
+
+        public T Get(Vector3 position)
+        {
+            var instance = Get();
+            instance.transform.position = position;
             return instance;
         }
 
@@ -56,7 +62,7 @@ namespace Runtime.Core
 
         private T Create(bool active)
         {
-            var instance = Object.Instantiate(_prefab, _parent);
+            var instance = Object.Instantiate(_prefab, _parent, false);
             instance.gameObject.SetActive(active);
             return instance;
         }
