@@ -6,6 +6,7 @@ namespace Runtime.Core
     {
         private void Start()
         {
+            Application.targetFrameRate = 60;
             SceneLoader.Load(SceneNames.Gameplay);
         }
     }
