@@ -17,6 +17,7 @@ MonoBehaviour:
   MaxArcHeight: 3
   InPlaceBounceHeight: 1
   InPlaceBounceDuration: 0.3
+  SlideDuration: 0.25
   MaxActiveBalls: 5
   DockCapacity: 5
   MinLaunchInterval: 0.15

@@ -30,6 +30,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1505540980294832304}
   - {fileID: 1753097398987792190}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -46,6 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Runtime.Presentation.StickView
   _topMeshRenderer: {fileID: 7493083788314017552}
+  _stack: {fileID: 1753097398987792190}
   _body: {fileID: 6259367618486664136}
   _bodyMesh: {fileID: 2271398095894861898}
 --- !u!1001 &1400189532182755163
@@ -54,7 +56,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 1753097398987792190}
+    m_TransformParent: {fileID: 6958553804652421826}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: a7a19754fc8114bb786adb89727dfba6, type: 3}
       propertyPath: m_LocalPosition.x
@@ -74,7 +76,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: a7a19754fc8114bb786adb89727dfba6, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: a7a19754fc8114bb786adb89727dfba6, type: 3}
       propertyPath: m_LocalRotation.y
@@ -196,10 +198,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: a101f7b02b6ae4ec7801cd82c5fe5aa2, type: 3}
-      insertIndex: 0
-      addedObject: {fileID: 1505540980294832304}
+    m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a101f7b02b6ae4ec7801cd82c5fe5aa2, type: 3}
 --- !u!4 &1753097398987792190 stripped

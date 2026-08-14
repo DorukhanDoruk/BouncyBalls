@@ -40,15 +40,6 @@ namespace Runtime.Core
             DissolveDuration = 0.25f
         };
 
-        [Header("Ball Move")]
-        public BallMoveSettings BallMove = new BallMoveSettings
-        {
-            GridShiftDuration = 0.25f,
-            GridShiftEase = DG.Tweening.Ease.OutCubic,
-            DockInsertDuration = 0.3f,
-            DockInsertEase = DG.Tweening.Ease.OutBack
-        };
-
         public Color GetColor(ObjectColor color)
         {
             for (int i = 0; i < Palette.Length; i++)

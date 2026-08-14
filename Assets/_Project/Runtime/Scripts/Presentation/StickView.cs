@@ -9,14 +9,17 @@ namespace Runtime.Presentation
         [SerializeField] private MeshRenderer _topMeshRenderer;
 
         [Header("Body")]
+        [SerializeField] private Transform _stack;
         [SerializeField] private Transform _body;
         [SerializeField] private MeshFilter _bodyMesh;
+
+        public Transform DiscRoot => _stack;
 
         private readonly List<Transform> _discs = new(); // Bottom to Top
         private float BodyLength => Mathf.Max(0f, (_stick.ShownDiscCount - 1) * _discHeight);
 
         private Stick _stick;
-        private Vector3 _basePosition;
+        private Vector3 _stackBase;
         private float _discHeight;
         private Tween _dip;
 
@@ -24,7 +27,7 @@ namespace Runtime.Presentation
         {
             _stick = stick;
             _discHeight = discHeight;
-            _basePosition = transform.position;
+            _stackBase = _stack.localPosition;
             _discs.Clear();
 
             ScaleBody();
@@ -77,9 +80,9 @@ namespace Runtime.Presentation
         public void Dip(float amount, float duration)
         {
             _dip?.Kill();
-            transform.position = _basePosition;
+            _stack.localPosition = _stackBase;
 
-            _dip = transform.DOPunchPosition(Vector3.down * amount, duration, 1, 0f);
+            _dip = _stack.DOPunchPosition(Vector3.down * amount, duration, 1, 0f);
         }
 
         private void ScaleBody()
@@ -91,16 +94,18 @@ namespace Runtime.Presentation
             scale.y = bodyLength / meshHeight;
             _body.localScale = scale;
 
-            PlaceBase(bodyLength);
+            PlaceCap();
         }
 
-        private void PlaceBase(float bodyLength)
+        private void PlaceCap()
         {
             var cap = _topMeshRenderer.transform;
-            var bounds = _topMeshRenderer.GetComponent<MeshFilter>().sharedMesh.bounds;
+            var capBounds = _topMeshRenderer.GetComponent<MeshFilter>().sharedMesh.bounds;
+
+            float bodyTop = _body.localPosition.y + _bodyMesh.sharedMesh.bounds.max.y * _body.localScale.y;
 
             var position = cap.localPosition;
-            position.y = bodyLength - bounds.min.y * cap.localScale.y;
+            position.y = bodyTop - capBounds.min.y * cap.localScale.y;
             cap.localPosition = position;
         }
 

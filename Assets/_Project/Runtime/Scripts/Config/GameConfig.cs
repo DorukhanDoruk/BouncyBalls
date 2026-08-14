@@ -10,6 +10,7 @@ namespace Runtime.Config
         public float MaxArcHeight;
         public float InPlaceBounceHeight;
         public float InPlaceBounceDuration;
+        public float SlideDuration;
         public int MaxActiveBalls;
         public int DockCapacity;
         public float MinLaunchInterval;

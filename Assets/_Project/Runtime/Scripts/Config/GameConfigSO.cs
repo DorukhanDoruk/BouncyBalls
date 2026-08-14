@@ -14,6 +14,9 @@ namespace Runtime.Core
         public float InPlaceBounceHeight = 1f;
         public float InPlaceBounceDuration = 0.3f;
 
+        [Header("Slide")]
+        public float SlideDuration = 0.25f;
+
         [Header("Limits")]
         public int MaxActiveBalls = 5;
         public int DockCapacity = 5;
@@ -27,7 +30,8 @@ namespace Runtime.Core
         {
             HopDuration = HopDuration, ArcHeightPerUnit = ArcHeightPerUnit,
             MaxArcHeight = MaxArcHeight, InPlaceBounceHeight = InPlaceBounceHeight,
-            InPlaceBounceDuration = InPlaceBounceDuration, MaxActiveBalls = MaxActiveBalls,
+            InPlaceBounceDuration = InPlaceBounceDuration, SlideDuration = SlideDuration,
+            MaxActiveBalls = MaxActiveBalls,
             DockCapacity = DockCapacity, MinLaunchInterval = MinLaunchInterval,
             DiscHeight = DiscHeight, BallRadius = BallRadius
         };

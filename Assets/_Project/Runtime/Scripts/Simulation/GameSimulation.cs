@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Runtime.Core;
 using Runtime.Level.Config;
 using Runtime.Simulation.Model;
+using UnityEngine;
 
 namespace Runtime.Simulation
 {
@@ -52,6 +53,8 @@ namespace Runtime.Simulation
             {
                 _launchCooldown -= deltaTime;
             }
+
+            AdvanceSlides(deltaTime);
 
             // Backwards, because an arriving ball can leave the list.
             for (int i = _flying.Count - 1; i >= 0; i--)
@@ -159,6 +162,12 @@ namespace Runtime.Simulation
 
             if (decision == PathMovementDecision.PathLapFinished)
             {
+                if (_dock.Count >= _config.DockCapacity)
+                {
+                    EndLevel(false);
+                    return;
+                }
+
                 SendToDock(ball);
                 return;
             }
@@ -220,7 +229,7 @@ namespace Runtime.Simulation
             var balls = _grid[column];
             for (int i = 0; i < balls.Count; i++)
             {
-                balls[i].Position = LevelLoader.GridBallSlot(column, ColumnCount, i, _layout);
+                StartSlide(balls[i], LevelLoader.GridBallSlot(column, ColumnCount, i, _layout));
                 balls[i].GridRowIndex = i;
             }
         }
@@ -229,8 +238,42 @@ namespace Runtime.Simulation
         {
             for (int i = 0; i < _dock.Count; i++)
             {
-                _dock[i].Position = LevelLoader.DockBallSlot(i, _config.DockCapacity, _layout);
+                StartSlide(_dock[i], LevelLoader.DockBallSlot(i, _config.DockCapacity, _layout));
             }
+        }
+
+        private void StartSlide(Ball ball, Vector3 target)
+        {
+            ball.Hop = new HopMotion(ball.Position, target, _config.SlideDuration);
+            ball.HopElapsed = 0f;
+        }
+
+        private void AdvanceSlides(float deltaTime)
+        {
+            for (int c = 0; c < _grid.Count; c++)
+            {
+                var column = _grid[c];
+                for (int i = 0; i < column.Count; i++)
+                {
+                    AdvanceSlide(column[i], deltaTime);
+                }
+            }
+
+            for (int i = 0; i < _dock.Count; i++)
+            {
+                AdvanceSlide(_dock[i], deltaTime);
+            }
+        }
+
+        private static void AdvanceSlide(Ball ball, float deltaTime)
+        {
+            if (ball.HopElapsed >= ball.Hop.Duration)
+            {
+                return;
+            }
+
+            ball.HopElapsed += deltaTime;
+            ball.Position = ball.Hop.Evaluate(ball.HopElapsed);
         }
     }
 }

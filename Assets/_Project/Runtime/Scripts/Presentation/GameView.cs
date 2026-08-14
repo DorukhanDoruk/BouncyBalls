@@ -89,7 +89,7 @@ namespace Runtime.Presentation
                 for (int j = Mathf.Max(0, stick.AliveCount - stick.ShownDiscCount); j < stick.AliveCount; j++)
                 {
                     var disc = stick.Discs[j];
-                    var discView = _factory.CreateDisc(disc, stick.Position, stickView.transform);
+                    var discView = _factory.CreateDisc(disc, stick.Position, stickView.DiscRoot);
 
                     _discViews.Add(disc, discView);
                     stickView.AddDisc(discView.transform);
@@ -159,7 +159,7 @@ namespace Runtime.Presentation
             }
 
             var disc = stick.Discs[index];
-            var discView = _factory.CreateDisc(disc, stick.Position, stickView.transform);
+            var discView = _factory.CreateDisc(disc, stick.Position, stickView.DiscRoot);
 
             _discViews.Add(disc, discView);
             stickView.AddDiscBelow(discView.transform);

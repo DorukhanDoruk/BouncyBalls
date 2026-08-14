@@ -11,6 +11,15 @@ namespace Runtime.Simulation.Model
         public readonly float Duration;
         public readonly float ArcHeight;
         
+        // Flat slide for balls settling into a grid or dock slot.
+        public HopMotion(Vector3 from, Vector3 to, float duration)
+        {
+            From = from;
+            To = to;
+            Duration = duration;
+            ArcHeight = 0f;
+        }
+
         public HopMotion(Vector3 from, Vector3 to, GameConfig gameConfig)
         {
             From = from;

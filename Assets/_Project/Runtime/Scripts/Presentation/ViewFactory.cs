@@ -49,7 +49,7 @@ namespace Runtime.Presentation
         public BallView CreateBall(Ball ball)
         {
             var view = _ballPool.Get(ball.Position);
-            view.SetBall(ball, _visualConfig.GetColor(ball.Color), _visualConfig.BallMove);
+            view.SetBall(ball, _visualConfig.GetColor(ball.Color));
             return view;
         }
 
