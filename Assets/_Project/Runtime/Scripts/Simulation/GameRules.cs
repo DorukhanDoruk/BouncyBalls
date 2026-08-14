@@ -3,25 +3,22 @@ namespace Runtime.Simulation
 {
     public static class GameRules
     {
-        public static bool TryBreakDiscAtTop(Stick stick, Ball ball, out Disc brokenDisc)
+        public static Disc BreakDiscAtTop(Stick stick, Ball ball)
         {
             if (stick.AliveCount == 0)
             {
-                brokenDisc = default;
-                return false;
+                return null;
             }
 
             var topDisc = stick.Discs[stick.AliveCount - 1];
             if (topDisc.Color != ball.Color)
             {
-                brokenDisc = default;
-                return false;
+                return null;
             }
 
             stick.RemoveTop();
             ball.Counter--;
-            brokenDisc = topDisc;
-            return true;
+            return topDisc;
         }
     }
 }

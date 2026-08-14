@@ -138,7 +138,7 @@ namespace Runtime.Simulation
             }
 
             var stick = _sticks[_path[ball.PathIndex]];
-            GameRules.TryBreakDiscAtTop(stick, ball, out var brokenDisc);
+            var brokenDisc = GameRules.BreakDiscAtTop(stick, ball);
             Events.RaiseBallLanded(ball, stick, brokenDisc);
 
             var decision = PathDecisionMaker.MakeDecision(_path, _sticks, ball.PathIndex, DoesGridHasBalls(), out int next);
