@@ -36,6 +36,12 @@ namespace Runtime.Presentation
             _discs.Add(disc);
         }
 
+        public void AddDiscBelow(Transform disc)
+        {
+            _discs.Insert(0, disc);
+            disc.localPosition = new Vector3(0f, _stick.ShownDiscCount * _discHeight - _discHeight * (_discs.Count + 0.5f), 0f);
+        }
+
         public void RemoveTopDisc()
         {
             _discs.RemoveAt(_discs.Count - 1);

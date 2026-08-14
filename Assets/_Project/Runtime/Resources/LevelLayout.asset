@@ -16,7 +16,7 @@ MonoBehaviour:
   GridOrigin: {x: 0, y: 0, z: -7}
   GridColumnSpacing: 1.75
   GridRowSpacing: 2.35
-  DockOrigin: {x: 0, y: 0, z: -3.6}
+  DockOrigin: {x: 0, y: 0.1, z: -3.6}
   DockSlotSpacing: 1.6
   BallLift: 0.6
   BallSelectionRadius: 0.75

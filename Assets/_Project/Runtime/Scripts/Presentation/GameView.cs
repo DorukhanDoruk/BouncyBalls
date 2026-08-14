@@ -86,7 +86,7 @@ namespace Runtime.Presentation
                 var stickView = _factory.CreateStick(stick, _gameConfig.DiscHeight);
                 _stickViews.Add(stick, stickView);
 
-                for (int j = 0; j < stick.AliveCount; j++)
+                for (int j = Mathf.Max(0, stick.AliveCount - stick.ShownDiscCount); j < stick.AliveCount; j++)
                 {
                     var disc = stick.Discs[j];
                     var discView = _factory.CreateDisc(disc, stick.Position, stickView.transform);
@@ -145,7 +145,24 @@ namespace Runtime.Presentation
             _discViews.Remove(disc);
 
             stickView.RemoveTopDisc();
+            RevealHiddenDisc(stick, stickView);
             stickView.LayoutDiscs(_visualConfig.DiscShiftDuration, _visualConfig.DiscShiftEase);
+        }
+
+        private void RevealHiddenDisc(Stick stick, StickView stickView)
+        {
+            int index = stick.AliveCount - stick.ShownDiscCount;
+
+            if (index < 0)
+            {
+                return;
+            }
+
+            var disc = stick.Discs[index];
+            var discView = _factory.CreateDisc(disc, stick.Position, stickView.transform);
+
+            _discViews.Add(disc, discView);
+            stickView.AddDiscBelow(discView.transform);
         }
     }
 }

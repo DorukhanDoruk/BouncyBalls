@@ -28,7 +28,7 @@ MonoBehaviour:
   - Id: 6
     Tint: {r: 0.6, g: 0.3, b: 0.85, a: 1}
   - Id: 7
-    Tint: {r: 0.95, g: 0.4, b: 0.7, a: 1}
+    Tint: {r: 0.95, g: 0.291, b: 0.674, a: 1}
   BallPrefab: {fileID: 1487107321798637747, guid: cb7bee0f7586449ca8bdef5a21acd732, type: 3}
   StickPrefab: {fileID: 8878548657681287385, guid: b11d53bc11bb74233b3b8e7c9ec9b205, type: 3}
   DiscPrefab: {fileID: 2721632727801960950, guid: 277bc0cec963648ce9913d56d13c1f97, type: 3}
@@ -37,11 +37,6 @@ MonoBehaviour:
   DiscShiftEase: 9
   StickDipAmount: 0.15
   StickDipDuration: 0.25
-  BallMove:
-    GridShiftDuration: 0.25
-    GridShiftEase: 9
-    DockInsertDuration: 0.3
-    DockInsertEase: 27
   DiscPiecePrefab: {fileID: 1100000000000000001, guid: c1d2e3f4a5b64789bc0d1e2f3a4b5c6d, type: 3}
   DiscPieceMeshes:
   - {fileID: 4300000, guid: 7d07169f808964efca36d0aa1775a78d, type: 2}
@@ -73,7 +68,8 @@ MonoBehaviour:
     ShrinkDuration: 0.5
     DissolveDelay: 2
     DissolveDuration: 0.25
-  GridShiftDuration: 0.25
-  GridShiftEase: 9
-  DockInsertDuration: 0.3
-  DockInsertEase: 27
+  BallMove:
+    GridShiftDuration: 0.25
+    GridShiftEase: 9
+    DockInsertDuration: 0.3
+    DockInsertEase: 27

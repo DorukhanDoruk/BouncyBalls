@@ -12,9 +12,6 @@ Shader "BouncyBalls/InstancedLit"
         _SpecPower("Specular Power", Range(1, 128)) = 32
         _SpecStrength("Specular Strength", Range(0, 1)) = 0.35
 
-        [Header(Outline)]
-        _OutlineColor("Outline Color", Color) = (0, 0, 0, 1)
-        _OutlineWidth("Outline Width", Range(0, 0.1)) = 0.02
     }
 
     SubShader
@@ -33,8 +30,6 @@ Shader "BouncyBalls/InstancedLit"
         half _SpecTint;
         half _SpecPower;
         half _SpecStrength;
-        half4 _OutlineColor;
-        float _OutlineWidth;
 
         // MaterialPropertyBlock writes land here, one value per instance.
         UNITY_INSTANCING_BUFFER_START(Props)
@@ -102,39 +97,6 @@ Shader "BouncyBalls/InstancedLit"
                 half3 specularColor = lerp(baseColor.rgb, 1.0h, _SpecTint);
 
                 return half4(albedo * mainLight.color + specularColor * specular, baseColor.a);
-            }
-            ENDHLSL
-        }
-
-        Pass
-        {
-            Name "Outline"
-            Tags { "LightMode" = "SRPDefaultUnlit" }
-
-            Cull Front
-
-            HLSLPROGRAM
-            #pragma vertex OutlineVert
-            #pragma fragment OutlineFrag
-
-            #pragma multi_compile_instancing
-
-            struct OutlineAttributes
-            {
-                float4 positionOS : POSITION;
-                float3 normalOS   : NORMAL;
-                UNITY_VERTEX_INPUT_INSTANCE_ID
-            };
-
-            float4 OutlineVert(OutlineAttributes input) : SV_POSITION
-            {
-                UNITY_SETUP_INSTANCE_ID(input);
-                return TransformObjectToHClip(input.positionOS.xyz + input.normalOS * _OutlineWidth);
-            }
-
-            half4 OutlineFrag() : SV_Target
-            {
-                return _OutlineColor;
             }
             ENDHLSL
         }

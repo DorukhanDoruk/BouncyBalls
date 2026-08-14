@@ -8,17 +8,22 @@ namespace Runtime.Presentation
     public class BallView : MonoBehaviour
     {
         private static readonly int _baseColor = Shader.PropertyToID("_BaseColor");
+        private static readonly int _outlineWidth = Shader.PropertyToID("_OutlineWidth");
 
         [SerializeField] private MeshRenderer _meshRenderer;
         [SerializeField] private ParticleSystem _trail;
+        [SerializeField] private float _outlineWidthValue = 0.02f;
+        [SerializeField] private float _frontOutlineWidth = 0.04f;
 
         private Ball _ball;
         private MaterialPropertyBlock _materialPropertyBlock;
 
         private BallMoveSettings _moveSettings;
+        private int _shownRow;
         private Vector3 _lastTarget;
         private Tween _move;
         private bool _trailing;
+        private bool _wasHopping;
 
         private void Awake()
         {
@@ -30,12 +35,14 @@ namespace Runtime.Presentation
             _ball = ball;
             _moveSettings = moveSettings;
             _lastTarget = ball.Position;
+            _shownRow = int.MinValue;
+            _wasHopping = false;
 
             _move?.Kill();
             transform.position = ball.Position;
 
             _materialPropertyBlock.SetColor(_baseColor, color);
-            _meshRenderer.SetPropertyBlock(_materialPropertyBlock);
+            ApplyOutline();
 
             var trailMain = _trail.main;
             trailMain.startColor = color;
@@ -49,12 +56,23 @@ namespace Runtime.Presentation
         // 5 Ball at once no need for a system update, each ball easily update themselves
         private void LateUpdate()
         {
+            ApplyOutline();
+
             bool hopping = _ball.State == BallState.Flying || _ball.State == BallState.ToDock;
             SetTrailing(hopping);
 
             if (hopping)
             {
                 _move?.Kill();
+                transform.position = _ball.Position;
+                _lastTarget = _ball.Position;
+                _wasHopping = true;
+                return;
+            }
+
+            if (_wasHopping)
+            {
+                _wasHopping = false;
                 transform.position = _ball.Position;
                 _lastTarget = _ball.Position;
                 return;
@@ -73,6 +91,19 @@ namespace Runtime.Presentation
             Ease ease = docked ? _moveSettings.DockInsertEase : _moveSettings.GridShiftEase;
 
             _move = transform.DOMove(_lastTarget, duration).SetEase(ease);
+        }
+
+        private void ApplyOutline()
+        {
+            if (_shownRow == _ball.GridRowIndex)
+            {
+                return;
+            }
+
+            _shownRow = _ball.GridRowIndex;
+
+            _materialPropertyBlock.SetFloat(_outlineWidth, _shownRow == 0 ? _frontOutlineWidth : _outlineWidthValue);
+            _meshRenderer.SetPropertyBlock(_materialPropertyBlock);
         }
 
         private void SetTrailing(bool value)
