@@ -1,7 +1,7 @@
 using UnityEngine;
-namespace Runtime.Core
+namespace Runtime.Config
 {
-    [CreateAssetMenu(menuName = "BouncyBalls/Level Constants", fileName = "LevelConstants")]
+    [CreateAssetMenu(menuName = "BouncyBalls/Level Layout", fileName = "LevelLayout")]
     public class LevelLayoutSO : ScriptableObject
     {
         [Header("Stick Layout")]

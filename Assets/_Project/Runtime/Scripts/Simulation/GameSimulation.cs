@@ -1,8 +1,8 @@
+using Runtime.Config;
 using System.Collections.Generic;
 using Runtime.Core;
 using Runtime.Level.Config;
 using Runtime.Simulation.Model;
-using Runtime.Simulation.Utility;
 
 namespace Runtime.Simulation
 {

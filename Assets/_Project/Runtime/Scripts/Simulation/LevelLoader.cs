@@ -1,10 +1,11 @@
+using Runtime.Config;
 using System.Collections.Generic;
 using Runtime.Core;
 using Runtime.Level.Config;
 using Runtime.Simulation.Model;
 using UnityEngine;
 
-namespace Runtime.Simulation.Utility
+namespace Runtime.Simulation
 {
     public static class LevelLoader
     {

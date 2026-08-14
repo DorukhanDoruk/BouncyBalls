@@ -1,6 +1,7 @@
 using System;
+using Runtime.Level.Model;
 using UnityEngine;
-namespace Runtime.Level.Model
+namespace Runtime.Config
 {
     [Serializable]
     public struct PaletteEntry

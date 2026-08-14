@@ -1,3 +1,4 @@
+using Runtime.Config;
 using Runtime.Core;
 using UnityEngine;
 namespace Runtime.Simulation.Model

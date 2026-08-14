@@ -1,7 +1,7 @@
 using System;
 using DG.Tweening;
 
-namespace Runtime.Core
+namespace Runtime.Config
 {
     [Serializable]
     public struct BallMoveSettings

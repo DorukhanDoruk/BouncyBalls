@@ -1,5 +1,5 @@
 using System;
-namespace Runtime.Core
+namespace Runtime.Config
 {
 
     [Serializable]

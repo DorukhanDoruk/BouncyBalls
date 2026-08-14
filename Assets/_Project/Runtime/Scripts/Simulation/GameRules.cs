@@ -1,5 +1,5 @@
 using Runtime.Simulation.Model;
-namespace Runtime.Simulation.Utility
+namespace Runtime.Simulation
 {
     public static class GameRules
     {

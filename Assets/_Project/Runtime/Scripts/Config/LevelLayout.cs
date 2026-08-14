@@ -1,6 +1,6 @@
 using System;
 using UnityEngine;
-namespace Runtime.Core
+namespace Runtime.Config
 {
     [Serializable]
     public struct LevelLayout

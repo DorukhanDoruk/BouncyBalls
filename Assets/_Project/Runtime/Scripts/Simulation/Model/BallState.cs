@@ -4,8 +4,8 @@ namespace Runtime.Simulation.Model
     {
         AtGrid = 0,
         Flying = 1,
-        AtDock = 2,
-        Dead = 3,
-        ToDock = 4,
+        ToDock = 2,
+        AtDock = 3,
+        Dead = 4,
     }
 }
