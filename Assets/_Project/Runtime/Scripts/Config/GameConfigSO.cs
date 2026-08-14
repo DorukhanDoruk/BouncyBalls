@@ -6,7 +6,7 @@ namespace Runtime.Core
     public class GameConfigSO : ScriptableObject
     {
         [Header("Movement")]
-        public float HopSpeed = 4.5f;
+        public float HopDuration = 0.45f;
         public float ArcHeightPerUnit = 1f;
         public float MaxArcHeight = 3f;
 
@@ -25,7 +25,7 @@ namespace Runtime.Core
 
         public GameConfig ToRuntime() => new GameConfig
         {
-            HopSpeed = HopSpeed, ArcHeightPerUnit = ArcHeightPerUnit,
+            HopDuration = HopDuration, ArcHeightPerUnit = ArcHeightPerUnit,
             MaxArcHeight = MaxArcHeight, InPlaceBounceHeight = InPlaceBounceHeight,
             InPlaceBounceDuration = InPlaceBounceDuration, MaxActiveBalls = MaxActiveBalls,
             DockCapacity = DockCapacity, MinLaunchInterval = MinLaunchInterval,

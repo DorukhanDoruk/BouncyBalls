@@ -5,7 +5,7 @@ namespace Runtime.Config
     [Serializable]
     public struct GameConfig
     {
-        public float HopSpeed;
+        public float HopDuration;
         public float ArcHeightPerUnit;
         public float MaxArcHeight;
         public float InPlaceBounceHeight;
@@ -18,7 +18,7 @@ namespace Runtime.Config
 
         public static GameConfig Default => new GameConfig
         {
-            HopSpeed = 4.5f, ArcHeightPerUnit = 1f,
+            HopDuration = 0.45f, ArcHeightPerUnit = 1f,
             MaxArcHeight = 3f, InPlaceBounceHeight = 1f,
             InPlaceBounceDuration = 0.3f, MaxActiveBalls = 5,
             DockCapacity = 5, MinLaunchInterval = 0.15f,

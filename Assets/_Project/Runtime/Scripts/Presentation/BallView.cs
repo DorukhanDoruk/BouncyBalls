@@ -10,6 +10,7 @@ namespace Runtime.Presentation
         private static readonly int _baseColor = Shader.PropertyToID("_BaseColor");
 
         [SerializeField] private MeshRenderer _meshRenderer;
+        [SerializeField] private ParticleSystem _trail;
 
         private Ball _ball;
         private MaterialPropertyBlock _materialPropertyBlock;
@@ -17,6 +18,7 @@ namespace Runtime.Presentation
         private BallMoveSettings _moveSettings;
         private Vector3 _lastTarget;
         private Tween _move;
+        private bool _trailing;
 
         private void Awake()
         {
@@ -34,12 +36,23 @@ namespace Runtime.Presentation
 
             _materialPropertyBlock.SetColor(_baseColor, color);
             _meshRenderer.SetPropertyBlock(_materialPropertyBlock);
+
+            var trailMain = _trail.main;
+            trailMain.startColor = color;
+
+            // Position first, then clear, or the pooled trail streaks in from where it was.
+            _trailing = false;
+            _trail.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+            _trail.Clear(true);
         }
 
         // 5 Ball at once no need for a system update, each ball easily update themselves
         private void LateUpdate()
         {
-            if (_ball.State == BallState.Flying || _ball.State == BallState.ToDock)
+            bool hopping = _ball.State == BallState.Flying || _ball.State == BallState.ToDock;
+            SetTrailing(hopping);
+
+            if (hopping)
             {
                 _move?.Kill();
                 transform.position = _ball.Position;
@@ -60,6 +73,24 @@ namespace Runtime.Presentation
             Ease ease = docked ? _moveSettings.DockInsertEase : _moveSettings.GridShiftEase;
 
             _move = transform.DOMove(_lastTarget, duration).SetEase(ease);
+        }
+
+        private void SetTrailing(bool value)
+        {
+            if (_trailing == value)
+            {
+                return;
+            }
+
+            _trailing = value;
+
+            if (value)
+            {
+                _trail.Play(true);
+                return;
+            }
+
+            _trail.Stop(true, ParticleSystemStopBehavior.StopEmitting);
         }
 
         private void OnDisable()

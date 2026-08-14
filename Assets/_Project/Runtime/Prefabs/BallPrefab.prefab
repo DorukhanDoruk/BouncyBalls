@@ -31,6 +31,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1194575682992337731}
+  - {fileID: 2947160382551873925}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3480603654593296372
@@ -46,6 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Runtime.Presentation.BallView
   _meshRenderer: {fileID: 61027969946880044}
+  _trail: {fileID: 7183906625014882730}
 --- !u!1001 &1664437662711190696
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -112,4 +114,71 @@ MeshRenderer:
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 144188fb3b67a4efa8fc6b2a036ed9be, type: 3}
   m_PrefabInstance: {fileID: 1664437662711190696}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &5310244918277361054
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 8442659886829776196}
+    m_Modifications:
+    - target: {fileID: 4539895228556871978, guid: ea482793d009443eb87186e4015f53f6, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4539895228556871978, guid: ea482793d009443eb87186e4015f53f6, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4539895228556871978, guid: ea482793d009443eb87186e4015f53f6, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4539895228556871978, guid: ea482793d009443eb87186e4015f53f6, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4539895228556871978, guid: ea482793d009443eb87186e4015f53f6, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4539895228556871978, guid: ea482793d009443eb87186e4015f53f6, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4539895228556871978, guid: ea482793d009443eb87186e4015f53f6, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4539895228556871978, guid: ea482793d009443eb87186e4015f53f6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4539895228556871978, guid: ea482793d009443eb87186e4015f53f6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4539895228556871978, guid: ea482793d009443eb87186e4015f53f6, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3306621355247345249, guid: ea482793d009443eb87186e4015f53f6, type: 3}
+      propertyPath: m_Name
+      value: BallTrail
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: ea482793d009443eb87186e4015f53f6, type: 3}
+--- !u!4 &2947160382551873925 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4539895228556871978, guid: ea482793d009443eb87186e4015f53f6, type: 3}
+  m_PrefabInstance: {fileID: 5310244918277361054}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &7183906625014882730 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 934576693193432775, guid: ea482793d009443eb87186e4015f53f6, type: 3}
+  m_PrefabInstance: {fileID: 5310244918277361054}
   m_PrefabAsset: {fileID: 0}

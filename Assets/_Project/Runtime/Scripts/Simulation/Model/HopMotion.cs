@@ -20,7 +20,7 @@ namespace Runtime.Simulation.Model
             var distance = Vector3.Distance(from, to);
             if (distance > float.Epsilon)
             {
-                Duration = distance / gameConfig.HopSpeed;
+                Duration = gameConfig.HopDuration;
                 ArcHeight = Mathf.Min(distance * gameConfig.ArcHeightPerUnit, gameConfig.MaxArcHeight);
             }
             else

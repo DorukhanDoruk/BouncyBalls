@@ -61,14 +61,14 @@ namespace Runtime.Services
             _simulation = simulation;
 
             _root.TopArea.SetLevelName(_levelService.Current.name);
-            _root.DockCounter.SetCount(_simulation.Dock.Count, _gameConfig.DockCapacity);
+            _root.DockCounter.SetCount(_simulation.Flying.Count, _gameConfig.MaxActiveBalls);
             _root.ResultPanel.Hide();
             _root.Backdrop.Hide();
 
             _labelPresenter.Rebuild(_simulation);
 
-            _simulation.Events.BallLaunched += OnDockChanged;
-            _simulation.Events.BallFinished += OnDockChanged;
+            _simulation.Events.BallLaunched += OnActiveBallsChanged;
+            _simulation.Events.BallFinished += OnActiveBallsChanged;
             _simulation.Events.LevelEnded += OnLevelEnded;
         }
 
@@ -79,15 +79,15 @@ namespace Runtime.Services
                 return;
             }
 
-            _simulation.Events.BallLaunched -= OnDockChanged;
-            _simulation.Events.BallFinished -= OnDockChanged;
+            _simulation.Events.BallLaunched -= OnActiveBallsChanged;
+            _simulation.Events.BallFinished -= OnActiveBallsChanged;
             _simulation.Events.LevelEnded -= OnLevelEnded;
             _simulation = null;
         }
 
-        private void OnDockChanged(Ball ball)
+        private void OnActiveBallsChanged(Ball ball)
         {
-            _root.DockCounter.SetCount(_simulation.Dock.Count, _gameConfig.DockCapacity);
+            _root.DockCounter.SetCount(_simulation.Flying.Count, _gameConfig.MaxActiveBalls);
         }
 
         private void OnLevelEnded(bool won)
