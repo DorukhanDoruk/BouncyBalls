@@ -77,7 +77,7 @@ namespace Runtime.Core
             var flowService = new GameFlowService(gameConfig, levelLayout, levelService);
             _container.Register(flowService);
 
-            var inputService = new InputService(_mainCamera, flowService, levelLayout);
+            var inputService = new InputService(_mainCamera, flowService, levelLayout.BallSelectionRadius);
             _container.Register(inputService);
 
             var uiPresenter = new UIPresenter(_uiRootPrefab, flowService, levelService, _mainCamera, gameConfig);

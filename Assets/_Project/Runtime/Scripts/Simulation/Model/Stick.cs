@@ -16,5 +16,10 @@ namespace Runtime.Simulation.Model
             AliveCount = aliveCount;
             ShownDiscCount = shownDiscCount;
         }
+
+        public void RemoveTop()
+        {
+            AliveCount--;
+        }
     }
 }

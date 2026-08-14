@@ -27,7 +27,7 @@ namespace Runtime.Simulation.Utility
             return sticks;
         }
 
-        public static List<List<Ball>> LoadGrid(LevelData level, in LevelLayout layout)
+        public static List<List<Ball>> LoadGrid(LevelData level, LevelLayout layout)
         {
             int columnCount = level.GridColumns.Count;
             var grid = new List<List<Ball>>(columnCount);

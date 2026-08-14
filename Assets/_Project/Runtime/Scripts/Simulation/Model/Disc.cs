@@ -3,7 +3,7 @@ namespace Runtime.Simulation.Model
 {
     public class Disc
     {
-        public ObjectColor Color;
+        public readonly ObjectColor Color;
 
         public Disc(ObjectColor color) 
         {

@@ -8,13 +8,13 @@ namespace Runtime.Services
     {
         private readonly Camera _camera;
         private readonly GameFlowService _flowService;
-        private readonly LevelLayout _levelLayout;
+        private readonly float _selectionRadius;
 
-        public InputService(Camera camera, GameFlowService flowService, LevelLayout levelLayout)
+        public InputService(Camera camera, GameFlowService flowService, float selectionRadius)
         {
             _camera = camera;
             _flowService = flowService;
-            _levelLayout = levelLayout;
+            _selectionRadius = selectionRadius;
         }
 
         public void Initialize()
@@ -41,7 +41,7 @@ namespace Runtime.Services
 
             var ray = _camera.ScreenPointToRay(pointer.position.ReadValue());
 
-            float bestDistance = _levelLayout.BallSelectionRadius;
+            float bestDistance = _selectionRadius;
             int bestColumn = -1;
             int bestDockIndex = -1;
 

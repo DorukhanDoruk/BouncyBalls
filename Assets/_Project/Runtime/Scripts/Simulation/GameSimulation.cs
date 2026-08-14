@@ -110,7 +110,7 @@ namespace Runtime.Simulation
 
         private void StartFlight(Ball ball)
         {
-            GameRules.MakeDecision(_path, _sticks, -1, DoesGridHasBalls(), out int next);
+            PathDecisionMaker.MakeDecision(_path, _sticks, -1, DoesGridHasBalls(), out int next);
 
             ball.PathIndex = next;
             ball.State = BallState.Flying;
@@ -137,7 +137,7 @@ namespace Runtime.Simulation
             GameRules.TryBreakDiscAtTop(stick, ball, out var brokenDisc);
             Events.RaiseBallLanded(ball, stick, brokenDisc);
 
-            var decision = GameRules.MakeDecision(_path, _sticks, ball.PathIndex, DoesGridHasBalls(), out int next);
+            var decision = PathDecisionMaker.MakeDecision(_path, _sticks, ball.PathIndex, DoesGridHasBalls(), out int next);
 
             bool ballDied = ball.Counter <= 0;
             if (ballDied)
