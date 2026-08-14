@@ -137,6 +137,28 @@ namespace BouncyBalls.Editor
             if (removeAt >= 0)
             {
                 sticks.DeleteArrayElementAtIndex(removeAt);
+                RemoveFromPath(removeAt);
+            }
+        }
+
+        private void RemoveFromPath(int stickIndex)
+        {
+            var path = _serialized.FindProperty(nameof(LevelData.Path));
+
+            for (int i = path.arraySize - 1; i >= 0; i--)
+            {
+                var element = path.GetArrayElementAtIndex(i);
+
+                if (element.intValue == stickIndex)
+                {
+                    path.DeleteArrayElementAtIndex(i);
+                    continue;
+                }
+
+                if (element.intValue > stickIndex)
+                {
+                    element.intValue--;
+                }
             }
         }
 
@@ -269,12 +291,11 @@ namespace BouncyBalls.Editor
                 }
             }
 
-            int carried = 0;
             for (int i = 0; i < _level.GridColumns.Count; i++)
             {
                 var balls = _level.GridColumns[i].GridBalls;
 
-                if (balls == null || balls.Count == 0)
+                if (balls.Count == 0)
                 {
                     issues.Add($"Column {i} has no balls.");
                     continue;
@@ -286,26 +307,62 @@ namespace BouncyBalls.Editor
                     {
                         issues.Add($"Column {i} ball {j} has a counter of {balls[j].Counter}.");
                     }
-
-                    carried += balls[j].Counter;
                 }
             }
 
-            int discs = 0;
-            for (int i = 0; i < _level.Sticks.Count; i++)
-            {
-                if (_level.Path.Contains(i))
-                {
-                    discs += _level.Sticks[i].DiscColors.Count;
-                }
-            }
-
-            if (carried < discs)
-            {
-                issues.Add($"Balls carry {carried} hits but the path holds {discs} discs, so the level cannot be cleared.");
-            }
+            AppendColorBudget(issues);
 
             return issues;
+        }
+
+        // A ball only breaks its own colour, so the budget has to balance per colour, not in total.
+        private void AppendColorBudget(List<string> issues)
+        {
+            var needed = new Dictionary<ObjectColor, int>();
+            var carried = new Dictionary<ObjectColor, int>();
+
+            for (int i = 0; i < _level.Sticks.Count; i++)
+            {
+                if (!_level.Path.Contains(i))
+                {
+                    continue;
+                }
+
+                var discs = _level.Sticks[i].DiscColors;
+                for (int d = 0; d < discs.Count; d++)
+                {
+                    needed.TryGetValue(discs[d], out int count);
+                    needed[discs[d]] = count + 1;
+                }
+            }
+
+            for (int i = 0; i < _level.GridColumns.Count; i++)
+            {
+                var balls = _level.GridColumns[i].GridBalls;
+                for (int j = 0; j < balls.Count; j++)
+                {
+                    carried.TryGetValue(balls[j].ColorId, out int count);
+                    carried[balls[j].ColorId] = count + Mathf.Max(0, balls[j].Counter);
+                }
+            }
+
+            foreach (var pair in needed)
+            {
+                carried.TryGetValue(pair.Key, out int hits);
+
+                if (hits < pair.Value)
+                {
+                    issues.Add($"{pair.Key}: path holds {pair.Value} discs but balls carry only {hits} hits.");
+                }
+            }
+
+            foreach (var pair in carried)
+            {
+                if (!needed.ContainsKey(pair.Key))
+                {
+                    issues.Add($"{pair.Key}: {pair.Value} hits carried but the path has no {pair.Key} disc.");
+                }
+            }
         }
 
         private void CreateLevel()

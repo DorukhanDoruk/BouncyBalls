@@ -27,7 +27,6 @@ namespace Runtime.Presentation
         {
             _stick = stick;
             _discHeight = discHeight;
-            _stackBase = _stack.localPosition;
             _discs.Clear();
 
             ScaleBody();
@@ -110,10 +109,17 @@ namespace Runtime.Presentation
         }
 
 
+        private void Awake()
+        {
+            _stackBase = _stack.localPosition;
+        }
+
         private void OnDisable()
         {
             _dip?.Kill();
             _dip = null;
+
+            _stack.localPosition = _stackBase;
         }
     }
 }

@@ -162,7 +162,7 @@ namespace Runtime.Simulation
 
             if (decision == PathMovementDecision.PathLapFinished)
             {
-                if (_dock.Count >= _config.DockCapacity)
+                if (ReservedDockSlots() >= _config.DockCapacity)
                 {
                     EndLevel(false);
                     return;
@@ -192,9 +192,24 @@ namespace Runtime.Simulation
             Events.RaiseBallFinished(ball);
         }
 
+        private int ReservedDockSlots()
+        {
+            int reserved = _dock.Count;
+
+            for (int i = 0; i < _flying.Count; i++)
+            {
+                if (_flying[i].State == BallState.ToDock)
+                {
+                    reserved++;
+                }
+            }
+
+            return reserved;
+        }
+
         private void SendToDock(Ball ball)
         {
-            var slot = LevelLoader.DockBallSlot(_dock.Count, _config.DockCapacity, _layout);
+            var slot = LevelLoader.DockBallSlot(ReservedDockSlots(), _config.DockCapacity, _layout);
 
             ball.State = BallState.ToDock;
             ball.HopElapsed = 0f;
@@ -221,6 +236,16 @@ namespace Runtime.Simulation
         private void EndLevel(bool won)
         {
             _isOver = true;
+
+            for (int i = _flying.Count - 1; i >= 0; i--)
+            {
+                var ball = _flying[i];
+                _flying.RemoveAt(i);
+
+                ball.State = BallState.Dead;
+                Events.RaiseBallFinished(ball);
+            }
+
             Events.RaiseLevelEnded(won);
         }
 
