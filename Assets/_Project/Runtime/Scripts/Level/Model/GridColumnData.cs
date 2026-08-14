@@ -5,6 +5,6 @@ namespace Runtime.Level.Model
     [Serializable]
     public class GridColumnData
     {
-        public List<GridBallData> GridBalls;
+        public List<GridBallData> GridBalls = new();
     }
 }
