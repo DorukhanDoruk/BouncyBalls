@@ -17,10 +17,41 @@ namespace BouncyBalls.Editor
             var layout = layoutConfig.ToRuntime();
             var config = gameConfig.ToRuntime();
 
+            DrawStickArea(layout);
             DrawSticks(level, layout, config, tint, snap);
             DrawPath(level, layout, config);
             DrawGrid(level, layout, tint);
             DrawDock(layout, config);
+        }
+
+        // What the game camera actually covers at the stick plane, so nothing gets placed off screen.
+        private static void DrawStickArea(LevelLayout layout)
+        {
+            var camera = Camera.main;
+
+            if (camera == null)
+            {
+                return;
+            }
+
+            var plane = new Plane(Vector3.up, Vector3.up * layout.StickOrigin.y);
+
+            var corners = new[]
+            {
+                PlanePoint(camera, plane, 0f, 0f),
+                PlanePoint(camera, plane, 1f, 0f),
+                PlanePoint(camera, plane, 1f, 1f),
+                PlanePoint(camera, plane, 0f, 1f)
+            };
+
+            Handles.DrawSolidRectangleWithOutline(corners, new Color(1f, 0.92f, 0.2f, 0.06f), new Color(1f, 0.92f, 0.2f, 0.9f));
+            Handles.Label(corners[3], "Gameplay View");
+        }
+
+        private static Vector3 PlanePoint(Camera camera, Plane plane, float x, float y)
+        {
+            var ray = camera.ViewportPointToRay(new Vector3(x, y, 0f));
+            return plane.Raycast(ray, out float distance) ? ray.GetPoint(distance) : ray.origin;
         }
 
         private static void DrawSticks(LevelData level, LevelLayout layout, GameConfig config,

@@ -28,6 +28,7 @@ namespace Runtime.Presentation
             _discs.Clear();
 
             ScaleBody();
+            UpdateCap();
         }
 
         public void AddDisc(Transform disc)
@@ -38,6 +39,12 @@ namespace Runtime.Presentation
         public void RemoveTopDisc()
         {
             _discs.RemoveAt(_discs.Count - 1);
+            UpdateCap();
+        }
+
+        private void UpdateCap()
+        {
+            _topMeshRenderer.enabled = _stick.AliveCount == 0;
         }
 
         public void LayoutDiscs(float duration, Ease ease)

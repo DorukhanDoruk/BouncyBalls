@@ -68,6 +68,11 @@ namespace BouncyBalls.Editor
 
             _serialized.ApplyModifiedProperties();
 
+            if (Camera.main == null)
+            {
+                EditorGUILayout.HelpBox("No MainCamera in the open scene, so the stick area gizmo is hidden.", MessageType.Warning);
+            }
+
             DrawValidation();
         }
 

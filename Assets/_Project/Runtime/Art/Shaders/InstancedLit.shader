@@ -5,6 +5,16 @@ Shader "BouncyBalls/InstancedLit"
     Properties
     {
         _BaseColor("Base Color", Color) = (1, 1, 1, 1)
+
+        [Header(Shading)]
+        _ShadeStrength("Shade Strength", Range(0, 1)) = 0.35
+        _SpecTint("Specular Tint", Range(0, 1)) = 0.45
+        _SpecPower("Specular Power", Range(1, 128)) = 32
+        _SpecStrength("Specular Strength", Range(0, 1)) = 0.35
+
+        [Header(Outline)]
+        _OutlineColor("Outline Color", Color) = (0, 0, 0, 1)
+        _OutlineWidth("Outline Width", Range(0, 0.1)) = 0.02
     }
 
     SubShader
@@ -15,6 +25,22 @@ Shader "BouncyBalls/InstancedLit"
             "Queue" = "Geometry"
             "RenderPipeline" = "UniversalPipeline"
         }
+
+        HLSLINCLUDE
+        #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+
+        half _ShadeStrength;
+        half _SpecTint;
+        half _SpecPower;
+        half _SpecStrength;
+        half4 _OutlineColor;
+        float _OutlineWidth;
+
+        // MaterialPropertyBlock writes land here, one value per instance.
+        UNITY_INSTANCING_BUFFER_START(Props)
+            UNITY_DEFINE_INSTANCED_PROP(float4, _BaseColor)
+        UNITY_INSTANCING_BUFFER_END(Props)
+        ENDHLSL
 
         Pass
         {
@@ -29,7 +55,6 @@ Shader "BouncyBalls/InstancedLit"
             #pragma multi_compile _ _MAIN_LIGHT_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE
             #pragma multi_compile_fragment _ _SHADOWS_SOFT
 
-            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
 
             struct Attributes
@@ -46,11 +71,6 @@ Shader "BouncyBalls/InstancedLit"
                 float3 normalWS   : TEXCOORD1;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
-
-            // MaterialPropertyBlock writes land here, one value per instance.
-            UNITY_INSTANCING_BUFFER_START(Props)
-                UNITY_DEFINE_INSTANCED_PROP(float4, _BaseColor)
-            UNITY_INSTANCING_BUFFER_END(Props)
 
             Varyings Vert(Attributes input)
             {
@@ -71,14 +91,50 @@ Shader "BouncyBalls/InstancedLit"
                 half4 baseColor = UNITY_ACCESS_INSTANCED_PROP(Props, _BaseColor);
 
                 float3 normalWS = normalize(input.normalWS);
+                float3 viewWS = normalize(GetWorldSpaceViewDir(input.positionWS));
                 Light mainLight = GetMainLight(TransformWorldToShadowCoord(input.positionWS));
 
-                // Half lambert: the shaded side stays readable instead of going black.
-                half diffuse = saturate(dot(normalWS, mainLight.direction)) * 0.5h + 0.5h;
-                half3 lighting = mainLight.color * diffuse * mainLight.shadowAttenuation;
-                half3 ambient = SampleSH(normalWS);
+                half lightT = saturate(dot(normalWS, mainLight.direction)) * mainLight.shadowAttenuation;
+                half3 albedo = lerp(baseColor.rgb * _ShadeStrength, baseColor.rgb, lightT);
 
-                return half4(baseColor.rgb * (lighting + ambient), baseColor.a);
+                half3 halfDir = normalize(mainLight.direction + viewWS);
+                half specular = pow(saturate(dot(normalWS, halfDir)), _SpecPower) * _SpecStrength * lightT;
+                half3 specularColor = lerp(baseColor.rgb, 1.0h, _SpecTint);
+
+                return half4(albedo * mainLight.color + specularColor * specular, baseColor.a);
+            }
+            ENDHLSL
+        }
+
+        Pass
+        {
+            Name "Outline"
+            Tags { "LightMode" = "SRPDefaultUnlit" }
+
+            Cull Front
+
+            HLSLPROGRAM
+            #pragma vertex OutlineVert
+            #pragma fragment OutlineFrag
+
+            #pragma multi_compile_instancing
+
+            struct OutlineAttributes
+            {
+                float4 positionOS : POSITION;
+                float3 normalOS   : NORMAL;
+                UNITY_VERTEX_INPUT_INSTANCE_ID
+            };
+
+            float4 OutlineVert(OutlineAttributes input) : SV_POSITION
+            {
+                UNITY_SETUP_INSTANCE_ID(input);
+                return TransformObjectToHClip(input.positionOS.xyz + input.normalOS * _OutlineWidth);
+            }
+
+            half4 OutlineFrag() : SV_Target
+            {
+                return _OutlineColor;
             }
             ENDHLSL
         }
@@ -98,7 +154,6 @@ Shader "BouncyBalls/InstancedLit"
 
             #pragma multi_compile_instancing
 
-            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Shadows.hlsl"
 
             float3 _LightDirection;
@@ -110,18 +165,9 @@ Shader "BouncyBalls/InstancedLit"
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
-            struct ShadowVaryings
+            float4 ShadowVert(ShadowAttributes input) : SV_POSITION
             {
-                float4 positionCS : SV_POSITION;
-                UNITY_VERTEX_INPUT_INSTANCE_ID
-            };
-
-            // Instancing here too, otherwise the shadow pass splits the batch again.
-            ShadowVaryings ShadowVert(ShadowAttributes input)
-            {
-                ShadowVaryings output;
                 UNITY_SETUP_INSTANCE_ID(input);
-                UNITY_TRANSFER_INSTANCE_ID(input, output);
 
                 float3 positionWS = TransformObjectToWorld(input.positionOS.xyz);
                 float3 normalWS = TransformObjectToWorldNormal(input.normalOS);
@@ -133,11 +179,10 @@ Shader "BouncyBalls/InstancedLit"
                     positionCS.z = max(positionCS.z, UNITY_NEAR_CLIP_VALUE);
                 #endif
 
-                output.positionCS = positionCS;
-                return output;
+                return positionCS;
             }
 
-            half4 ShadowFrag(ShadowVaryings input) : SV_Target
+            half4 ShadowFrag() : SV_Target
             {
                 return 0;
             }

@@ -44,7 +44,6 @@ namespace Runtime.Presentation
 
         private void OnDestroy()
         {
-            Teardown();
             Unsubscribe();
         }
 

@@ -13,29 +13,71 @@ MonoBehaviour:
   m_Name: Level_01
   m_EditorClassIdentifier: Assembly-CSharp::Runtime.Core.LevelData
   Sticks:
+  - Position: {x: -3.5, y: 0, z: 0}
+    DiscColors: 000000000100000002000000000000000100000002000000
+    ShownDiscCount: 3
+  - Position: {x: -2.5, y: 0, z: 1}
+    DiscColors: 000000000100000002000000000000000100000002000000
+    ShownDiscCount: 3
+  - Position: {x: -1.5, y: 0, z: 2}
+    DiscColors: 000000000100000002000000000000000100000002000000
+    ShownDiscCount: 3
   - Position: {x: -1, y: 0, z: 0}
     DiscColors: 000000000100000002000000000000000100000002000000
     ShownDiscCount: 3
-  - Position: {x: 0, y: 0, z: 0}
+  - Position: {x: -0, y: 0, z: 1}
     DiscColors: 000000000100000002000000000000000100000002000000
     ShownDiscCount: 3
-  - Position: {x: 1, y: 0, z: 0}
+  - Position: {x: 1, y: 0, z: 2}
     DiscColors: 000000000100000002000000000000000100000002000000
     ShownDiscCount: 3
-  Path: 000000000100000002000000
+  - Position: {x: 1.5, y: 0, z: 0}
+    DiscColors: 000000000100000002000000000000000100000002000000
+    ShownDiscCount: 3
+  - Position: {x: 2.5, y: 0, z: 1}
+    DiscColors: 000000000100000002000000000000000100000002000000
+    ShownDiscCount: 3
+  - Position: {x: 3.5, y: 0, z: 2}
+    DiscColors: 000000000100000002000000000000000100000002000000
+    ShownDiscCount: 3
+  Path: 000000000100000002000000030000000400000005000000060000000700000008000000
   GridColumns:
   - GridBalls:
     - ColorId: 0
       Counter: 3
     - ColorId: 2
       Counter: 3
+    - ColorId: 1
+      Counter: 3
+    - ColorId: 0
+      Counter: 3
+    - ColorId: 2
+      Counter: 3
+    - ColorId: 1
+      Counter: 3
   - GridBalls:
     - ColorId: 1
       Counter: 3
     - ColorId: 0
       Counter: 3
+    - ColorId: 2
+      Counter: 3
+    - ColorId: 1
+      Counter: 3
+    - ColorId: 0
+      Counter: 3
+    - ColorId: 2
+      Counter: 3
   - GridBalls:
     - ColorId: 2
       Counter: 3
     - ColorId: 1
+      Counter: 3
+    - ColorId: 0
+      Counter: 3
+    - ColorId: 2
+      Counter: 3
+    - ColorId: 1
+      Counter: 3
+    - ColorId: 0
       Counter: 3
