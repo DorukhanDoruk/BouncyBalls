@@ -34,7 +34,7 @@ namespace Runtime.Services
                 return;
             }
 
-            if (EventSystem.current.IsPointerOverGameObject())
+            if (EventSystem.current.IsPointerOverGameObject(PointerId(pointer)))
             {
                 return;
             }
@@ -87,6 +87,16 @@ namespace Runtime.Services
             {
                 simulation.LaunchFromDock(bestDockIndex);
             }
+        }
+
+        private static int PointerId(Pointer pointer)
+        {
+            if (pointer is Touchscreen touchscreen)
+            {
+                return touchscreen.primaryTouch.touchId.ReadValue();
+            }
+
+            return PointerInputModule.kMouseLeftId;
         }
 
         // Perpendicular distance from the ray to a point; the direction is already normalized.

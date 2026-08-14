@@ -60,7 +60,7 @@ namespace Runtime.Services
 
             _simulation = simulation;
 
-            _root.TopArea.SetLevelName(_levelService.Current.name);
+            _root.TopArea.SetLevelNumber(_levelService.CurrentLevelNumber);
             _root.DockCounter.SetCount(_simulation.Flying.Count, _gameConfig.MaxActiveBalls);
             _root.ResultPanel.Hide();
             _root.Backdrop.Hide();

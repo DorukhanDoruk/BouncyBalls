@@ -11,9 +11,9 @@ namespace Runtime.Presentation
 
         public Button SettingsButton => _settingsButton;
 
-        public void SetLevelName(string levelName)
+        public void SetLevelNumber(int number)
         {
-            _levelLabel.SetText(levelName);
+            _levelLabel.SetText("Level {0}", number);
         }
     }
 }

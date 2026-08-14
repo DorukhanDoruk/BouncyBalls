@@ -8,7 +8,8 @@ namespace Runtime.Services
         private int _currentLevelNumber;
         
         public LevelData Current => _levels[_currentLevelNumber - 1];
-        
+        public int CurrentLevelNumber => _currentLevelNumber;
+
         public LevelService(LevelData[] levels, int currentLevelNumber)
         {
             _levels = levels;

@@ -8,9 +8,6 @@ namespace Runtime.Core
     [DefaultExecutionOrder(-1000)]
     public sealed class Game : MonoBehaviour
     {
-        public static Game Instance { get; private set; }
-        public static bool IsReady => Instance != null && Instance._ready;
-
         [Header("Config")]
         [SerializeField] private GameConfigSO   _gameConfig;
         [SerializeField] private VisualConfigSO _visualConfig;
@@ -25,19 +22,12 @@ namespace Runtime.Core
         [SerializeField] private UiRootView _uiRoot;
 
         private ServiceContainer _container;
+        private GameFlowService _flowService;
+        private UIPresenter _uiPresenter;
         private bool _ready;
 
         private void Awake()
         {
-            if (Instance != null && Instance != this)
-            {
-                Destroy(gameObject); 
-                return;
-            }
-
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-
             Application.targetFrameRate = 60;
             Screen.sleepTimeout = SleepTimeout.NeverSleep;
 
@@ -54,14 +44,13 @@ namespace Runtime.Core
 
         private void OnDestroy()
         {
-            if (Instance != this)
-            {
-                return;
-            }
-            _container?.Dispose();
-            _container = null;
-            Instance = null;
             _ready = false;
+
+            _flowService.LevelStarted -= _gameView.Rebuild;
+            _uiPresenter.PlayAgainRequested -= _flowService.Continue;
+
+            _container.Dispose();
+            _container = null;
         }
 
         private void Bootstrap()
@@ -71,40 +60,30 @@ namespace Runtime.Core
 
             var gameConfig = _gameConfig.ToRuntime();
             var levelLayout = _levelLayout.ToRuntime();
-            
+
             var levelService = new LevelService(_levels, 1);
             _container.Register(levelService);
 
-            var flowService = new GameFlowService(gameConfig, levelLayout, levelService);
-            _container.Register(flowService);
+            _flowService = new GameFlowService(gameConfig, levelLayout, levelService);
+            _container.Register(_flowService);
 
-            var inputService = new InputService(_mainCamera, flowService, levelLayout.BallSelectionRadius);
+            var inputService = new InputService(_mainCamera, _flowService, levelLayout.BallSelectionRadius);
             _container.Register(inputService);
 
-            var uiPresenter = new UIPresenter(_uiRoot, flowService, levelService, _mainCamera, gameConfig);
-            _container.Register(uiPresenter);
+            _uiPresenter = new UIPresenter(_uiRoot, _flowService, levelService, _mainCamera, gameConfig);
+            _container.Register(_uiPresenter);
 
             _container.InitializeAll();
 
             _gameView.Initialize(_visualConfig, gameConfig, levelLayout);
 
-            flowService.LevelStarted += _gameView.Rebuild;
-            uiPresenter.PlayAgainRequested += flowService.Continue;
+            _flowService.LevelStarted += _gameView.Rebuild;
+            _uiPresenter.PlayAgainRequested += _flowService.Continue;
 
-            flowService.StartLevel();
+            _flowService.StartLevel();
             _ready = true;
 
             Debug.Log("[Game] Bootstrap completed");
-        }
-
-        public static T Get<T>() where T : class, IService
-        {
-            if (!IsReady)
-            {
-                throw new System.InvalidOperationException("Game is not ready yet, check the execution of invocation");
-            }
-
-            return Instance._container.Resolve<T>();
         }
     }
 }
