@@ -13,7 +13,7 @@ namespace Runtime.Services
         private readonly Camera _camera;
         private readonly RectTransform _layer;
         private readonly ObjectPool<BallLabelView> _pool;
-        private readonly Dictionary<Ball, BallLabelView> _labels = new();
+        private readonly Dictionary<Ball, BallLabelView> _labels = new(ReferenceComparer<Ball>.Instance);
 
         private GameSimulation _simulation;
 

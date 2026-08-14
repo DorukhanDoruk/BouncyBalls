@@ -9,9 +9,9 @@ namespace Runtime.Presentation
 {
     public class GameView : MonoBehaviour
     {
-        private readonly Dictionary<Ball, BallView> _ballViews = new Dictionary<Ball, BallView>();
-        private readonly Dictionary<Disc, DiscView> _discViews = new Dictionary<Disc, DiscView>();
-        private readonly Dictionary<Stick, StickView> _stickViews = new Dictionary<Stick, StickView>();
+        private readonly Dictionary<Ball, BallView> _ballViews = new(ReferenceComparer<Ball>.Instance);
+        private readonly Dictionary<Disc, DiscView> _discViews = new(ReferenceComparer<Disc>.Instance);
+        private readonly Dictionary<Stick, StickView> _stickViews = new(ReferenceComparer<Stick>.Instance);
 
         private GameSimulation _simulation;
         private VisualConfigSO _visualConfig;
@@ -80,14 +80,16 @@ namespace Runtime.Presentation
 
         private void BuildSticks()
         {
-            foreach (var stick in _simulation.Sticks)
+            var sticks = _simulation.Sticks;
+            for (int i = 0; i < sticks.Count; i++)
             {
+                var stick = sticks[i];
                 var stickView = _factory.CreateStick(stick, _gameConfig.DiscHeight);
                 _stickViews.Add(stick, stickView);
 
-                for (int i = 0; i < stick.AliveCount; i++)
+                for (int j = 0; j < stick.AliveCount; j++)
                 {
-                    var disc = stick.Discs[i];
+                    var disc = stick.Discs[j];
                     var discView = _factory.CreateDisc(disc, stick.Position, stickView.transform);
 
                     _discViews.Add(disc, discView);
@@ -103,8 +105,9 @@ namespace Runtime.Presentation
             for (int i = 0; i < _simulation.ColumnCount; i++)
             {
                 var column = _simulation.GridColumn(i);
-                foreach (var ball in column)
+                for (int j = 0; j < column.Count; j++)
                 {
+                    var ball = column[j];
                     _ballViews.Add(ball, _factory.CreateBall(ball));
                 }
             }

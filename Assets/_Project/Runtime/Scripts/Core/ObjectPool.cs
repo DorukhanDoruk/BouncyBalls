@@ -39,7 +39,15 @@ namespace Runtime.Core
 
         public void Release(T instance)
         {
-            _active.Remove(instance);
+            for (int i = 0; i < _active.Count; i++)
+            {
+                if (ReferenceEquals(_active[i], instance))
+                {
+                    _active.RemoveAt(i);
+                    break;
+                }
+            }
+
             Return(instance);
         }
 
