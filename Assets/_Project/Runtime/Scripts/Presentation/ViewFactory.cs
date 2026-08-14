@@ -79,6 +79,7 @@ namespace Runtime.Presentation
             _discPool.ReleaseAll();
             _ballPool.ReleaseAll();
             _dockPool.ReleaseAll();
+            _piecePool.ReleaseAll();
         }
     }
 }
