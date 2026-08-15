@@ -89,7 +89,7 @@ namespace Runtime.Services
             }
         }
 
-        private static int PointerId(Pointer pointer)
+        private int PointerId(Pointer pointer)
         {
             if (pointer is Touchscreen touchscreen)
             {
@@ -100,7 +100,7 @@ namespace Runtime.Services
         }
 
         // Perpendicular distance from the ray to a point; the direction is already normalized.
-        private static float DistanceToRay(Ray ray, Vector3 point)
+        private float DistanceToRay(Ray ray, Vector3 point)
         {
             return Vector3.Cross(ray.direction, point - ray.origin).magnitude;
         }
