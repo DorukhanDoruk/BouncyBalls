@@ -138,7 +138,7 @@ namespace Runtime.Simulation
             }
 
             var stick = _sticks[_path[ball.PathIndex]];
-            var brokenDisc = GameRules.BreakDiscAtTop(stick, ball);
+            var brokenDisc = BreakDiscAtTop(stick, ball);
             Events.RaiseBallLanded(ball, stick, brokenDisc);
 
             var decision = PathDecisionMaker.MakeDecision(_path, _sticks, ball.PathIndex, DoesGridHasBalls(), out int next);
@@ -290,7 +290,7 @@ namespace Runtime.Simulation
             }
         }
 
-        private static void AdvanceSlide(Ball ball, float deltaTime)
+        private void AdvanceSlide(Ball ball, float deltaTime)
         {
             if (ball.HopElapsed >= ball.Hop.Duration)
             {
@@ -299,6 +299,24 @@ namespace Runtime.Simulation
 
             ball.HopElapsed += deltaTime;
             ball.Position = ball.Hop.Evaluate(ball.HopElapsed);
+        }
+        
+        private Disc BreakDiscAtTop(Stick stick, Ball ball)
+        {
+            if (stick.AliveCount == 0)
+            {
+                return null;
+            }
+
+            var topDisc = stick.Discs[stick.AliveCount - 1];
+            if (topDisc.Color != ball.Color)
+            {
+                return null;
+            }
+
+            stick.RemoveTop();
+            ball.Counter--;
+            return topDisc;
         }
     }
 }
